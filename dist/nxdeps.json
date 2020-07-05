@@ -1,0 +1,932 @@
+{
+  "projectGraph": {
+    "nodes": {
+      "guessinator-e2e": {
+        "name": "guessinator-e2e",
+        "type": "e2e",
+        "data": {
+          "root": "apps/guessinator-e2e",
+          "sourceRoot": "apps/guessinator-e2e/src",
+          "projectType": "application",
+          "architect": {
+            "e2e": {
+              "builder": "@nrwl/cypress:cypress",
+              "options": {
+                "cypressConfig": "apps/guessinator-e2e/cypress.json",
+                "tsConfig": "apps/guessinator-e2e/tsconfig.e2e.json",
+                "devServerTarget": "guessinator:serve"
+              },
+              "configurations": {
+                "production": {
+                  "devServerTarget": "guessinator:serve:production"
+                }
+              }
+            },
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "apps/guessinator-e2e/tsconfig.e2e.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!apps/guessinator-e2e/**/*"
+                ]
+              }
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "apps/guessinator-e2e/cypress.json",
+              "ext": ".json",
+              "mtime": 1593961208166.8918
+            },
+            {
+              "file": "apps/guessinator-e2e/src/fixtures/example.json",
+              "ext": ".json",
+              "mtime": 1593961208168.892
+            },
+            {
+              "file": "apps/guessinator-e2e/src/integration/app.spec.ts",
+              "ext": ".ts",
+              "mtime": 1593961208169.8923
+            },
+            {
+              "file": "apps/guessinator-e2e/src/plugins/index.js",
+              "ext": ".js",
+              "mtime": 1593961208170.3923
+            },
+            {
+              "file": "apps/guessinator-e2e/src/support/app.po.ts",
+              "ext": ".ts",
+              "mtime": 1593961208170.8923
+            },
+            {
+              "file": "apps/guessinator-e2e/src/support/commands.ts",
+              "ext": ".ts",
+              "mtime": 1593961208171.3926
+            },
+            {
+              "file": "apps/guessinator-e2e/src/support/index.ts",
+              "ext": ".ts",
+              "mtime": 1593961208171.8923
+            },
+            {
+              "file": "apps/guessinator-e2e/tsconfig.e2e.json",
+              "ext": ".json",
+              "mtime": 1593961208167.392
+            },
+            {
+              "file": "apps/guessinator-e2e/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1593961208167.8918
+            },
+            {
+              "file": "apps/guessinator-e2e/tslint.json",
+              "ext": ".json",
+              "mtime": 1593961208166.3916
+            }
+          ]
+        }
+      },
+      "guessinator": {
+        "name": "guessinator",
+        "type": "app",
+        "data": {
+          "projectType": "application",
+          "schematics": {
+            "@nrwl/angular:component": {
+              "style": "scss"
+            }
+          },
+          "root": "apps/guessinator",
+          "sourceRoot": "apps/guessinator/src",
+          "prefix": "gilly",
+          "architect": {
+            "build": {
+              "builder": "@angular-devkit/build-angular:browser",
+              "options": {
+                "outputPath": "dist/apps/guessinator",
+                "index": "apps/guessinator/src/index.html",
+                "main": "apps/guessinator/src/main.ts",
+                "polyfills": "apps/guessinator/src/polyfills.ts",
+                "tsConfig": "apps/guessinator/tsconfig.app.json",
+                "aot": true,
+                "assets": [
+                  "apps/guessinator/src/favicon.ico",
+                  "apps/guessinator/src/assets"
+                ],
+                "styles": [
+                  "apps/guessinator/src/styles.scss"
+                ],
+                "scripts": []
+              },
+              "configurations": {
+                "production": {
+                  "fileReplacements": [
+                    {
+                      "replace": "apps/guessinator/src/environments/environment.ts",
+                      "with": "apps/guessinator/src/environments/environment.prod.ts"
+                    }
+                  ],
+                  "optimization": true,
+                  "outputHashing": "all",
+                  "sourceMap": false,
+                  "extractCss": true,
+                  "namedChunks": false,
+                  "extractLicenses": true,
+                  "vendorChunk": false,
+                  "buildOptimizer": true,
+                  "budgets": [
+                    {
+                      "type": "initial",
+                      "maximumWarning": "2mb",
+                      "maximumError": "5mb"
+                    },
+                    {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "6kb",
+                      "maximumError": "10kb"
+                    }
+                  ]
+                }
+              }
+            },
+            "serve": {
+              "builder": "@angular-devkit/build-angular:dev-server",
+              "options": {
+                "browserTarget": "guessinator:build"
+              },
+              "configurations": {
+                "production": {
+                  "browserTarget": "guessinator:build:production"
+                }
+              }
+            },
+            "extract-i18n": {
+              "builder": "@angular-devkit/build-angular:extract-i18n",
+              "options": {
+                "browserTarget": "guessinator:build"
+              }
+            },
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "apps/guessinator/tsconfig.app.json",
+                  "apps/guessinator/tsconfig.spec.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!apps/guessinator/**/*"
+                ]
+              }
+            },
+            "test": {
+              "builder": "@nrwl/jest:jest",
+              "options": {
+                "jestConfig": "apps/guessinator/jest.config.js",
+                "tsConfig": "apps/guessinator/tsconfig.spec.json",
+                "passWithNoTests": true,
+                "setupFile": "apps/guessinator/src/test-setup.ts"
+              }
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "apps/guessinator/browserslist",
+              "ext": "",
+              "mtime": 1593961208155.89
+            },
+            {
+              "file": "apps/guessinator/jest.config.js",
+              "ext": ".js",
+              "mtime": 1593961208164.8918
+            },
+            {
+              "file": "apps/guessinator/src/app/app.component.html",
+              "ext": ".html",
+              "mtime": 1593961208162.8914
+            },
+            {
+              "file": "apps/guessinator/src/app/app.component.scss",
+              "ext": ".scss",
+              "mtime": 1593961208164.3914
+            },
+            {
+              "file": "apps/guessinator/src/app/app.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1593961208163.391
+            },
+            {
+              "file": "apps/guessinator/src/app/app.component.ts",
+              "ext": ".ts",
+              "mtime": 1593961208163.8914
+            },
+            {
+              "file": "apps/guessinator/src/app/app.module.ts",
+              "ext": ".ts",
+              "mtime": 1593961208162.391
+            },
+            {
+              "file": "apps/guessinator/src/assets/.gitkeep",
+              "ext": "",
+              "mtime": 1593961208160.3904
+            },
+            {
+              "file": "apps/guessinator/src/environments/environment.prod.ts",
+              "ext": ".ts",
+              "mtime": 1593961208161.391
+            },
+            {
+              "file": "apps/guessinator/src/environments/environment.ts",
+              "ext": ".ts",
+              "mtime": 1593961208161.391
+            },
+            {
+              "file": "apps/guessinator/src/favicon.ico",
+              "ext": ".ico",
+              "mtime": 1593961208155.39
+            },
+            {
+              "file": "apps/guessinator/src/index.html",
+              "ext": ".html",
+              "mtime": 1593961208157.8904
+            },
+            {
+              "file": "apps/guessinator/src/main.ts",
+              "ext": ".ts",
+              "mtime": 1593961208158.3906
+            },
+            {
+              "file": "apps/guessinator/src/polyfills.ts",
+              "ext": ".ts",
+              "mtime": 1593961208158.8904
+            },
+            {
+              "file": "apps/guessinator/src/styles.scss",
+              "ext": ".scss",
+              "mtime": 1593961208159.8901
+            },
+            {
+              "file": "apps/guessinator/src/test-setup.ts",
+              "ext": ".ts",
+              "mtime": 1593961208165.8916
+            },
+            {
+              "file": "apps/guessinator/tsconfig.app.json",
+              "ext": ".json",
+              "mtime": 1593961208156.3901
+            },
+            {
+              "file": "apps/guessinator/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1593961208154.3896
+            },
+            {
+              "file": "apps/guessinator/tsconfig.spec.json",
+              "ext": ".json",
+              "mtime": 1593961208165.3916
+            },
+            {
+              "file": "apps/guessinator/tslint.json",
+              "ext": ".json",
+              "mtime": 1593961208156.89
+            }
+          ]
+        }
+      },
+      "@nrwl/angular": {
+        "type": "npm",
+        "name": "@nrwl/angular",
+        "data": {
+          "version": "9.5.1",
+          "files": []
+        }
+      },
+      "@angular/animations": {
+        "type": "npm",
+        "name": "@angular/animations",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "@angular/common": {
+        "type": "npm",
+        "name": "@angular/common",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "@angular/compiler": {
+        "type": "npm",
+        "name": "@angular/compiler",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "@angular/core": {
+        "type": "npm",
+        "name": "@angular/core",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "@angular/forms": {
+        "type": "npm",
+        "name": "@angular/forms",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "@angular/platform-browser": {
+        "type": "npm",
+        "name": "@angular/platform-browser",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "@angular/platform-browser-dynamic": {
+        "type": "npm",
+        "name": "@angular/platform-browser-dynamic",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "@angular/router": {
+        "type": "npm",
+        "name": "@angular/router",
+        "data": {
+          "version": "^9.1.0",
+          "files": []
+        }
+      },
+      "core-js": {
+        "type": "npm",
+        "name": "core-js",
+        "data": {
+          "version": "^2.5.4",
+          "files": []
+        }
+      },
+      "rxjs": {
+        "type": "npm",
+        "name": "rxjs",
+        "data": {
+          "version": "~6.5.4",
+          "files": []
+        }
+      },
+      "zone.js": {
+        "type": "npm",
+        "name": "zone.js",
+        "data": {
+          "version": "^0.10.2",
+          "files": []
+        }
+      },
+      "express": {
+        "type": "npm",
+        "name": "express",
+        "data": {
+          "version": "4.17.1",
+          "files": []
+        }
+      },
+      "helmet": {
+        "type": "npm",
+        "name": "helmet",
+        "data": {
+          "version": "^3.21.2",
+          "files": []
+        }
+      },
+      "jsonwebtoken": {
+        "type": "npm",
+        "name": "jsonwebtoken",
+        "data": {
+          "version": "^8.5.1",
+          "files": []
+        }
+      },
+      "mongodb": {
+        "type": "npm",
+        "name": "mongodb",
+        "data": {
+          "version": "^3.5.7",
+          "files": []
+        }
+      },
+      "mssql": {
+        "type": "npm",
+        "name": "mssql",
+        "data": {
+          "version": "^5.1.0",
+          "files": []
+        }
+      },
+      "typeorm": {
+        "type": "npm",
+        "name": "typeorm",
+        "data": {
+          "version": "^0.2.20",
+          "files": []
+        }
+      },
+      "pg": {
+        "type": "npm",
+        "name": "pg",
+        "data": {
+          "version": "^7.12.1",
+          "files": []
+        }
+      },
+      "cors": {
+        "type": "npm",
+        "name": "cors",
+        "data": {
+          "version": "^2.8.5",
+          "files": []
+        }
+      },
+      "compression": {
+        "type": "npm",
+        "name": "compression",
+        "data": {
+          "version": "^1.7.4",
+          "files": []
+        }
+      },
+      "class-validator": {
+        "type": "npm",
+        "name": "class-validator",
+        "data": {
+          "version": "^0.11.0",
+          "files": []
+        }
+      },
+      "bcryptjs": {
+        "type": "npm",
+        "name": "bcryptjs",
+        "data": {
+          "version": "^2.4.3",
+          "files": []
+        }
+      },
+      "@angular-devkit/build-angular": {
+        "type": "npm",
+        "name": "@angular-devkit/build-angular",
+        "data": {
+          "version": "0.901.0",
+          "files": []
+        }
+      },
+      "@angular/cli": {
+        "type": "npm",
+        "name": "@angular/cli",
+        "data": {
+          "version": "9.1.7",
+          "files": []
+        }
+      },
+      "@angular/compiler-cli": {
+        "type": "npm",
+        "name": "@angular/compiler-cli",
+        "data": {
+          "version": "9.1.7",
+          "files": []
+        }
+      },
+      "@angular/language-service": {
+        "type": "npm",
+        "name": "@angular/language-service",
+        "data": {
+          "version": "9.1.7",
+          "files": []
+        }
+      },
+      "@nrwl/cypress": {
+        "type": "npm",
+        "name": "@nrwl/cypress",
+        "data": {
+          "version": "9.3.0",
+          "files": []
+        }
+      },
+      "@nrwl/express": {
+        "type": "npm",
+        "name": "@nrwl/express",
+        "data": {
+          "version": "9.3.0",
+          "files": []
+        }
+      },
+      "@nrwl/jest": {
+        "type": "npm",
+        "name": "@nrwl/jest",
+        "data": {
+          "version": "9.3.0",
+          "files": []
+        }
+      },
+      "@nrwl/workspace": {
+        "type": "npm",
+        "name": "@nrwl/workspace",
+        "data": {
+          "version": "9.3.0",
+          "files": []
+        }
+      },
+      "@types/helmet": {
+        "type": "npm",
+        "name": "@types/helmet",
+        "data": {
+          "version": "0.0.45",
+          "files": []
+        }
+      },
+      "@types/jest": {
+        "type": "npm",
+        "name": "@types/jest",
+        "data": {
+          "version": "25.1.4",
+          "files": []
+        }
+      },
+      "@types/jsonwebtoken": {
+        "type": "npm",
+        "name": "@types/jsonwebtoken",
+        "data": {
+          "version": "^8.5.0",
+          "files": []
+        }
+      },
+      "@types/node": {
+        "type": "npm",
+        "name": "@types/node",
+        "data": {
+          "version": "~8.9.4",
+          "files": []
+        }
+      },
+      "codelyzer": {
+        "type": "npm",
+        "name": "codelyzer",
+        "data": {
+          "version": "~5.0.1",
+          "files": []
+        }
+      },
+      "cypress": {
+        "type": "npm",
+        "name": "cypress",
+        "data": {
+          "version": "^4.1.0",
+          "files": []
+        }
+      },
+      "dotenv": {
+        "type": "npm",
+        "name": "dotenv",
+        "data": {
+          "version": "6.2.0",
+          "files": []
+        }
+      },
+      "eslint": {
+        "type": "npm",
+        "name": "eslint",
+        "data": {
+          "version": "6.8.0",
+          "files": []
+        }
+      },
+      "jest": {
+        "type": "npm",
+        "name": "jest",
+        "data": {
+          "version": "25.2.3",
+          "files": []
+        }
+      },
+      "jest-preset-angular": {
+        "type": "npm",
+        "name": "jest-preset-angular",
+        "data": {
+          "version": "8.1.2",
+          "files": []
+        }
+      },
+      "prettier": {
+        "type": "npm",
+        "name": "prettier",
+        "data": {
+          "version": "2.0.4",
+          "files": []
+        }
+      },
+      "ts-jest": {
+        "type": "npm",
+        "name": "ts-jest",
+        "data": {
+          "version": "25.2.1",
+          "files": []
+        }
+      },
+      "ts-node": {
+        "type": "npm",
+        "name": "ts-node",
+        "data": {
+          "version": "~7.0.0",
+          "files": []
+        }
+      },
+      "tslint": {
+        "type": "npm",
+        "name": "tslint",
+        "data": {
+          "version": "~6.0.0",
+          "files": []
+        }
+      },
+      "typescript": {
+        "type": "npm",
+        "name": "typescript",
+        "data": {
+          "version": "~3.8.3",
+          "files": []
+        }
+      },
+      "@nrwl/node": {
+        "type": "npm",
+        "name": "@nrwl/node",
+        "data": {
+          "version": "9.3.0",
+          "files": []
+        }
+      },
+      "@types/express": {
+        "type": "npm",
+        "name": "@types/express",
+        "data": {
+          "version": "4.17.0",
+          "files": []
+        }
+      }
+    },
+    "dependencies": {
+      "guessinator-e2e": [
+        {
+          "type": "implicit",
+          "source": "guessinator-e2e",
+          "target": "guessinator"
+        },
+        {
+          "type": "static",
+          "source": "guessinator-e2e",
+          "target": "@nrwl/cypress"
+        }
+      ],
+      "guessinator": [
+        {
+          "type": "static",
+          "source": "guessinator",
+          "target": "@angular/core"
+        },
+        {
+          "type": "static",
+          "source": "guessinator",
+          "target": "@angular/platform-browser"
+        },
+        {
+          "type": "static",
+          "source": "guessinator",
+          "target": "@angular/platform-browser-dynamic"
+        },
+        {
+          "type": "static",
+          "source": "guessinator",
+          "target": "zone.js"
+        },
+        {
+          "type": "static",
+          "source": "guessinator",
+          "target": "jest-preset-angular"
+        }
+      ],
+      "@nrwl/angular": [],
+      "@angular/animations": [],
+      "@angular/common": [],
+      "@angular/compiler": [],
+      "@angular/core": [],
+      "@angular/forms": [],
+      "@angular/platform-browser": [],
+      "@angular/platform-browser-dynamic": [],
+      "@angular/router": [],
+      "core-js": [],
+      "rxjs": [],
+      "zone.js": [],
+      "express": [],
+      "helmet": [],
+      "jsonwebtoken": [],
+      "mongodb": [],
+      "mssql": [],
+      "typeorm": [],
+      "pg": [],
+      "cors": [],
+      "compression": [],
+      "class-validator": [],
+      "bcryptjs": [],
+      "@angular-devkit/build-angular": [],
+      "@angular/cli": [],
+      "@angular/compiler-cli": [],
+      "@angular/language-service": [],
+      "@nrwl/cypress": [],
+      "@nrwl/express": [],
+      "@nrwl/jest": [],
+      "@nrwl/workspace": [],
+      "@types/helmet": [],
+      "@types/jest": [],
+      "@types/jsonwebtoken": [],
+      "@types/node": [],
+      "codelyzer": [],
+      "cypress": [],
+      "dotenv": [],
+      "eslint": [],
+      "jest": [],
+      "jest-preset-angular": [],
+      "prettier": [],
+      "ts-jest": [],
+      "ts-node": [],
+      "tslint": [],
+      "typescript": [],
+      "@nrwl/node": [],
+      "@types/express": []
+    }
+  },
+  "fileMap": {
+    "guessinator-e2e": [
+      {
+        "file": "apps/guessinator-e2e/cypress.json",
+        "ext": ".json",
+        "mtime": 1593961208166.8918
+      },
+      {
+        "file": "apps/guessinator-e2e/src/fixtures/example.json",
+        "ext": ".json",
+        "mtime": 1593961208168.892
+      },
+      {
+        "file": "apps/guessinator-e2e/src/integration/app.spec.ts",
+        "ext": ".ts",
+        "mtime": 1593961208169.8923
+      },
+      {
+        "file": "apps/guessinator-e2e/src/plugins/index.js",
+        "ext": ".js",
+        "mtime": 1593961208170.3923
+      },
+      {
+        "file": "apps/guessinator-e2e/src/support/app.po.ts",
+        "ext": ".ts",
+        "mtime": 1593961208170.8923
+      },
+      {
+        "file": "apps/guessinator-e2e/src/support/commands.ts",
+        "ext": ".ts",
+        "mtime": 1593961208171.3926
+      },
+      {
+        "file": "apps/guessinator-e2e/src/support/index.ts",
+        "ext": ".ts",
+        "mtime": 1593961208171.8923
+      },
+      {
+        "file": "apps/guessinator-e2e/tsconfig.e2e.json",
+        "ext": ".json",
+        "mtime": 1593961208167.392
+      },
+      {
+        "file": "apps/guessinator-e2e/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1593961208167.8918
+      },
+      {
+        "file": "apps/guessinator-e2e/tslint.json",
+        "ext": ".json",
+        "mtime": 1593961208166.3916
+      }
+    ],
+    "guessinator": [
+      {
+        "file": "apps/guessinator/browserslist",
+        "ext": "",
+        "mtime": 1593961208155.89
+      },
+      {
+        "file": "apps/guessinator/jest.config.js",
+        "ext": ".js",
+        "mtime": 1593961208164.8918
+      },
+      {
+        "file": "apps/guessinator/src/app/app.component.html",
+        "ext": ".html",
+        "mtime": 1593961208162.8914
+      },
+      {
+        "file": "apps/guessinator/src/app/app.component.scss",
+        "ext": ".scss",
+        "mtime": 1593961208164.3914
+      },
+      {
+        "file": "apps/guessinator/src/app/app.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1593961208163.391
+      },
+      {
+        "file": "apps/guessinator/src/app/app.component.ts",
+        "ext": ".ts",
+        "mtime": 1593961208163.8914
+      },
+      {
+        "file": "apps/guessinator/src/app/app.module.ts",
+        "ext": ".ts",
+        "mtime": 1593961208162.391
+      },
+      {
+        "file": "apps/guessinator/src/assets/.gitkeep",
+        "ext": "",
+        "mtime": 1593961208160.3904
+      },
+      {
+        "file": "apps/guessinator/src/environments/environment.prod.ts",
+        "ext": ".ts",
+        "mtime": 1593961208161.391
+      },
+      {
+        "file": "apps/guessinator/src/environments/environment.ts",
+        "ext": ".ts",
+        "mtime": 1593961208161.391
+      },
+      {
+        "file": "apps/guessinator/src/favicon.ico",
+        "ext": ".ico",
+        "mtime": 1593961208155.39
+      },
+      {
+        "file": "apps/guessinator/src/index.html",
+        "ext": ".html",
+        "mtime": 1593961208157.8904
+      },
+      {
+        "file": "apps/guessinator/src/main.ts",
+        "ext": ".ts",
+        "mtime": 1593961208158.3906
+      },
+      {
+        "file": "apps/guessinator/src/polyfills.ts",
+        "ext": ".ts",
+        "mtime": 1593961208158.8904
+      },
+      {
+        "file": "apps/guessinator/src/styles.scss",
+        "ext": ".scss",
+        "mtime": 1593961208159.8901
+      },
+      {
+        "file": "apps/guessinator/src/test-setup.ts",
+        "ext": ".ts",
+        "mtime": 1593961208165.8916
+      },
+      {
+        "file": "apps/guessinator/tsconfig.app.json",
+        "ext": ".json",
+        "mtime": 1593961208156.3901
+      },
+      {
+        "file": "apps/guessinator/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1593961208154.3896
+      },
+      {
+        "file": "apps/guessinator/tsconfig.spec.json",
+        "ext": ".json",
+        "mtime": 1593961208165.3916
+      },
+      {
+        "file": "apps/guessinator/tslint.json",
+        "ext": ".json",
+        "mtime": 1593961208156.89
+      }
+    ]
+  }
+}
