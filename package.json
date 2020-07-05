@@ -27,8 +27,8 @@
 		"dep-graph": "nx dep-graph",
 		"help": "nx help",
 		"dev-dakimbo-server": "nx serve dakimbo-server",
-    "dev-guessinator": "nx serve guessinator",
-    "build-guessinator": "nx build guessinator --base-href=/guessinator/"
+		"dev-guessinator": "nx serve guessinator",
+		"build-guessinator": "nx build guessinator --base-href=/guessinator/"
 	},
 	"private": true,
 	"dependencies": {
