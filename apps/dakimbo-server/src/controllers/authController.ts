@@ -1,5 +1,4 @@
 import { User } from '@entities';
-import { validate } from 'class-validator';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
@@ -115,17 +114,17 @@ class AuthController {
 		}
 
 		//Validate the model (password length)
-		user.password = newPassword;
-		const errors = await validate(user);
-		if (errors.length > 0) {
-			res.status(400).send(errors);
+		try {
+			user.password = newPassword;
+			//Hash the new password and save
+			UserController.hashPassword(user);
+			userRepository.save(user);
+
+			res.status(204).send();
+		} catch (e) {
+			res.status(400).send(e);
 			return;
 		}
-		//Hash the new password and save
-		UserController.hashPassword(user);
-		userRepository.save(user);
-
-		res.status(204).send();
 	};
 }
 export default AuthController;

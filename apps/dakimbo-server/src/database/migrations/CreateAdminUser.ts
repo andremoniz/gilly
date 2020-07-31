@@ -16,7 +16,7 @@ export async function createAdminUser() {
 
 	if (!superadminRole) {
 		let superadmin = new AuthRole();
-		superadmin.role = 'Super Admin';
+		superadmin.role = 'SuperAdmin';
 		const roleRepository = getRepository(AuthRole);
 		superadminRole = await roleRepository.save(superadmin);
 	}

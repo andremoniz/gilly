@@ -1,6 +1,5 @@
 import { User } from '@entities';
 import * as bcrypt from 'bcryptjs';
-import { validate } from 'class-validator';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
@@ -48,13 +47,6 @@ class UserController {
 		user.roles = roles;
 
 		// const { adminUser } = <any>jwt.verify(<string>res.getHeader('token'), config.jwtSecret);
-
-		//Validade if the parameters are ok
-		const errors = await validate(user);
-		if (errors.length > 0) {
-			res.status(400).send(errors);
-			return;
-		}
 
 		//Hash the password, to securely store on DB
 		UserController.hashPassword(user);
