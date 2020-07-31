@@ -95,11 +95,11 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @entities */ "./apps/dakimbo-server/src/database/entities/index.ts");
+/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
 
-const isProd = process.env.IS_PROD === 'true';
-const pathToEntities = isProd ? './database/entities/**/*.js' : './database/entities/**/*.ts';
-const pathToMigrations = isProd ? './database/migrations/**/*.js' : './database/migrations/**/*.ts';
+var isProd = process.env.IS_PROD === 'true';
+var pathToEntities = isProd ? './database/entities/**/*.js' : './database/entities/**/*.ts';
+var pathToMigrations = isProd ? './database/migrations/**/*.js' : './database/migrations/**/*.ts';
 /* harmony default export */ __webpack_exports__["default"] = ({
     isProd: isProd,
     httpsOpts: {
@@ -147,7 +147,7 @@ const pathToMigrations = isProd ? './database/migrations/**/*.js' : './database/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./apps/dakimbo-server/src/database/entities/index.ts");
+/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
 /* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! class-validator */ "class-validator");
 /* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(class_validator__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
@@ -163,102 +163,129 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const loginAttempts = 3;
-class AuthController {
-}
-AuthController.login = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    //Check if username and password are set
-    let { username, email, password } = req.body;
-    if (!((username || email) && password)) {
-        res.status(400).send(`You didn't enter a username or password...`);
-        console.log(`LOGIN: Username or Password not found; failed to log in!`);
-        return;
+var loginAttempts = 3;
+var AuthController = /** @class */ (function () {
+    function AuthController() {
     }
-    //Get user from database
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    let user;
-    try {
-        user = yield userRepository.findOneOrFail({ where: [{ username }, { email }] });
-    }
-    catch (error) {
-        res.status(401).send('Account was not found, please check your username / e-mail and try again.');
-        console.log(`LOGIN: User ${username} not found; failed to log in!`);
-        return;
-    }
-    if (user.numFailedLogin >= loginAttempts || user.isLocked) {
-        const attemptsRemaining = loginAttempts - user.numFailedLogin;
-        user.isLocked = user.isLocked || attemptsRemaining <= 0;
-        yield userRepository.save(user); // increment num failed login counter
-        res.status(401).send('Account is locked; please contact an administrator!');
-        console.log(`LOGIN: User ${username} has a locked account.`);
-        return;
-    }
-    //Check if encrypted password match
-    if (!_userController__WEBPACK_IMPORTED_MODULE_6__["default"].checkIfUnencryptedPasswordIsValid(password, user)) {
-        user.numFailedLogin++;
-        const attemptsRemaining = loginAttempts - user.numFailedLogin;
-        user.isLocked = user.isLocked || attemptsRemaining <= 0;
-        yield userRepository.save(user); // increment num failed login counter
-        res.status(401).send(`You entered a wrong username, e-mail or password. ${attemptsRemaining > 0
-            ? attemptsRemaining + ' login attempts remaining before account is locked!'
-            : 'Account is now LOCKED!'} `);
-        console.log(`LOGIN: User ${user.username} wrong password; failed to log in!`);
-        return;
-    }
-    //Sign JWT, valid for 1 hour
-    const token = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["sign"]({
-        userId: user.id,
-        username: user.username,
-        roles: user.roles.map((r) => {
-            return { role: r.role };
-        })
-    }, _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret, {
-        expiresIn: '1h'
-    });
-    // Delete user pass
-    delete user.password;
-    console.log(`LOGIN: User ${user.username} successfully logged in!`);
-    user.numSuccessfulLogin++;
-    user.numFailedLogin = 0;
-    user.lastLoggedInDate = new Date();
-    yield userRepository.save(user); // increment num successful login counter
-    //Send the jwt in the response
-    res.send(Object.assign({ jwt: token }, user));
-});
-AuthController.changePassword = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    //Get ID from JWT
-    const id = res.locals.jwtPayload.userId;
-    //Get parameters from the body
-    const { oldPassword, newPassword } = req.body;
-    if (!(oldPassword && newPassword)) {
-        res.status(400).send();
-    }
-    //Get user from the database
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    let user;
-    try {
-        user = yield userRepository.findOneOrFail(id);
-    }
-    catch (id) {
-        res.status(401).send();
-    }
-    //Check if old password matches
-    if (!_userController__WEBPACK_IMPORTED_MODULE_6__["default"].checkIfUnencryptedPasswordIsValid(oldPassword, user)) {
-        res.status(401).send();
-        return;
-    }
-    //Validate the model (password length)
-    user.password = newPassword;
-    const errors = yield Object(class_validator__WEBPACK_IMPORTED_MODULE_2__["validate"])(user);
-    if (errors.length > 0) {
-        res.status(400).send(errors);
-        return;
-    }
-    //Hash the new password and save
-    _userController__WEBPACK_IMPORTED_MODULE_6__["default"].hashPassword(user);
-    userRepository.save(user);
-    res.status(204).send();
-});
+    AuthController.login = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var _a, username, email, password, userRepository, user, error_1, attemptsRemaining, attemptsRemaining, token;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = req.body, username = _a.username, email = _a.email, password = _a.password;
+                    if (!((username || email) && password)) {
+                        res.status(400).send("You didn't enter a username or password...");
+                        console.log("LOGIN: Username or Password not found; failed to log in!");
+                        return [2 /*return*/];
+                    }
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findOneOrFail({ where: [{ username: username }, { email: email }] })];
+                case 2:
+                    user = _b.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _b.sent();
+                    res.status(401).send('Account was not found, please check your username / e-mail and try again.');
+                    console.log("LOGIN: User " + username + " not found; failed to log in!");
+                    return [2 /*return*/];
+                case 4:
+                    if (!(user.numFailedLogin >= loginAttempts || user.isLocked)) return [3 /*break*/, 6];
+                    attemptsRemaining = loginAttempts - user.numFailedLogin;
+                    user.isLocked = user.isLocked || attemptsRemaining <= 0;
+                    return [4 /*yield*/, userRepository.save(user)];
+                case 5:
+                    _b.sent(); // increment num failed login counter
+                    res.status(401).send('Account is locked; please contact an administrator!');
+                    console.log("LOGIN: User " + username + " has a locked account.");
+                    return [2 /*return*/];
+                case 6:
+                    if (!!_userController__WEBPACK_IMPORTED_MODULE_6__["default"].checkIfUnencryptedPasswordIsValid(password, user)) return [3 /*break*/, 8];
+                    user.numFailedLogin++;
+                    attemptsRemaining = loginAttempts - user.numFailedLogin;
+                    user.isLocked = user.isLocked || attemptsRemaining <= 0;
+                    return [4 /*yield*/, userRepository.save(user)];
+                case 7:
+                    _b.sent(); // increment num failed login counter
+                    res.status(401).send("You entered a wrong username, e-mail or password. " + (attemptsRemaining > 0
+                        ? attemptsRemaining + ' login attempts remaining before account is locked!'
+                        : 'Account is now LOCKED!') + " ");
+                    console.log("LOGIN: User " + user.username + " wrong password; failed to log in!");
+                    return [2 /*return*/];
+                case 8:
+                    token = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["sign"]({
+                        userId: user.id,
+                        username: user.username,
+                        roles: user.roles.map(function (r) {
+                            return { role: r.role };
+                        })
+                    }, _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret, {
+                        expiresIn: '1h'
+                    });
+                    // Delete user pass
+                    delete user.password;
+                    console.log("LOGIN: User " + user.username + " successfully logged in!");
+                    user.numSuccessfulLogin++;
+                    user.numFailedLogin = 0;
+                    user.lastLoggedInDate = new Date();
+                    return [4 /*yield*/, userRepository.save(user)];
+                case 9:
+                    _b.sent(); // increment num successful login counter
+                    //Send the jwt in the response
+                    res.send(Object.assign({ jwt: token }, user));
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    AuthController.changePassword = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var id, _a, oldPassword, newPassword, userRepository, user, id_1, errors;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = res.locals.jwtPayload.userId;
+                    _a = req.body, oldPassword = _a.oldPassword, newPassword = _a.newPassword;
+                    if (!(oldPassword && newPassword)) {
+                        res.status(400).send();
+                    }
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findOneOrFail(id)];
+                case 2:
+                    user = _b.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    id_1 = _b.sent();
+                    res.status(401).send();
+                    return [3 /*break*/, 4];
+                case 4:
+                    //Check if old password matches
+                    if (!_userController__WEBPACK_IMPORTED_MODULE_6__["default"].checkIfUnencryptedPasswordIsValid(oldPassword, user)) {
+                        res.status(401).send();
+                        return [2 /*return*/];
+                    }
+                    //Validate the model (password length)
+                    user.password = newPassword;
+                    return [4 /*yield*/, Object(class_validator__WEBPACK_IMPORTED_MODULE_2__["validate"])(user)];
+                case 5:
+                    errors = _b.sent();
+                    if (errors.length > 0) {
+                        res.status(400).send(errors);
+                        return [2 /*return*/];
+                    }
+                    //Hash the new password and save
+                    _userController__WEBPACK_IMPORTED_MODULE_6__["default"].hashPassword(user);
+                    userRepository.save(user);
+                    res.status(204).send();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    return AuthController;
+}());
 /* harmony default export */ __webpack_exports__["default"] = (AuthController);
 
 
@@ -276,7 +303,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataTransaction", function() { return DataTransaction; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./apps/dakimbo-server/src/database/entities/index.ts");
+/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
 /* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
 /* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../config */ "./apps/dakimbo-server/src/config.ts");
@@ -288,8 +315,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class DataTransaction {
-    constructor(req, res) {
+var DataTransaction = /** @class */ (function () {
+    function DataTransaction(req, res) {
         this.req = req;
         this.res = res;
         this.entityName = this.req.params.entity;
@@ -306,87 +333,137 @@ class DataTransaction {
             return;
         }
     }
-    performTransaction() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            if (['POST', 'PATCH', 'PUT'].includes(this.req.method)) {
-                yield this.executeSave();
-            }
-            else if (this.req.method === 'DELETE') {
-                yield this.executeDelete();
-            }
-        });
-    }
-    executeSave() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            const isArray = Array.isArray(this.dataObject);
-            if (isArray) {
-                this.dataObject.forEach((d) => this.setEntityUser(d));
-            }
-            else {
-                this.setEntityUser(this.dataObject);
-                if (!this.dataObject.id && this.req.params.id)
-                    this.dataObject.id = this.req.params.id;
-            }
-            try {
-                if (this.model.preProcess) {
-                    if (isArray) {
-                        const preProcessPromises = [];
-                        this.dataObject.forEach((o) => preProcessPromises.push(this.model.preProcess(o)));
-                        yield Promise.all(preProcessPromises);
-                    }
-                    else {
-                        yield this.model.preProcess(this.dataObject);
-                    }
+    DataTransaction.prototype.performTransaction = function () {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!['POST', 'PATCH', 'PUT'].includes(this.req.method)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.executeSave()];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 2:
+                        if (!(this.req.method === 'DELETE')) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.executeDelete()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
                 }
-                let savedEntity = yield this.repo.save(this.dataObject);
-                if (this.model.postProcess) {
-                    if (isArray) {
-                        const postProcessPromises = [];
-                        this.dataObject.forEach((o) => postProcessPromises.push(this.model.postProcess(o)));
-                        yield Promise.all(postProcessPromises);
-                    }
-                    else {
-                        yield this.model.postProcess(this.dataObject);
-                    }
-                }
-                if (this.model.loadAfterCreate) {
-                    savedEntity = yield this.repo.findOne(this.dataObject.id);
-                }
-                console.log(`${this.req.method}: ${this.entityName} | ${isArray ? 'Length: ' + savedEntity.length : savedEntity.id} | USER: ${this.userJwt.username}`);
-                this.res.send(savedEntity);
-            }
-            catch (e) {
-                this.res.status(500).send(e);
-                console.error(`${this.req.method} FAILED: ${this.entityName} | USER: ${this.userJwt.username}`);
-                console.error(`ERROR: `, e);
-            }
+            });
         });
-    }
-    executeDelete() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            const idToDelete = this.req.params.id;
-            const isArray = Array.isArray(this.dataObject);
-            try {
-                yield this.repo.delete(isArray ? this.dataObject : idToDelete);
-                console.log(`DELETE: ${this.entityName} | ${isArray ? 'Length: ' + this.dataObject.length : idToDelete} | USER: ${this.userJwt.username}`);
-                this.res.send({
-                    id: idToDelete
-                });
-            }
-            catch (e) {
-                this.res.status(500).send(e);
-                console.error(`DELETE FAILED: ${this.entityName} | ${idToDelete} | USER: ${this.userJwt.username}`);
-                console.error(`ERROR: `, e);
-            }
+    };
+    DataTransaction.prototype.executeSave = function () {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            var isArray, preProcessPromises_1, savedEntity, postProcessPromises_1, e_1;
+            var _this = this;
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        isArray = Array.isArray(this.dataObject);
+                        if (isArray) {
+                            this.dataObject.forEach(function (d) { return _this.setEntityUser(d); });
+                        }
+                        else {
+                            this.setEntityUser(this.dataObject);
+                            if (!this.dataObject.id && this.req.params.id)
+                                this.dataObject.id = this.req.params.id;
+                        }
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 13, , 14]);
+                        if (!this.model.preProcess) return [3 /*break*/, 5];
+                        if (!isArray) return [3 /*break*/, 3];
+                        preProcessPromises_1 = [];
+                        this.dataObject.forEach(function (o) {
+                            return preProcessPromises_1.push(_this.model.preProcess(o));
+                        });
+                        return [4 /*yield*/, Promise.all(preProcessPromises_1)];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 3: return [4 /*yield*/, this.model.preProcess(this.dataObject)];
+                    case 4:
+                        _a.sent();
+                        _a.label = 5;
+                    case 5: return [4 /*yield*/, this.repo.save(this.dataObject)];
+                    case 6:
+                        savedEntity = _a.sent();
+                        if (!this.model.postProcess) return [3 /*break*/, 10];
+                        if (!isArray) return [3 /*break*/, 8];
+                        postProcessPromises_1 = [];
+                        this.dataObject.forEach(function (o) {
+                            return postProcessPromises_1.push(_this.model.postProcess(o));
+                        });
+                        return [4 /*yield*/, Promise.all(postProcessPromises_1)];
+                    case 7:
+                        _a.sent();
+                        return [3 /*break*/, 10];
+                    case 8: return [4 /*yield*/, this.model.postProcess(this.dataObject)];
+                    case 9:
+                        _a.sent();
+                        _a.label = 10;
+                    case 10:
+                        if (!this.model.loadAfterCreate) return [3 /*break*/, 12];
+                        return [4 /*yield*/, this.repo.findOne(this.dataObject.id)];
+                    case 11:
+                        savedEntity = _a.sent();
+                        _a.label = 12;
+                    case 12:
+                        console.log(this.req.method + ": " + this.entityName + " | " + (isArray ? 'Length: ' + savedEntity.length : savedEntity.id) + " | USER: " + this.userJwt.username);
+                        this.res.send(savedEntity);
+                        return [3 /*break*/, 14];
+                    case 13:
+                        e_1 = _a.sent();
+                        this.res.status(500).send(e_1);
+                        console.error(this.req.method + " FAILED: " + this.entityName + " | USER: " + this.userJwt.username);
+                        console.error("ERROR: ", e_1);
+                        return [3 /*break*/, 14];
+                    case 14: return [2 /*return*/];
+                }
+            });
         });
-    }
-    setEntityUser(entity) {
+    };
+    DataTransaction.prototype.executeDelete = function () {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            var idToDelete, isArray, e_2;
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        idToDelete = this.req.params.id;
+                        isArray = Array.isArray(this.dataObject);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.repo.delete(isArray ? this.dataObject : idToDelete)];
+                    case 2:
+                        _a.sent();
+                        console.log("DELETE: " + this.entityName + " | " + (isArray ? 'Length: ' + this.dataObject.length : idToDelete) + " | USER: " + this.userJwt.username);
+                        this.res.send({
+                            id: idToDelete
+                        });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _a.sent();
+                        this.res.status(500).send(e_2);
+                        console.error("DELETE FAILED: " + this.entityName + " | " + idToDelete + " | USER: " + this.userJwt.username);
+                        console.error("ERROR: ", e_2);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    DataTransaction.prototype.setEntityUser = function (entity) {
         entity.modifyUser = this.userJwt.username;
         if (this.req.method === 'POST') {
             entity.createUser = this.userJwt.username;
         }
-    }
-}
+    };
+    return DataTransaction;
+}());
+
 
 
 /***/ }),
@@ -403,7 +480,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "readData", function() { return readData; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./apps/dakimbo-server/src/database/entities/index.ts");
+/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
 /* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
 /* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! typeorm */ "typeorm");
@@ -418,83 +495,103 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const readData = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    const entityName = req.params.entity;
-    if (!entityName) {
-        res.send('You must include the resource name to get these entities from!');
-        return;
-    }
-    const userJwt = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret);
-    const model = _entities__WEBPACK_IMPORTED_MODULE_1__["entityMap"][entityName];
-    if (!Object(_libs_utilities_src_lib_auth_checkModelAllowedRoles__WEBPACK_IMPORTED_MODULE_4__["checkModelAllowedRoles"])(model, userJwt)) {
-        this.res.status(403).send('You are not allowed to transaction this entity!');
-        return;
-    }
-    try {
-        let repo = _database_database__WEBPACK_IMPORTED_MODULE_6__["Database"]._connection.getRepository(entityName);
-        let entities = [];
-        let findOptions = {};
-        let useDefaultRepo = false;
-        const queries = Object.keys(req.query);
-        if (queries && queries.length) {
-            let query = {};
-            let attrs = [];
-            for (let i = 0, len = queries.length; i < len; i++) {
-                const key = queries[i];
-                const value = req.query[key];
-                if (key === 'useDefaultRepo') {
-                    useDefaultRepo = true;
+var readData = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+    var entityName, userJwt, model, repo, entities, findOptions, useDefaultRepo, queries, query, attrs, i, len, key, value, splitProp, prop, subProp, manager, _a, e_1;
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                entityName = req.params.entity;
+                if (!entityName) {
+                    res.send('You must include the resource name to get these entities from!');
+                    return [2 /*return*/];
                 }
-                else if (key === 'attrs') {
-                    attrs = value.split(',');
+                userJwt = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret);
+                model = _entities__WEBPACK_IMPORTED_MODULE_1__["entityMap"][entityName];
+                if (!Object(_libs_utilities_src_lib_auth_checkModelAllowedRoles__WEBPACK_IMPORTED_MODULE_4__["checkModelAllowedRoles"])(model, userJwt)) {
+                    this.res.status(403).send('You are not allowed to transaction this entity!');
+                    return [2 /*return*/];
                 }
-                else if (key.indexOf('.') >= 0) {
-                    const splitProp = key.split('.');
-                    const prop = splitProp[0], subProp = splitProp[1];
-                    query[prop] = {};
-                    query[prop][subProp] = transformQueryValue(value);
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 12, , 13]);
+                repo = _database_database__WEBPACK_IMPORTED_MODULE_6__["Database"]._connection.getRepository(entityName);
+                entities = [];
+                findOptions = {};
+                useDefaultRepo = false;
+                queries = Object.keys(req.query);
+                if (queries && queries.length) {
+                    query = {};
+                    attrs = [];
+                    for (i = 0, len = queries.length; i < len; i++) {
+                        key = queries[i];
+                        value = req.query[key];
+                        if (key === 'useDefaultRepo') {
+                            useDefaultRepo = true;
+                        }
+                        else if (key === 'attrs') {
+                            attrs = value.split(',');
+                        }
+                        else if (key.indexOf('.') >= 0) {
+                            splitProp = key.split('.');
+                            prop = splitProp[0], subProp = splitProp[1];
+                            query[prop] = {};
+                            query[prop][subProp] = transformQueryValue(value);
+                        }
+                        else {
+                            query[key] = transformQueryValue(value);
+                        }
+                    }
+                    findOptions = {};
+                    if (query) {
+                        findOptions.where = query;
+                    }
+                    if (attrs && attrs.length) {
+                        findOptions.select = attrs;
+                    }
                 }
-                else {
-                    query[key] = transformQueryValue(value);
+                if (!(model.repoType && !useDefaultRepo)) return [3 /*break*/, 7];
+                manager = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getManager"])();
+                _a = model.repoType;
+                switch (_a) {
+                    case 'tree': return [3 /*break*/, 2];
                 }
-            }
-            findOptions = {};
-            if (query) {
-                findOptions.where = query;
-            }
-            if (attrs && attrs.length) {
-                findOptions.select = attrs;
-            }
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, manager.getTreeRepository(entityName).findTrees()];
+            case 3:
+                entities = _b.sent();
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, repo.find(findOptions)];
+            case 5:
+                entities = _b.sent();
+                return [3 /*break*/, 6];
+            case 6: return [3 /*break*/, 9];
+            case 7: return [4 /*yield*/, repo.find(findOptions)];
+            case 8:
+                entities = _b.sent();
+                _b.label = 9;
+            case 9:
+                if (!(model && model.relationships && model.relationships.length)) return [3 /*break*/, 11];
+                return [4 /*yield*/, loadRelationships(entityName, repo, model.relationships, entities)];
+            case 10:
+                _b.sent();
+                _b.label = 11;
+            case 11:
+                removeIgnoredAttrs(entities);
+                console.log("GET: " + entityName + (Object.keys(req.query).length ? ' ' + JSON.stringify(req.query) : '') + " | Returned " + entities.length + " entities! USER: " + userJwt.username);
+                res.send(entities);
+                return [3 /*break*/, 13];
+            case 12:
+                e_1 = _b.sent();
+                res.status(500).send(e_1);
+                console.error("GET FAILED: " + entityName + " " + JSON.stringify(req.query) + " | USER: " + userJwt.username);
+                console.error("ERROR: ", e_1);
+                return [3 /*break*/, 13];
+            case 13: return [2 /*return*/];
         }
-        if (model.repoType && !useDefaultRepo) {
-            const manager = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getManager"])();
-            switch (model.repoType) {
-                case 'tree':
-                    entities = yield manager.getTreeRepository(entityName).findTrees();
-                    break;
-                default:
-                    entities = yield repo.find(findOptions);
-                    break;
-            }
-        }
-        else {
-            entities = yield repo.find(findOptions);
-        }
-        if (model && model.relationships && model.relationships.length) {
-            yield loadRelationships(entityName, repo, model.relationships, entities);
-        }
-        removeIgnoredAttrs(entities);
-        console.log(`GET: ${entityName}${Object.keys(req.query).length ? ' ' + JSON.stringify(req.query) : ''} | Returned ${entities.length} entities! USER: ${userJwt.username}`);
-        res.send(entities);
-    }
-    catch (e) {
-        res.status(500).send(e);
-        console.error(`GET FAILED: ${entityName} ${JSON.stringify(req.query)} | USER: ${userJwt.username}`);
-        console.error(`ERROR: `, e);
-    }
-});
-const transformQueryValue = (value) => {
-    const lowerValue = value.toLowerCase();
+    });
+}); };
+var transformQueryValue = function (value) {
+    var lowerValue = value.toLowerCase();
     if (lowerValue === 'null') {
         return Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["IsNull"])();
     }
@@ -502,70 +599,86 @@ const transformQueryValue = (value) => {
         return value;
     }
 };
-const removeIgnoredAttrs = (entities) => {
+var removeIgnoredAttrs = function (entities) {
     if (!entities)
         return;
-    const ignoreAttrs = ['relationships', 'loadAfterCreate'];
-    (entities instanceof Array ? entities : [entities]).forEach((e) => ignoreAttrs.forEach((attr) => delete e[attr]));
+    var ignoreAttrs = ['relationships', 'loadAfterCreate'];
+    (entities instanceof Array ? entities : [entities]).forEach(function (e) {
+        return ignoreAttrs.forEach(function (attr) { return delete e[attr]; });
+    });
 };
-const loadRelationships = (entityName, repo, relationships, baseEntities, ignoreSubRelations) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    if (!baseEntities || !baseEntities.length)
-        return;
-    // Wait for all sub finds to complete and spread them into a res object
-    const res = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(yield Promise.all(relationships.map((relation) => {
-        const manager = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getManager"])();
-        if (relation.model && relation.model.repoType && !relation.useDefaultRepo) {
-            switch (relation.model.repoType) {
-                case 'tree':
-                    return manager.getTreeRepository(entityName).findTrees();
-                    break;
-                default:
-                    return repo.findByIds(baseEntities.map((entity) => {
-                        if (!entity || !entity.id)
-                            return;
-                        return entity.id;
-                    }), {
-                        select: ['id'],
-                        relations: [relation.name]
-                    });
-                    break;
-            }
-        }
-        else {
-            return repo.findByIds(baseEntities.map((entity) => {
-                if (!entity || !entity.id)
-                    return;
-                return entity.id;
-            }), {
-                select: ['id'],
-                relations: [relation.name]
-            });
-        }
-    })), []);
-    // Loop over every sub find result, find the "full entity" we're trying to build from our base entities,
-    // and attach the corresponding related entites to it (not a "pure" function)
-    const subRelationshipPromises = [];
-    for (const i of Object.keys(res)) {
-        for (const r of res[i]) {
-            const fullEntity = baseEntities.find((e) => e.id === r.id);
-            if (fullEntity) {
-                const relationName = relationships[i].name;
-                const relationObject = r[relationName];
-                if (relationships[i].model &&
-                    relationships[i].model.relationships &&
-                    !ignoreSubRelations) {
-                    const subRepo = _database_database__WEBPACK_IMPORTED_MODULE_6__["Database"]._connection.getRepository(relationships[i].model.displayName);
-                    const subRelationships = relationships[i].model.relationships;
-                    subRelationshipPromises.push(loadRelationships(entityName, subRepo, subRelationships, relationObject instanceof Array ? relationObject : [relationObject], relationships[i].ignoreSubRelations));
+var loadRelationships = function (entityName, repo, relationships, baseEntities, ignoreSubRelations) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+    var res, subRelationshipPromises, _i, _a, i, _loop_1, _b, _c, r;
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                if (!baseEntities || !baseEntities.length)
+                    return [2 /*return*/];
+                return [4 /*yield*/, Promise.all(relationships.map(function (relation) {
+                        var manager = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getManager"])();
+                        if (relation.model && relation.model.repoType && !relation.useDefaultRepo) {
+                            switch (relation.model.repoType) {
+                                case 'tree':
+                                    return manager.getTreeRepository(entityName).findTrees();
+                                    break;
+                                default:
+                                    return repo.findByIds(baseEntities.map(function (entity) {
+                                        if (!entity || !entity.id)
+                                            return;
+                                        return entity.id;
+                                    }), {
+                                        select: ['id'],
+                                        relations: [relation.name]
+                                    });
+                                    break;
+                            }
+                        }
+                        else {
+                            return repo.findByIds(baseEntities.map(function (entity) {
+                                if (!entity || !entity.id)
+                                    return;
+                                return entity.id;
+                            }), {
+                                select: ['id'],
+                                relations: [relation.name]
+                            });
+                        }
+                    }))];
+            case 1:
+                res = tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"].apply(void 0, [_d.sent(),
+                    []]);
+                subRelationshipPromises = [];
+                for (_i = 0, _a = Object.keys(res); _i < _a.length; _i++) {
+                    i = _a[_i];
+                    _loop_1 = function (r) {
+                        var fullEntity = baseEntities.find(function (e) { return e.id === r.id; });
+                        if (fullEntity) {
+                            var relationName = relationships[i].name;
+                            var relationObject = r[relationName];
+                            if (relationships[i].model &&
+                                relationships[i].model.relationships &&
+                                !ignoreSubRelations) {
+                                var subRepo = _database_database__WEBPACK_IMPORTED_MODULE_6__["Database"]._connection.getRepository(relationships[i].model.displayName);
+                                var subRelationships = relationships[i].model.relationships;
+                                subRelationshipPromises.push(loadRelationships(entityName, subRepo, subRelationships, relationObject instanceof Array ? relationObject : [relationObject], relationships[i].ignoreSubRelations));
+                            }
+                            removeIgnoredAttrs(relationObject);
+                            removeIgnoredAttrs(fullEntity);
+                            fullEntity[relationName] = relationObject;
+                        }
+                    };
+                    for (_b = 0, _c = res[i]; _b < _c.length; _b++) {
+                        r = _c[_b];
+                        _loop_1(r);
+                    }
                 }
-                removeIgnoredAttrs(relationObject);
-                removeIgnoredAttrs(fullEntity);
-                fullEntity[relationName] = relationObject;
-            }
+                return [4 /*yield*/, Promise.all(subRelationshipPromises)];
+            case 2:
+                _d.sent();
+                return [2 /*return*/];
         }
-    }
-    yield Promise.all(subRelationshipPromises);
-});
+    });
+}); };
 
 
 /***/ }),
@@ -586,18 +699,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class DataController {
-}
-DataController.get = _data_read__WEBPACK_IMPORTED_MODULE_1__["readData"];
-DataController.create = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    yield new _data_data_transaction__WEBPACK_IMPORTED_MODULE_2__["DataTransaction"](req, res).performTransaction();
-});
-DataController.update = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    yield new _data_data_transaction__WEBPACK_IMPORTED_MODULE_2__["DataTransaction"](req, res).performTransaction();
-});
-DataController.delete = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    yield new _data_data_transaction__WEBPACK_IMPORTED_MODULE_2__["DataTransaction"](req, res).performTransaction();
-});
+var DataController = /** @class */ (function () {
+    function DataController() {
+    }
+    DataController.get = _data_read__WEBPACK_IMPORTED_MODULE_1__["readData"];
+    DataController.create = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, new _data_data_transaction__WEBPACK_IMPORTED_MODULE_2__["DataTransaction"](req, res).performTransaction()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    DataController.update = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, new _data_data_transaction__WEBPACK_IMPORTED_MODULE_2__["DataTransaction"](req, res).performTransaction()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    DataController.delete = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, new _data_data_transaction__WEBPACK_IMPORTED_MODULE_2__["DataTransaction"](req, res).performTransaction()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    return DataController;
+}());
 /* harmony default export */ __webpack_exports__["default"] = (DataController);
 
 
@@ -622,22 +759,37 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class MetricsController {
-}
-MetricsController.getMetricsFor = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    const { username } = jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_2__["default"].jwtSecret);
-    const metricToFind = req.params.metricName;
-    try {
-        const metricRepo = _database_database__WEBPACK_IMPORTED_MODULE_3__["Database"]._connection.getRepository(metricToFind);
-        const metrics = yield metricRepo.find();
-        console.log(`METRICS FETCHED: ${metricToFind} --- FOUND: ${metrics.length} | USER: ${username}`);
-        res.send(metrics);
+var MetricsController = /** @class */ (function () {
+    function MetricsController() {
     }
-    catch (error) {
-        res.status(500).send(error);
-        console.log(`FAILED: Metrics fetch for ${metricToFind}`);
-    }
-});
+    MetricsController.getMetricsFor = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var username, metricToFind, metricRepo, metrics, error_1;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    username = jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_2__["default"].jwtSecret).username;
+                    metricToFind = req.params.metricName;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    metricRepo = _database_database__WEBPACK_IMPORTED_MODULE_3__["Database"]._connection.getRepository(metricToFind);
+                    return [4 /*yield*/, metricRepo.find()];
+                case 2:
+                    metrics = _a.sent();
+                    console.log("METRICS FETCHED: " + metricToFind + " --- FOUND: " + metrics.length + " | USER: " + username);
+                    res.send(metrics);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    res.status(500).send(error_1);
+                    console.log("FAILED: Metrics fetch for " + metricToFind);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    return MetricsController;
+}());
 /* harmony default export */ __webpack_exports__["default"] = (MetricsController);
 
 
@@ -654,7 +806,7 @@ MetricsController.getMetricsFor = (req, res) => Object(tslib__WEBPACK_IMPORTED_M
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./apps/dakimbo-server/src/database/entities/index.ts");
+/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
 /* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bcryptjs */ "bcryptjs");
 /* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! class-validator */ "class-validator");
@@ -671,165 +823,227 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class UserController {
-    static hashPassword(userEntity) {
+var UserController = /** @class */ (function () {
+    function UserController() {
+    }
+    UserController.hashPassword = function (userEntity) {
         userEntity.password = bcryptjs__WEBPACK_IMPORTED_MODULE_2__["hashSync"](userEntity.password, 8);
-    }
-    static checkIfUnencryptedPasswordIsValid(unencryptedPassword, userEntity) {
+    };
+    UserController.checkIfUnencryptedPasswordIsValid = function (unencryptedPassword, userEntity) {
         return bcryptjs__WEBPACK_IMPORTED_MODULE_2__["compareSync"](unencryptedPassword, userEntity.password);
-    }
-}
-UserController.listAll = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    //Get users from database
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    const users = yield userRepository.find();
-    users.forEach((user) => {
-        delete user.password;
-    });
-    //Send the users object
-    res.send(users);
-});
-UserController.getOneById = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    //Get the ID from the url
-    const id = req.params.id;
-    //Get the user from database
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    try {
-        const user = yield userRepository.findOneOrFail(id);
-        delete user.password;
-        res.status(201).send(user);
-    }
-    catch (error) {
-        res.status(404).send('User not found');
-    }
-});
-UserController.newUser = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    //Get parameters from the body
-    let { username, password, email, roles } = req.body;
-    let user = new _entities__WEBPACK_IMPORTED_MODULE_1__["User"]();
-    user.username = username;
-    user.password = password;
-    user.email = email;
-    user.roles = roles;
-    // const { adminUser } = <any>jwt.verify(<string>res.getHeader('token'), config.jwtSecret);
-    //Validade if the parameters are ok
-    const errors = yield Object(class_validator__WEBPACK_IMPORTED_MODULE_3__["validate"])(user);
-    if (errors.length > 0) {
-        res.status(400).send(errors);
-        return;
-    }
-    //Hash the password, to securely store on DB
-    UserController.hashPassword(user);
-    //Try to save. If fails, the username is already in use
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    try {
-        yield userRepository.save(user);
-    }
-    catch (e) {
-        res.status(409).send('Username already in use!');
-        return;
-    }
-    delete user.password;
-    //If all ok, send 201 response
-    console.log(`CREATE USER: ${user.username}`);
-    res.status(201).send(user);
-});
-UserController.editUser = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    //Get the ID from the url
-    const id = req.params.id;
-    //Get values from the body
-    const { username, password, roles, email, isLocked, numFailedLogin } = req.body;
-    const { adminUser } = jsonwebtoken__WEBPACK_IMPORTED_MODULE_4__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_6__["default"].jwtSecret);
-    //Try to find user on database
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    let user;
-    try {
-        user = yield userRepository.findOneOrFail(id);
-    }
-    catch (error) {
-        //If not found, send a 404 response
-        res.status(404).send('User not found');
-        return;
-    }
-    //Validate the new values on model
-    user.username = username;
-    user.roles = roles;
-    user.email = email;
-    user.isLocked = isLocked;
-    user.numFailedLogin = numFailedLogin;
-    if (password) {
-        user.password = password;
-        UserController.hashPassword(user);
-    }
-    const errors = yield Object(class_validator__WEBPACK_IMPORTED_MODULE_3__["validate"])(user);
-    if (errors.length > 0) {
-        res.status(400).send(errors);
-        return;
-    }
-    //Try to save, if fails, that means username already in use
-    try {
-        yield userRepository.save(user);
-    }
-    catch (e) {
-        res.status(409).send('username already in use');
-        return;
-    }
-    //After all send a 204 (no content, but accepted) response
-    console.log(`EDIT USER: ${user.username} | BY ADMIN: ${adminUser}`);
-    res.status(204).send();
-});
-UserController.deleteUser = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    //Get the ID from the url
-    const id = req.params.id;
-    const { adminUser } = jsonwebtoken__WEBPACK_IMPORTED_MODULE_4__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_6__["default"].jwtSecret);
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    let user;
-    try {
-        user = yield userRepository.findOneOrFail(id);
-    }
-    catch (error) {
-        res.status(404).send('User not found');
-        return;
-    }
-    userRepository.delete(id);
-    //After all send a 204 (no content, but accepted) response
-    console.log(`DELETE USER: ${user.username} | BY ADMIN: ${adminUser}`);
-    res.status(204).send();
-});
-UserController.getCurrentUser = (req, res) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    // Get the jwt token from the head
-    const authHeader = req.headers['authorization'];
-    if (!authHeader || !authHeader.includes('Bearer')) {
-        res.status(408).send('No Authorization Header or Bearer token presented!');
-        return;
-    }
-    const token = authHeader.split('Bearer')[1].trim();
-    let jwtPayload;
-    // Try to validate the token and get data
-    try {
-        jwtPayload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_4__["verify"](token, _config__WEBPACK_IMPORTED_MODULE_6__["default"].jwtSecret);
-        res.locals.jwtPayload = jwtPayload;
-    }
-    catch (error) {
-        // If token is not valid, respond with 401 (unauthorized)
-        res.status(401).send();
-        return;
-    }
-    // The token is valid for 1 hour
-    // We want to send a new token on every request
-    const { userId, username } = jwtPayload;
-    const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-    let user;
-    try {
-        user = yield userRepository.findOneOrFail(userId);
-    }
-    catch (error) {
-        res.status(404).send('User not found');
-        return;
-    }
-    delete user.password;
-    res.status(201).send(user);
-});
+    };
+    UserController.listAll = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var userRepository, users;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    return [4 /*yield*/, userRepository.find()];
+                case 1:
+                    users = _a.sent();
+                    users.forEach(function (user) {
+                        delete user.password;
+                    });
+                    //Send the users object
+                    res.send(users);
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    UserController.getOneById = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var id, userRepository, user, error_1;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = req.params.id;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findOneOrFail(id)];
+                case 2:
+                    user = _a.sent();
+                    delete user.password;
+                    res.status(201).send(user);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    res.status(404).send('User not found');
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
+    UserController.newUser = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var _a, username, password, email, roles, user, errors, userRepository, e_1;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = req.body, username = _a.username, password = _a.password, email = _a.email, roles = _a.roles;
+                    user = new _entities__WEBPACK_IMPORTED_MODULE_1__["User"]();
+                    user.username = username;
+                    user.password = password;
+                    user.email = email;
+                    user.roles = roles;
+                    return [4 /*yield*/, Object(class_validator__WEBPACK_IMPORTED_MODULE_3__["validate"])(user)];
+                case 1:
+                    errors = _b.sent();
+                    if (errors.length > 0) {
+                        res.status(400).send(errors);
+                        return [2 /*return*/];
+                    }
+                    //Hash the password, to securely store on DB
+                    UserController.hashPassword(user);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _b.label = 2;
+                case 2:
+                    _b.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, userRepository.save(user)];
+                case 3:
+                    _b.sent();
+                    return [3 /*break*/, 5];
+                case 4:
+                    e_1 = _b.sent();
+                    res.status(409).send('Username already in use!');
+                    return [2 /*return*/];
+                case 5:
+                    delete user.password;
+                    //If all ok, send 201 response
+                    console.log("CREATE USER: " + user.username);
+                    res.status(201).send(user);
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    UserController.editUser = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var id, _a, username, password, roles, email, isLocked, numFailedLogin, adminUser, userRepository, user, error_2, errors, e_2;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = req.params.id;
+                    _a = req.body, username = _a.username, password = _a.password, roles = _a.roles, email = _a.email, isLocked = _a.isLocked, numFailedLogin = _a.numFailedLogin;
+                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_4__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_6__["default"].jwtSecret).adminUser;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findOneOrFail(id)];
+                case 2:
+                    user = _b.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_2 = _b.sent();
+                    //If not found, send a 404 response
+                    res.status(404).send('User not found');
+                    return [2 /*return*/];
+                case 4:
+                    //Validate the new values on model
+                    user.username = username;
+                    user.roles = roles;
+                    user.email = email;
+                    user.isLocked = isLocked;
+                    user.numFailedLogin = numFailedLogin;
+                    if (password) {
+                        user.password = password;
+                        UserController.hashPassword(user);
+                    }
+                    return [4 /*yield*/, Object(class_validator__WEBPACK_IMPORTED_MODULE_3__["validate"])(user)];
+                case 5:
+                    errors = _b.sent();
+                    if (errors.length > 0) {
+                        res.status(400).send(errors);
+                        return [2 /*return*/];
+                    }
+                    _b.label = 6;
+                case 6:
+                    _b.trys.push([6, 8, , 9]);
+                    return [4 /*yield*/, userRepository.save(user)];
+                case 7:
+                    _b.sent();
+                    return [3 /*break*/, 9];
+                case 8:
+                    e_2 = _b.sent();
+                    res.status(409).send('username already in use');
+                    return [2 /*return*/];
+                case 9:
+                    //After all send a 204 (no content, but accepted) response
+                    console.log("EDIT USER: " + user.username + " | BY ADMIN: " + adminUser);
+                    res.status(204).send();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    UserController.deleteUser = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var id, adminUser, userRepository, user, error_3;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = req.params.id;
+                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_4__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_6__["default"].jwtSecret).adminUser;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findOneOrFail(id)];
+                case 2:
+                    user = _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_3 = _a.sent();
+                    res.status(404).send('User not found');
+                    return [2 /*return*/];
+                case 4:
+                    userRepository.delete(id);
+                    //After all send a 204 (no content, but accepted) response
+                    console.log("DELETE USER: " + user.username + " | BY ADMIN: " + adminUser);
+                    res.status(204).send();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    UserController.getCurrentUser = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var authHeader, token, jwtPayload, userId, username, userRepository, user, error_4;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    authHeader = req.headers['authorization'];
+                    if (!authHeader || !authHeader.includes('Bearer')) {
+                        res.status(408).send('No Authorization Header or Bearer token presented!');
+                        return [2 /*return*/];
+                    }
+                    token = authHeader.split('Bearer')[1].trim();
+                    // Try to validate the token and get data
+                    try {
+                        jwtPayload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_4__["verify"](token, _config__WEBPACK_IMPORTED_MODULE_6__["default"].jwtSecret);
+                        res.locals.jwtPayload = jwtPayload;
+                    }
+                    catch (error) {
+                        // If token is not valid, respond with 401 (unauthorized)
+                        res.status(401).send();
+                        return [2 /*return*/];
+                    }
+                    userId = jwtPayload.userId, username = jwtPayload.username;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_5__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findOneOrFail(userId)];
+                case 2:
+                    user = _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_4 = _a.sent();
+                    res.status(404).send('User not found');
+                    return [2 /*return*/];
+                case 4:
+                    delete user.password;
+                    res.status(201).send(user);
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    return UserController;
+}());
 /* harmony default export */ __webpack_exports__["default"] = (UserController);
 
 
@@ -851,509 +1065,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
 
 
-class Database {
-    constructor() { }
-    connect(dbOptions) {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            Database._dbOptions = dbOptions;
-            try {
-                console.log(`Connecting to ${Database._dbOptions.type} Database: ${Database._dbOptions.database} at ${Database._dbOptions.host}:${Database._dbOptions.port} with user: ${Database._dbOptions.username}`);
-                Database._connection = yield Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["createConnection"])(Database._dbOptions);
-                yield this.runMigrations();
-                console.log(`Connection to database established!`);
-            }
-            catch (e) {
-                console.log(`Error Connecting to ${Database._dbOptions.host}:${Database._dbOptions.port}\n`, e);
-            }
+var Database = /** @class */ (function () {
+    function Database() {
+    }
+    Database.prototype.connect = function (dbOptions) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            var _a, e_1;
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        Database._dbOptions = dbOptions;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 4, , 5]);
+                        console.log("Connecting to " + Database._dbOptions.type + " Database: " + Database._dbOptions.database + " at " + Database._dbOptions.host + ":" + Database._dbOptions.port + " with user: " + Database._dbOptions.username);
+                        _a = Database;
+                        return [4 /*yield*/, Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["createConnection"])(Database._dbOptions)];
+                    case 2:
+                        _a._connection = _b.sent();
+                        return [4 /*yield*/, this.runMigrations()];
+                    case 3:
+                        _b.sent();
+                        console.log("Connection to database established!");
+                        return [3 /*break*/, 5];
+                    case 4:
+                        e_1 = _b.sent();
+                        console.log("Error Connecting to " + Database._dbOptions.host + ":" + Database._dbOptions.port + "\n", e_1);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
         });
-    }
-    runMigrations() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            const migrations = [];
-            if (migrations.length) {
-                console.log(`Running migrations...`);
-                yield Promise.all(migrations);
-                console.log(`Migrations finished!`);
-            }
+    };
+    Database.prototype.runMigrations = function () {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            var migrations;
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        migrations = [];
+                        if (!migrations.length) return [3 /*break*/, 2];
+                        console.log("Running migrations...");
+                        return [4 /*yield*/, Promise.all(migrations)];
+                    case 1:
+                        _a.sent();
+                        console.log("Migrations finished!");
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
+                }
+            });
         });
-    }
-}
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/_entity-map.ts":
-/*!******************************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/_entity-map.ts ***!
-  \******************************************************************/
-/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entityMap", function() { return entityMap; });
-/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./auth/auth-action */ "./apps/dakimbo-server/src/database/entities/auth/auth-action.ts");
-/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth/auth-entity */ "./apps/dakimbo-server/src/database/entities/auth/auth-entity.ts");
-/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth/auth-role */ "./apps/dakimbo-server/src/database/entities/auth/auth-role.ts");
-/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts");
-/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/user */ "./apps/dakimbo-server/src/database/entities/auth/user.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__["AuthAction"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__["AuthEntity"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__["AuthRole"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]; });
-
-
-
-
-
-
-const entityMap = {
-    // AUTH
-    User: _auth_user__WEBPACK_IMPORTED_MODULE_4__["User"],
-    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__["AuthRole"],
-    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__["AuthAction"],
-    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__["AuthEntity"],
-    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]
-};
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/auth/auth-action.ts":
-/*!***********************************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/auth/auth-action.ts ***!
-  \***********************************************************************/
-/*! exports provided: AuthAction */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return AuthAction; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./apps/dakimbo-server/src/database/entities/base.ts");
-/* harmony import */ var _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-role-permission */ "./apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts");
-
-
-
-
-let AuthAction = class AuthAction extends _base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"] {
-};
-AuthAction.displayName = 'AuthAction';
-AuthAction.repoType = 'tree';
-AuthAction.allowedRoles = ['superadmin'];
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthAction.prototype, "action", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthAction.prototype, "type", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthAction.prototype, "application", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
-], AuthAction.prototype, "isFolder", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])((type) => _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"], (authRolePermission) => authRolePermission.action),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
-], AuthAction.prototype, "authRolePermissions", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["TreeChildren"])(),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
-], AuthAction.prototype, "children", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["TreeParent"])(),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", AuthAction)
-], AuthAction.prototype, "parent", void 0);
-AuthAction = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
-        name: 'auth_action',
-        orderBy: {
-            action: 'ASC'
-        }
-    }),
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Tree"])('nested-set')
-], AuthAction);
-
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/auth/auth-entity.ts":
-/*!***********************************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/auth/auth-entity.ts ***!
-  \***********************************************************************/
-/*! exports provided: AuthEntity */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return AuthEntity; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./apps/dakimbo-server/src/database/entities/base.ts");
-/* harmony import */ var _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-role-permission */ "./apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts");
-
-
-
-
-let AuthEntity = class AuthEntity extends _base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"] {
-};
-AuthEntity.displayName = 'AuthAction';
-AuthEntity.allowedRoles = ['superadmin'];
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthEntity.prototype, "entity", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthEntity.prototype, "type", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthEntity.prototype, "application", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])((type) => _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"], (authRolePermission) => authRolePermission.entity),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
-], AuthEntity.prototype, "authRolePermissions", void 0);
-AuthEntity = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
-        name: 'auth_entity',
-        orderBy: {
-            action: 'ASC'
-        }
-    })
-], AuthEntity);
-
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts":
-/*!********************************************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts ***!
-  \********************************************************************************/
-/*! exports provided: AuthRolePermission */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return AuthRolePermission; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./apps/dakimbo-server/src/database/entities/base.ts");
-/* harmony import */ var _auth_action__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-action */ "./apps/dakimbo-server/src/database/entities/auth/auth-action.ts");
-/* harmony import */ var _auth_entity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth-entity */ "./apps/dakimbo-server/src/database/entities/auth/auth-entity.ts");
-/* harmony import */ var _auth_role__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth-role */ "./apps/dakimbo-server/src/database/entities/auth/auth-role.ts");
-var _a, _b, _c;
-
-
-
-
-
-
-let AuthRolePermission = class AuthRolePermission extends _base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"] {
-};
-AuthRolePermission.displayName = 'AuthRoleAction';
-AuthRolePermission.allowedRoles = ['superadmin'];
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
-], AuthRolePermission.prototype, "allowed", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
-], AuthRolePermission.prototype, "canCreate", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
-], AuthRolePermission.prototype, "canRead", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
-], AuthRolePermission.prototype, "canUpdate", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
-], AuthRolePermission.prototype, "canDelete", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])((type) => _auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"], (authAction) => authAction.authRolePermissions),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof _auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"] !== "undefined" && _auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"]) === "function" ? _a : Object)
-], AuthRolePermission.prototype, "action", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])((type) => _auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"], (authEntity) => authEntity.authRolePermissions),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"] !== "undefined" && _auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"]) === "function" ? _b : Object)
-], AuthRolePermission.prototype, "entity", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])((type) => _auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"], (authRole) => authRole.authRolePermissions),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_c = typeof _auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"] !== "undefined" && _auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"]) === "function" ? _c : Object)
-], AuthRolePermission.prototype, "role", void 0);
-AuthRolePermission = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
-        name: 'auth_role_permission'
-    })
-], AuthRolePermission);
-
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/auth/auth-role.ts":
-/*!*********************************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/auth/auth-role.ts ***!
-  \*********************************************************************/
-/*! exports provided: AuthRole */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return AuthRole; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./apps/dakimbo-server/src/database/entities/base.ts");
-/* harmony import */ var _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-role-permission */ "./apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts");
-/* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./user */ "./apps/dakimbo-server/src/database/entities/auth/user.ts");
-
-
-
-
-
-let AuthRole = class AuthRole extends _base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"] {
-};
-AuthRole.displayName = 'AuthRole';
-AuthRole.allowedRoles = ['superadmin'];
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthRole.prototype, "role", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], AuthRole.prototype, "type", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])((type) => _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"], (authRolePermission) => authRolePermission.role),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
-], AuthRole.prototype, "authRolePermissions", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToMany"])((type) => _user__WEBPACK_IMPORTED_MODULE_4__["User"], (user) => user.roles, {
-        onDelete: 'SET NULL'
-    }),
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["JoinTable"])(),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
-], AuthRole.prototype, "users", void 0);
-AuthRole = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
-        name: 'auth_role',
-        orderBy: {
-            role: 'ASC'
-        }
-    }),
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Unique"])(['role'])
-], AuthRole);
-
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/auth/user.ts":
-/*!****************************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/auth/user.ts ***!
-  \****************************************************************/
-/*! exports provided: User */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return User; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! class-validator */ "class-validator");
-/* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(class_validator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base */ "./apps/dakimbo-server/src/database/entities/base.ts");
-/* harmony import */ var _auth_role__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth-role */ "./apps/dakimbo-server/src/database/entities/auth/auth-role.ts");
-var _a;
-
-
-
-
-
-let User = class User extends _base__WEBPACK_IMPORTED_MODULE_3__["BaseModel"] {
-    constructor(props) {
-        super(props);
-    }
-};
-User.displayName = 'User';
-User.relationships = [{ model: _auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"] }];
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])(),
-    Object(class_validator__WEBPACK_IMPORTED_MODULE_1__["Length"])(4, 20),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], User.prototype, "username", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])(),
-    Object(class_validator__WEBPACK_IMPORTED_MODULE_1__["Length"])(4, 100),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], User.prototype, "password", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
-        nullable: true,
-        length: 255
-    }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], User.prototype, "email", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
-        nullable: true,
-        default: 0
-    }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
-], User.prototype, "numSuccessfulLogin", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
-        nullable: true,
-        default: 0
-    }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
-], User.prototype, "numFailedLogin", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
-], User.prototype, "lastLoggedInDate", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ default: false }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
-], User.prototype, "isLocked", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["ManyToMany"])((type) => _auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"], (role) => role.users, { eager: true, cascade: true }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
-], User.prototype, "roles", void 0);
-User = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Entity"])({
-        name: 'auth_user',
-        orderBy: {
-            username: 'ASC'
-        }
-    }),
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Unique"])(['username']),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [User])
-], User);
-
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/base.ts":
-/*!***********************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/base.ts ***!
-  \***********************************************************/
-/*! exports provided: BaseModel */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BaseModel", function() { return BaseModel; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
-var _a, _b;
-
-
-class BaseModel {
-    constructor(props) {
-        if (!props)
-            return;
-        Object.keys(props).forEach((prop) => {
-            const value = props[prop];
-            this[prop] = value;
-        });
-    }
-}
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["PrimaryGeneratedColumn"])('uuid'),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], BaseModel.prototype, "id", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["VersionColumn"])({
-        nullable: true
-    }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], BaseModel.prototype, "version", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["CreateDateColumn"])(),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
-], BaseModel.prototype, "createDate", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["UpdateDateColumn"])(),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
-], BaseModel.prototype, "modifyDate", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({
-        nullable: true
-    }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], BaseModel.prototype, "createUser", void 0);
-Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({
-        nullable: true
-    }),
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-], BaseModel.prototype, "modifyUser", void 0);
-
-
-/***/ }),
-
-/***/ "./apps/dakimbo-server/src/database/entities/index.ts":
-/*!************************************************************!*\
-  !*** ./apps/dakimbo-server/src/database/entities/index.ts ***!
-  \************************************************************/
-/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _entity_map__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_entity-map */ "./apps/dakimbo-server/src/database/entities/_entity-map.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "entityMap", function() { return _entity_map__WEBPACK_IMPORTED_MODULE_0__["entityMap"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _entity_map__WEBPACK_IMPORTED_MODULE_0__["User"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _entity_map__WEBPACK_IMPORTED_MODULE_0__["AuthAction"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _entity_map__WEBPACK_IMPORTED_MODULE_0__["AuthEntity"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _entity_map__WEBPACK_IMPORTED_MODULE_0__["AuthRole"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _entity_map__WEBPACK_IMPORTED_MODULE_0__["AuthRolePermission"]; });
-
-/**
- * ENTITIES
- */
+    };
+    return Database;
+}());
 
 
 
@@ -1397,27 +1161,36 @@ __webpack_require__(/*! dotenv */ "dotenv").config();
 
 
 
-(() => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-    const db = new _database_database__WEBPACK_IMPORTED_MODULE_7__["Database"]();
-    yield db.connect(_config__WEBPACK_IMPORTED_MODULE_9__["default"].dbOptions);
-    const app = express__WEBPACK_IMPORTED_MODULE_5___default()();
-    const port = process.env.port || 1337;
-    // MIDDLEWARE
-    app.use(cors__WEBPACK_IMPORTED_MODULE_4___default()());
-    app.use(helmet__WEBPACK_IMPORTED_MODULE_6___default()());
-    app.use(compression__WEBPACK_IMPORTED_MODULE_3___default()());
-    app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.urlencoded({ extended: false }));
-    app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json());
-    app.use(express__WEBPACK_IMPORTED_MODULE_5___default.a.static(__dirname + '/public'));
-    app.use('/', _routes__WEBPACK_IMPORTED_MODULE_8__["default"]);
-    app.get('*', (req, res) => {
-        res.sendFile(__dirname + '/public/index.html');
+(function () { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+    var db, app, port, server;
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                db = new _database_database__WEBPACK_IMPORTED_MODULE_7__["Database"]();
+                return [4 /*yield*/, db.connect(_config__WEBPACK_IMPORTED_MODULE_9__["default"].dbOptions)];
+            case 1:
+                _a.sent();
+                app = express__WEBPACK_IMPORTED_MODULE_5___default()();
+                port = process.env.port || 1337;
+                // MIDDLEWARE
+                app.use(cors__WEBPACK_IMPORTED_MODULE_4___default()());
+                app.use(helmet__WEBPACK_IMPORTED_MODULE_6___default()());
+                app.use(compression__WEBPACK_IMPORTED_MODULE_3___default()());
+                app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.urlencoded({ extended: false }));
+                app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json());
+                app.use(express__WEBPACK_IMPORTED_MODULE_5___default.a.static(__dirname + '/public'));
+                app.use('/', _routes__WEBPACK_IMPORTED_MODULE_8__["default"]);
+                app.get('*', function (req, res) {
+                    res.sendFile(__dirname + '/public/index.html');
+                });
+                server = app.listen(port, function () {
+                    return console.log("Server is listening on " + port);
+                });
+                server.on('error', console.error);
+                return [2 /*return*/];
+        }
     });
-    const server = app.listen(port, () => {
-        return console.log(`Server is listening on ${port}`);
-    });
-    server.on('error', console.error);
-}))();
+}); })();
 
 
 /***/ }),
@@ -1437,15 +1210,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../config */ "./apps/dakimbo-server/src/config.ts");
 
 
-const checkJwt = (req, res, next) => {
+var checkJwt = function (req, res, next) {
     // Get the jwt token from the head
-    const authHeader = req.headers['authorization'];
+    var authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.includes('Bearer')) {
         res.status(408).send('No Authorization Header or Bearer token presented!');
         return;
     }
-    const token = authHeader.split('Bearer')[1].trim();
-    let jwtPayload;
+    var token = authHeader.split('Bearer')[1].trim();
+    var jwtPayload;
     // Try to validate the token and get data
     try {
         jwtPayload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_0__["verify"](token, _config__WEBPACK_IMPORTED_MODULE_1__["default"].jwtSecret);
@@ -1458,8 +1231,8 @@ const checkJwt = (req, res, next) => {
     }
     // The token is valid for 1 hour
     // We want to send a new token on every request
-    const { userId, username, roles } = jwtPayload;
-    const newToken = jsonwebtoken__WEBPACK_IMPORTED_MODULE_0__["sign"]({ userId, username, roles }, _config__WEBPACK_IMPORTED_MODULE_1__["default"].jwtSecret, {
+    var userId = jwtPayload.userId, username = jwtPayload.username, roles = jwtPayload.roles;
+    var newToken = jsonwebtoken__WEBPACK_IMPORTED_MODULE_0__["sign"]({ userId: userId, username: username, roles: roles }, _config__WEBPACK_IMPORTED_MODULE_1__["default"].jwtSecret, {
         expiresIn: '1h'
     });
     res.setHeader('token', newToken);
@@ -1482,7 +1255,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkRole", function() { return checkRole; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./apps/dakimbo-server/src/database/entities/index.ts");
+/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _libs_utilities_src_lib_auth_checkUserRole__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../../../libs/utilities/src/lib/auth/checkUserRole */ "./libs/utilities/src/lib/auth/checkUserRole.ts");
@@ -1490,25 +1263,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const checkRole = (roles) => {
-    return (req, res, next) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function* () {
-        // Get the user ID from previous midleware
-        const id = res.locals.jwtPayload.userId;
-        // Get user role from the database
-        const userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
-        let user;
-        try {
-            user = yield userRepository.findOneOrFail(id);
-        }
-        catch (id) {
-            res.status(401).send();
-        }
-        // Check if array of authorized roles includes the user's role
-        if (Object(_libs_utilities_src_lib_auth_checkUserRole__WEBPACK_IMPORTED_MODULE_3__["checkUserRole"])(user, roles))
-            next();
-        else
-            res.status(401).send();
-    });
+var checkRole = function (roles) {
+    return function (req, res, next) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
+        var id, userRepository, user, id_1;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = res.locals.jwtPayload.userId;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findOneOrFail(id)];
+                case 2:
+                    user = _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    id_1 = _a.sent();
+                    res.status(401).send();
+                    return [3 /*break*/, 4];
+                case 4:
+                    // Check if array of authorized roles includes the user's role
+                    if (Object(_libs_utilities_src_lib_auth_checkUserRole__WEBPACK_IMPORTED_MODULE_3__["checkUserRole"])(user, roles))
+                        next();
+                    else
+                        res.status(401).send();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
 };
 
 
@@ -1530,7 +1313,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
+var router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
 //Login route
 router.post('/login', _controllers_authController__WEBPACK_IMPORTED_MODULE_1__["default"].login);
 //Change my password
@@ -1560,7 +1343,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
+var router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
 if (_config__WEBPACK_IMPORTED_MODULE_4__["default"].isProd) {
     router.get('/:entity', [_middlewares_checkJwt__WEBPACK_IMPORTED_MODULE_1__["checkJwt"], Object(_middlewares_checkRole__WEBPACK_IMPORTED_MODULE_2__["checkRole"])(['superadmin', 'admin'])], _controllers_dataController__WEBPACK_IMPORTED_MODULE_3__["default"].get);
     router.post('/:entity', [_middlewares_checkJwt__WEBPACK_IMPORTED_MODULE_1__["checkJwt"], Object(_middlewares_checkRole__WEBPACK_IMPORTED_MODULE_2__["checkRole"])(['superadmin', 'admin'])], _controllers_dataController__WEBPACK_IMPORTED_MODULE_3__["default"].create);
@@ -1600,7 +1383,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const routes = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
+var routes = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
 routes.use('/auth', _auth__WEBPACK_IMPORTED_MODULE_1__["default"]);
 routes.use('/user', _user__WEBPACK_IMPORTED_MODULE_2__["default"]);
 routes.use('/data', _data__WEBPACK_IMPORTED_MODULE_3__["default"]);
@@ -1628,7 +1411,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
+var router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
 // Get specific metric
 router.get('/:metricName', [_middlewares_checkJwt__WEBPACK_IMPORTED_MODULE_1__["checkJwt"], Object(_middlewares_checkRole__WEBPACK_IMPORTED_MODULE_2__["checkRole"])(['superadmin'])], _controllers_metricsController__WEBPACK_IMPORTED_MODULE_3__["default"].getMetricsFor);
 /* harmony default export */ __webpack_exports__["default"] = (router);
@@ -1654,7 +1437,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
+var router = Object(express__WEBPACK_IMPORTED_MODULE_0__["Router"])();
 //Get all users
 router.get('/', [_middlewares_checkJwt__WEBPACK_IMPORTED_MODULE_2__["checkJwt"], Object(_middlewares_checkRole__WEBPACK_IMPORTED_MODULE_3__["checkRole"])(['admin'])], _controllers_userController__WEBPACK_IMPORTED_MODULE_1__["default"].listAll);
 // Get one user
@@ -1679,21 +1462,493 @@ router.get('/me', [_middlewares_checkJwt__WEBPACK_IMPORTED_MODULE_2__["checkJwt"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-const log = console.log;
+var log = console.log;
 console.log = function () {
-    const firstParameter = arguments[0];
-    const otherParameters = Array.prototype.slice.call(arguments, 1);
-    log.apply(console, [`${dateFormat()} ${firstParameter}`.concat(otherParameters)]);
+    var firstParameter = arguments[0];
+    var otherParameters = Array.prototype.slice.call(arguments, 1);
+    log.apply(console, [(dateFormat() + " " + firstParameter).concat(otherParameters)]);
 };
-const error = console.error;
+var error = console.error;
 console.error = function () {
-    const firstParameter = arguments[0];
-    const otherParameters = Array.prototype.slice.call(arguments, 1);
-    error.apply(console, [`${dateFormat()} ${firstParameter}`.concat(otherParameters)]);
+    var firstParameter = arguments[0];
+    var otherParameters = Array.prototype.slice.call(arguments, 1);
+    error.apply(console, [(dateFormat() + " " + firstParameter).concat(otherParameters)]);
 };
-const dateFormat = () => {
-    return `[\x1b[34m${new Date().toISOString()}\x1b[0m]`;
+var dateFormat = function () {
+    return "[\u001B[34m" + new Date().toISOString() + "\u001B[0m]";
 };
+
+
+/***/ }),
+
+/***/ "./libs/entities/_entity-map.ts":
+/*!**************************************!*\
+  !*** ./libs/entities/_entity-map.ts ***!
+  \**************************************/
+/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entityMap", function() { return entityMap; });
+/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./auth/auth-action */ "./libs/entities/auth/auth-action.ts");
+/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth/auth-entity */ "./libs/entities/auth/auth-entity.ts");
+/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
+/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
+/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__["AuthAction"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__["AuthEntity"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__["AuthRole"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]; });
+
+
+
+
+
+
+var entityMap = {
+    // AUTH
+    User: _auth_user__WEBPACK_IMPORTED_MODULE_4__["User"],
+    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__["AuthRole"],
+    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__["AuthAction"],
+    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__["AuthEntity"],
+    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]
+};
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/auth/auth-action.ts":
+/*!*******************************************!*\
+  !*** ./libs/entities/auth/auth-action.ts ***!
+  \*******************************************/
+/*! exports provided: AuthAction */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return AuthAction; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
+
+
+
+
+var AuthAction = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AuthAction, _super);
+    function AuthAction() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AuthAction.displayName = 'AuthAction';
+    AuthAction.repoType = 'tree';
+    AuthAction.allowedRoles = ['superadmin'];
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthAction.prototype, "action", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthAction.prototype, "type", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthAction.prototype, "application", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
+    ], AuthAction.prototype, "isFolder", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]; }, function (authRolePermission) { return authRolePermission.action; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], AuthAction.prototype, "authRolePermissions", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["TreeChildren"])(),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], AuthAction.prototype, "children", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["TreeParent"])(),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", AuthAction)
+    ], AuthAction.prototype, "parent", void 0);
+    AuthAction = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
+            name: 'auth_action',
+            orderBy: {
+                action: 'ASC'
+            }
+        }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Tree"])('nested-set')
+    ], AuthAction);
+    return AuthAction;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/auth/auth-entity.ts":
+/*!*******************************************!*\
+  !*** ./libs/entities/auth/auth-entity.ts ***!
+  \*******************************************/
+/*! exports provided: AuthEntity */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return AuthEntity; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
+
+
+
+
+var AuthEntity = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AuthEntity, _super);
+    function AuthEntity() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AuthEntity.displayName = 'AuthAction';
+    AuthEntity.allowedRoles = ['superadmin'];
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthEntity.prototype, "entity", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthEntity.prototype, "type", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthEntity.prototype, "application", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]; }, function (authRolePermission) { return authRolePermission.entity; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], AuthEntity.prototype, "authRolePermissions", void 0);
+    AuthEntity = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
+            name: 'auth_entity',
+            orderBy: {
+                action: 'ASC'
+            }
+        })
+    ], AuthEntity);
+    return AuthEntity;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/auth/auth-role-permission.ts":
+/*!****************************************************!*\
+  !*** ./libs/entities/auth/auth-role-permission.ts ***!
+  \****************************************************/
+/*! exports provided: AuthRolePermission */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return AuthRolePermission; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _auth_action__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-action */ "./libs/entities/auth/auth-action.ts");
+/* harmony import */ var _auth_entity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth-entity */ "./libs/entities/auth/auth-entity.ts");
+/* harmony import */ var _auth_role__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth-role */ "./libs/entities/auth/auth-role.ts");
+
+
+
+
+
+
+var AuthRolePermission = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AuthRolePermission, _super);
+    function AuthRolePermission() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a, _b, _c;
+    AuthRolePermission.displayName = 'AuthRoleAction';
+    AuthRolePermission.allowedRoles = ['superadmin'];
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
+    ], AuthRolePermission.prototype, "allowed", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
+    ], AuthRolePermission.prototype, "canCreate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
+    ], AuthRolePermission.prototype, "canRead", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
+    ], AuthRolePermission.prototype, "canUpdate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: false }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
+    ], AuthRolePermission.prototype, "canDelete", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"]; }, function (authAction) { return authAction.authRolePermissions; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof _auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"] !== "undefined" && _auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"]) === "function" ? _a : Object)
+    ], AuthRolePermission.prototype, "action", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"]; }, function (authEntity) { return authEntity.authRolePermissions; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"] !== "undefined" && _auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"]) === "function" ? _b : Object)
+    ], AuthRolePermission.prototype, "entity", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"]; }, function (authRole) { return authRole.authRolePermissions; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_c = typeof _auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"] !== "undefined" && _auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"]) === "function" ? _c : Object)
+    ], AuthRolePermission.prototype, "role", void 0);
+    AuthRolePermission = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
+            name: 'auth_role_permission'
+        })
+    ], AuthRolePermission);
+    return AuthRolePermission;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/auth/auth-role.ts":
+/*!*****************************************!*\
+  !*** ./libs/entities/auth/auth-role.ts ***!
+  \*****************************************/
+/*! exports provided: AuthRole */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return AuthRole; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
+/* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./user */ "./libs/entities/auth/user.ts");
+
+
+
+
+
+var AuthRole = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AuthRole, _super);
+    function AuthRole() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AuthRole.displayName = 'AuthRole';
+    AuthRole.allowedRoles = ['superadmin'];
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthRole.prototype, "role", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], AuthRole.prototype, "type", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]; }, function (authRolePermission) { return authRolePermission.role; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], AuthRole.prototype, "authRolePermissions", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToMany"])(function (type) { return _user__WEBPACK_IMPORTED_MODULE_4__["User"]; }, function (user) { return user.roles; }, {
+            onDelete: 'SET NULL'
+        }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["JoinTable"])(),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], AuthRole.prototype, "users", void 0);
+    AuthRole = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
+            name: 'auth_role',
+            orderBy: {
+                role: 'ASC'
+            }
+        }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Unique"])(['role'])
+    ], AuthRole);
+    return AuthRole;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/auth/user.ts":
+/*!************************************!*\
+  !*** ./libs/entities/auth/user.ts ***!
+  \************************************/
+/*! exports provided: User */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return User; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! class-validator */ "class-validator");
+/* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(class_validator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _auth_role__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth-role */ "./libs/entities/auth/auth-role.ts");
+
+
+
+
+
+var User = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(User, _super);
+    function User(props) {
+        return _super.call(this, props) || this;
+    }
+    var _a;
+    User.displayName = 'User';
+    User.relationships = [{ model: _auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"] }];
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])(),
+        Object(class_validator__WEBPACK_IMPORTED_MODULE_1__["Length"])(4, 20),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], User.prototype, "username", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])(),
+        Object(class_validator__WEBPACK_IMPORTED_MODULE_1__["Length"])(4, 100),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], User.prototype, "password", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
+            nullable: true,
+            length: 255
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], User.prototype, "email", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
+            nullable: true,
+            default: 0
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], User.prototype, "numSuccessfulLogin", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
+            nullable: true,
+            default: 0
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], User.prototype, "numFailedLogin", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+    ], User.prototype, "lastLoggedInDate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ default: false }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
+    ], User.prototype, "isLocked", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["ManyToMany"])(function (type) { return _auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"]; }, function (role) { return role.users; }, { eager: true, cascade: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], User.prototype, "roles", void 0);
+    User = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Entity"])({
+            name: 'auth_user',
+            orderBy: {
+                username: 'ASC'
+            }
+        }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Unique"])(['username']),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [User])
+    ], User);
+    return User;
+}(_base__WEBPACK_IMPORTED_MODULE_3__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/base.ts":
+/*!*******************************!*\
+  !*** ./libs/entities/base.ts ***!
+  \*******************************/
+/*! exports provided: BaseModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BaseModel", function() { return BaseModel; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var BaseModel = /** @class */ (function () {
+    function BaseModel(props) {
+        var _this = this;
+        if (!props)
+            return;
+        Object.keys(props).forEach(function (prop) {
+            var value = props[prop];
+            _this[prop] = value;
+        });
+    }
+    var _a, _b;
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["PrimaryGeneratedColumn"])('uuid'),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], BaseModel.prototype, "id", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["VersionColumn"])({
+            nullable: true
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], BaseModel.prototype, "version", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["CreateDateColumn"])(),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+    ], BaseModel.prototype, "createDate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["UpdateDateColumn"])(),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+    ], BaseModel.prototype, "modifyDate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({
+            nullable: true
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], BaseModel.prototype, "createUser", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({
+            nullable: true
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], BaseModel.prototype, "modifyUser", void 0);
+    return BaseModel;
+}());
+
 
 
 /***/ }),
@@ -1710,7 +1965,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkModelAllowedRoles", function() { return checkModelAllowedRoles; });
 /* harmony import */ var _checkUserRole__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkUserRole */ "./libs/utilities/src/lib/auth/checkUserRole.ts");
 
-const checkModelAllowedRoles = (model, userJwt) => {
+var checkModelAllowedRoles = function (model, userJwt) {
     if (model.allowedRoles && model.allowedRoles.length) {
         return Object(_checkUserRole__WEBPACK_IMPORTED_MODULE_0__["checkUserRole"])(userJwt, model.allowedRoles);
     }
@@ -1732,12 +1987,16 @@ const checkModelAllowedRoles = (model, userJwt) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkUserRole", function() { return checkUserRole; });
-const checkUserRole = (user, expectedRoles) => {
+var checkUserRole = function (user, expectedRoles) {
     if (!user || !expectedRoles)
         return true;
-    const expectedRolesLower = expectedRoles.map((er) => er.toLowerCase().trim().split(' ').join(''));
-    const userRolesLower = (user.roles || []).map((r) => r.role.toLowerCase().trim().split(' ').join(''));
-    return (expectedRoles.includes('*') || userRolesLower.some((r) => expectedRolesLower.includes(r)));
+    var expectedRolesLower = expectedRoles.map(function (er) {
+        return er.toLowerCase().trim().split(' ').join('');
+    });
+    var userRolesLower = (user.roles || []).map(function (r) {
+        return r.role.toLowerCase().trim().split(' ').join('');
+    });
+    return (expectedRoles.includes('*') || userRolesLower.some(function (r) { return expectedRolesLower.includes(r); }));
 };
 
 

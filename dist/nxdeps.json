@@ -171,7 +171,7 @@
             {
               "file": "apps/dakimbo-server/src/config.ts",
               "ext": ".ts",
-              "mtime": 1596212899398.4668
+              "mtime": 1596216770894.8818
             },
             {
               "file": "apps/dakimbo-server/src/controllers/authController.ts",
@@ -209,59 +209,9 @@
               "mtime": 1595943455617.9915
             },
             {
-              "file": "apps/dakimbo-server/src/database/entities/auth/auth-action.ts",
-              "ext": ".ts",
-              "mtime": 1595952320133.0518
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/auth/auth-entity.ts",
-              "ext": ".ts",
-              "mtime": 1595952320133.553
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts",
-              "ext": ".ts",
-              "mtime": 1595952320134.0537
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/auth/auth-role.ts",
-              "ext": ".ts",
-              "mtime": 1595952320134.554
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/auth/user.ts",
-              "ext": ".ts",
-              "mtime": 1595952320135.0532
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/base.ts",
-              "ext": ".ts",
-              "mtime": 1595952320135.5537
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/index.ts",
-              "ext": ".ts",
-              "mtime": 1596212818071.28
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/_entity-map.ts",
-              "ext": ".ts",
-              "mtime": 1596212545454.0793
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-view.ts",
-              "ext": ".ts",
-              "mtime": 1595616381620.6492
-            },
-            {
-              "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-visit.ts",
-              "ext": ".ts",
-              "mtime": 1596212330472.282
-            },
-            {
               "file": "apps/dakimbo-server/src/database/migrations/CreateAdminUser.ts",
               "ext": ".ts",
-              "mtime": 1596212899398.4668
+              "mtime": 1596216863628.252
             },
             {
               "file": "apps/dakimbo-server/src/main.ts",
@@ -316,7 +266,7 @@
             {
               "file": "apps/dakimbo-server/tsconfig.app.json",
               "ext": ".json",
-              "mtime": 1593961832247.7595
+              "mtime": 1596220684326.267
             },
             {
               "file": "apps/dakimbo-server/tsconfig.json",
@@ -647,7 +597,7 @@
           "projectType": "library",
           "root": "libs/app-shell",
           "sourceRoot": "libs/app-shell/src",
-          "prefix": "sof",
+          "prefix": "gilly",
           "architect": {
             "lint": {
               "builder": "@angular-devkit/build-angular:tslint",
@@ -1121,7 +1071,7 @@
           },
           "root": "apps/admin",
           "sourceRoot": "apps/admin/src",
-          "prefix": "sof",
+          "prefix": "gilly",
           "architect": {
             "build": {
               "builder": "@angular-devkit/build-angular:browser",
@@ -3086,7 +3036,7 @@
       {
         "file": "apps/dakimbo-server/src/config.ts",
         "ext": ".ts",
-        "mtime": 1596212899398.4668
+        "mtime": 1596216770894.8818
       },
       {
         "file": "apps/dakimbo-server/src/controllers/authController.ts",
@@ -3124,59 +3074,9 @@
         "mtime": 1595943455617.9915
       },
       {
-        "file": "apps/dakimbo-server/src/database/entities/auth/auth-action.ts",
-        "ext": ".ts",
-        "mtime": 1595952320133.0518
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/auth/auth-entity.ts",
-        "ext": ".ts",
-        "mtime": 1595952320133.553
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts",
-        "ext": ".ts",
-        "mtime": 1595952320134.0537
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/auth/auth-role.ts",
-        "ext": ".ts",
-        "mtime": 1595952320134.554
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/auth/user.ts",
-        "ext": ".ts",
-        "mtime": 1595952320135.0532
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/base.ts",
-        "ext": ".ts",
-        "mtime": 1595952320135.5537
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/index.ts",
-        "ext": ".ts",
-        "mtime": 1596212818071.28
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/_entity-map.ts",
-        "ext": ".ts",
-        "mtime": 1596212545454.0793
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-view.ts",
-        "ext": ".ts",
-        "mtime": 1595616381620.6492
-      },
-      {
-        "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-visit.ts",
-        "ext": ".ts",
-        "mtime": 1596212330472.282
-      },
-      {
         "file": "apps/dakimbo-server/src/database/migrations/CreateAdminUser.ts",
         "ext": ".ts",
-        "mtime": 1596212899398.4668
+        "mtime": 1596216863628.252
       },
       {
         "file": "apps/dakimbo-server/src/main.ts",
@@ -3231,7 +3131,7 @@
       {
         "file": "apps/dakimbo-server/tsconfig.app.json",
         "ext": ".json",
-        "mtime": 1593961832247.7595
+        "mtime": 1596220684326.267
       },
       {
         "file": "apps/dakimbo-server/tsconfig.json",

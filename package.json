@@ -31,7 +31,7 @@
 		"build-admin": "nx build admin --prod --aot --build-optimizer --deleteOutputPath=false --base-href=/admin/",
 		"dev-dakimbo-server": "nx serve dakimbo-server",
 		"build-dakimbo-server": "nx build dakimbo-server --configuration=production",
-		"dev-guessinator": "nx serve guessinator",
+		"dev-guessinator": "nx serve guessinator --port=4215",
 		"build-guessinator": "nx build guessinator --prod --aot --build-optimizer --base-href=/guessinator/"
 	},
 	"browser": {
