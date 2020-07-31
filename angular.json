@@ -44,7 +44,7 @@
 							"apps/dakimbo-server/tsconfig.app.json",
 							"apps/dakimbo-server/tsconfig.spec.json"
 						],
-						"exclude": ["**/node_modules/**", "!apps/dakimbo-server/**"]
+						"exclude": ["**/node_modules/**", "!apps/dakimbo-server/**/*"]
 					}
 				},
 				"test": {
@@ -153,7 +153,7 @@
 							"apps/admin/tsconfig.app.json",
 							"apps/admin/tsconfig.spec.json"
 						],
-						"exclude": ["**/node_modules/**", "!apps/admin/**"]
+						"exclude": ["**/node_modules/**", "!apps/admin/**/*"]
 					}
 				},
 				"test": {
@@ -189,7 +189,7 @@
 					"builder": "@angular-devkit/build-angular:tslint",
 					"options": {
 						"tsConfig": ["apps/admin-e2e/tsconfig.e2e.json"],
-						"exclude": ["**/node_modules/**", "!apps/admin-e2e/**"]
+						"exclude": ["**/node_modules/**", "!apps/admin-e2e/**/*"]
 					}
 				}
 			}
@@ -204,7 +204,7 @@
 					"builder": "@angular-devkit/build-angular:tslint",
 					"options": {
 						"tsConfig": ["libs/data/tsconfig.lib.json", "libs/data/tsconfig.spec.json"],
-						"exclude": ["**/node_modules/**", "!libs/data/**"]
+						"exclude": ["**/node_modules/**", "!libs/data/**/*"]
 					}
 				},
 				"test": {
@@ -355,7 +355,7 @@
 							"libs/app-shell/tsconfig.lib.json",
 							"libs/app-shell/tsconfig.spec.json"
 						],
-						"exclude": ["**/node_modules/**", "!libs/app-shell/**"]
+						"exclude": ["**/node_modules/**", "!libs/app-shell/**/*"]
 					}
 				},
 				"test": {
@@ -387,7 +387,7 @@
 							"libs/utilities/tsconfig.lib.json",
 							"libs/utilities/tsconfig.spec.json"
 						],
-						"exclude": ["**/node_modules/**", "!libs/utilities/**"]
+						"exclude": ["**/node_modules/**", "!libs/utilities/**/*"]
 					}
 				},
 				"test": {
