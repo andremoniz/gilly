@@ -1485,26 +1485,34 @@ var dateFormat = function () {
 /*!**************************************!*\
   !*** ./libs/entities/_entity-map.ts ***!
   \**************************************/
-/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission */
+/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission, MetricPageView, MetricPageVisit */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entityMap", function() { return entityMap; });
-/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./auth/auth-action */ "./libs/entities/auth/auth-action.ts");
-/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth/auth-entity */ "./libs/entities/auth/auth-entity.ts");
-/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
-/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
-/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]; });
+/* harmony import */ var _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_metrics/metric-page-view */ "./libs/entities/_metrics/metric-page-view.ts");
+/* harmony import */ var _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_metrics/metric-page-visit */ "./libs/entities/_metrics/metric-page-visit.ts");
+/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth/auth-action */ "./libs/entities/auth/auth-action.ts");
+/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-entity */ "./libs/entities/auth/auth-entity.ts");
+/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
+/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
+/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_6__["User"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__["AuthAction"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__["AuthAction"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__["AuthEntity"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__["AuthEntity"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__["AuthRole"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__["AuthRolePermission"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageView", function() { return _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageVisit", function() { return _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"]; });
+
+
 
 
 
@@ -1513,16 +1521,155 @@ __webpack_require__.r(__webpack_exports__);
 
 var entityMap = {
     // AUTH
-    User: _auth_user__WEBPACK_IMPORTED_MODULE_4__["User"],
-    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_2__["AuthRole"],
-    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_0__["AuthAction"],
-    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_1__["AuthEntity"],
-    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_3__["AuthRolePermission"]
+    User: _auth_user__WEBPACK_IMPORTED_MODULE_6__["User"],
+    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"],
+    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__["AuthAction"],
+    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__["AuthEntity"],
+    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__["AuthRolePermission"],
+    // METRICS
+    MetricPageView: _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"],
+    MetricPageVisit: _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"]
 };
 
 
 
 
+
+
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/_metrics/metric-page-view.ts":
+/*!****************************************************!*\
+  !*** ./libs/entities/_metrics/metric-page-view.ts ***!
+  \****************************************************/
+/*! exports provided: MetricPageView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MetricPageView", function() { return MetricPageView; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+
+
+
+var MetricPageView = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(MetricPageView, _super);
+    function MetricPageView(props) {
+        return _super.call(this, props) || this;
+    }
+    MetricPageView.displayName = 'MetricPageView';
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], MetricPageView.prototype, "pageName", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, default: 1 }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], MetricPageView.prototype, "viewCount", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], MetricPageView.prototype, "appName", void 0);
+    MetricPageView = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
+            name: '__metric_page_view',
+            orderBy: {
+                pageName: 'ASC'
+            }
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [MetricPageView])
+    ], MetricPageView);
+    return MetricPageView;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/_metrics/metric-page-visit.ts":
+/*!*****************************************************!*\
+  !*** ./libs/entities/_metrics/metric-page-visit.ts ***!
+  \*****************************************************/
+/*! exports provided: MetricPageVisit */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MetricPageVisit", function() { return MetricPageVisit; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _apps_dakimbo_server_src_database_database__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../../apps/dakimbo-server/src/database/database */ "./apps/dakimbo-server/src/database/database.ts");
+
+
+
+
+var MetricPageVisit = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(MetricPageVisit, _super);
+    function MetricPageVisit(props) {
+        return _super.call(this, props) || this;
+    }
+    MetricPageVisit.preProcess = function (entity) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            var repo, existingPageViewMetric;
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        repo = _apps_dakimbo_server_src_database_database__WEBPACK_IMPORTED_MODULE_3__["Database"]._connection.getRepository('MetricPageView');
+                        return [4 /*yield*/, repo.findOne({
+                                where: { appName: entity.appName, pageName: entity.pageName }
+                            })];
+                    case 1:
+                        existingPageViewMetric = _a.sent();
+                        if (!!existingPageViewMetric) return [3 /*break*/, 3];
+                        return [4 /*yield*/, repo.save({
+                                pageName: entity.pageName,
+                                appName: entity.appName,
+                                viewCount: 1
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 3:
+                        existingPageViewMetric.viewCount++;
+                        return [4 /*yield*/, repo.save(existingPageViewMetric)];
+                    case 4:
+                        _a.sent();
+                        _a.label = 5;
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MetricPageVisit.displayName = 'MetricPageVisit';
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], MetricPageVisit.prototype, "pageName", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], MetricPageVisit.prototype, "appName", void 0);
+    MetricPageVisit = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
+            name: '__metric_page_visit',
+            orderBy: {
+                createDate: 'DESC'
+            }
+        }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [MetricPageVisit])
+    ], MetricPageVisit);
+    return MetricPageVisit;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
 
 
 
@@ -1810,13 +1957,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return User; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! class-validator */ "class-validator");
-/* harmony import */ var class_validator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(class_validator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
-/* harmony import */ var _auth_role__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth-role */ "./libs/entities/auth/auth-role.ts");
-
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _auth_role__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-role */ "./libs/entities/auth/auth-role.ts");
 
 
 
@@ -1828,62 +1972,60 @@ var User = /** @class */ (function (_super) {
     }
     var _a;
     User.displayName = 'User';
-    User.relationships = [{ model: _auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"] }];
+    User.relationships = [{ model: _auth_role__WEBPACK_IMPORTED_MODULE_3__["AuthRole"] }];
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])(),
-        Object(class_validator__WEBPACK_IMPORTED_MODULE_1__["Length"])(4, 20),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])(),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
     ], User.prototype, "username", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])(),
-        Object(class_validator__WEBPACK_IMPORTED_MODULE_1__["Length"])(4, 100),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])(),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
     ], User.prototype, "password", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({
             nullable: true,
             length: 255
         }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
     ], User.prototype, "email", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({
             nullable: true,
             default: 0
         }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], User.prototype, "numSuccessfulLogin", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({
             nullable: true,
             default: 0
         }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], User.prototype, "numFailedLogin", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
     ], User.prototype, "lastLoggedInDate", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ default: false }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ default: false }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)
     ], User.prototype, "isLocked", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["ManyToMany"])(function (type) { return _auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"]; }, function (role) { return role.users; }, { eager: true, cascade: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToMany"])(function (type) { return _auth_role__WEBPACK_IMPORTED_MODULE_3__["AuthRole"]; }, function (role) { return role.users; }, { eager: true, cascade: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], User.prototype, "roles", void 0);
     User = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Entity"])({
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])({
             name: 'auth_user',
             orderBy: {
                 username: 'ASC'
             }
         }),
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Unique"])(['username']),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Unique"])(['username']),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [User])
     ], User);
     return User;
-}(_base__WEBPACK_IMPORTED_MODULE_3__["BaseModel"]));
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
 
 
 

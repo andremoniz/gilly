@@ -2,7 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DataServiceModule } from '@entities';
+import { DataServiceModule } from '@lib/data';
 import { NzMessageService } from 'ng-zorro-antd';
 
 import { UtilitiesModule } from './../../../utilities/src/lib/utilities.module';
@@ -79,7 +79,7 @@ export class AppShellModule {
 		}
 	}
 
-	static forRoot(config: AppShellModuleConfig): ModuleWithProviders {
+	static forRoot(config: AppShellModuleConfig): ModuleWithProviders<AppShellModule> {
 		return {
 			ngModule: AppShellModule,
 			providers: [

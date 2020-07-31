@@ -1,3 +1,5 @@
+import { MetricPageView } from './_metrics/metric-page-view';
+import { MetricPageVisit } from './_metrics/metric-page-visit';
 import { AuthAction } from './auth/auth-action';
 import { AuthEntity } from './auth/auth-entity';
 import { AuthRole } from './auth/auth-role';
@@ -10,7 +12,11 @@ export const entityMap = {
 	AuthRole,
 	AuthAction,
 	AuthEntity,
-	AuthRolePermission
+	AuthRolePermission,
+
+	// METRICS
+	MetricPageView,
+	MetricPageVisit
 };
 
 export { User } from './auth/user';
@@ -18,3 +24,5 @@ export { AuthAction } from './auth/auth-action';
 export { AuthEntity } from './auth/auth-entity';
 export { AuthRole } from './auth/auth-role';
 export { AuthRolePermission } from './auth/auth-role-permission';
+export { MetricPageView } from './_metrics/metric-page-view';
+export { MetricPageVisit } from './_metrics/metric-page-visit';

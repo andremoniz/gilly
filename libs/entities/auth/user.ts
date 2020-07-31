@@ -1,4 +1,3 @@
-import { Length } from 'class-validator';
 import { Column, Entity, ManyToMany, Unique } from 'typeorm';
 
 import { BaseModel } from '../base';
@@ -19,11 +18,9 @@ export class User extends BaseModel {
 	}
 
 	@Column()
-	@Length(4, 20)
 	username?: string;
 
 	@Column()
-	@Length(4, 100)
 	password?: string;
 
 	@Column({

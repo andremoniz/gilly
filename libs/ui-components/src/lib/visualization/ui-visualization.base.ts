@@ -1,8 +1,9 @@
 import { Observable, Subscription } from 'rxjs';
-import { ChangeDetectorRef, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, Input, OnDestroy, Output, Directive } from '@angular/core';
 import { isObservable, Subject } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 
+@Directive()
 export abstract class UIVisualizationBase implements OnDestroy {
 	configLoaded$ = new Subject<UIVisualizationConfig>();
 	displayOptionsLoaded$ = new Subject<any>();

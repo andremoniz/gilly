@@ -57,143 +57,6 @@
 				}
 			}
 		},
-		"admin": {
-			"projectType": "application",
-			"schematics": {
-				"@nrwl/angular:component": {
-					"style": "scss"
-				}
-			},
-			"root": "apps/admin",
-			"sourceRoot": "apps/admin/src",
-			"prefix": "gilly",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
-					"options": {
-						"showCircularDependencies": false,
-						"outputPath": "dist/draco-server/public/admin",
-						"index": "apps/admin/src/index.html",
-						"main": "apps/admin/src/main.ts",
-						"polyfills": "apps/admin/src/polyfills.ts",
-						"tsConfig": "apps/admin/tsconfig.app.json",
-						"aot": true,
-						"assets": [
-							"apps/admin/src/favicon.ico",
-							"apps/admin/src/assets",
-							{
-								"glob": "**/*",
-								"input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
-								"output": "/assets/"
-							}
-						],
-						"styles": [
-							"apps/admin/src/styles.scss",
-							"libs/app-shell/src/index.scss",
-							"node_modules/ng-zorro-antd/ng-zorro-antd.dark.css",
-							"node_modules/primeflex/primeflex.min.css",
-							"node_modules/primeicons/primeicons.css",
-							"node_modules/primeng/resources/themes/nova-dark/theme.css",
-							"node_modules/primeng/resources/primeng.min.css"
-						],
-						"scripts": []
-					},
-					"configurations": {
-						"production": {
-							"fileReplacements": [
-								{
-									"replace": "apps/admin/src/environments/environment.ts",
-									"with": "apps/admin/src/environments/environment.prod.ts"
-								}
-							],
-							"optimization": true,
-							"outputHashing": "all",
-							"sourceMap": true,
-							"extractCss": true,
-							"namedChunks": false,
-							"extractLicenses": true,
-							"vendorChunk": false,
-							"buildOptimizer": true,
-							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "5mb",
-									"maximumError": "10mb"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "6kb",
-									"maximumError": "15kb"
-								}
-							]
-						}
-					}
-				},
-				"serve": {
-					"builder": "@angular-devkit/build-angular:dev-server",
-					"options": {
-						"browserTarget": "admin:build"
-					},
-					"configurations": {
-						"production": {
-							"browserTarget": "admin:build:production"
-						}
-					}
-				},
-				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n",
-					"options": {
-						"browserTarget": "admin:build"
-					}
-				},
-				"lint": {
-					"builder": "@angular-devkit/build-angular:tslint",
-					"options": {
-						"tsConfig": [
-							"apps/admin/tsconfig.app.json",
-							"apps/admin/tsconfig.spec.json"
-						],
-						"exclude": ["**/node_modules/**", "!apps/admin/**/*"]
-					}
-				},
-				"test": {
-					"builder": "@nrwl/jest:jest",
-					"options": {
-						"jestConfig": "apps/admin/jest.config.js",
-						"tsConfig": "apps/admin/tsconfig.spec.json",
-						"passWithNoTests": true,
-						"setupFile": "apps/admin/src/test-setup.ts"
-					}
-				}
-			}
-		},
-		"admin-e2e": {
-			"root": "apps/admin-e2e",
-			"sourceRoot": "apps/admin-e2e/src",
-			"projectType": "application",
-			"architect": {
-				"e2e": {
-					"builder": "@nrwl/cypress:cypress",
-					"options": {
-						"cypressConfig": "apps/admin-e2e/cypress.json",
-						"tsConfig": "apps/admin-e2e/tsconfig.e2e.json",
-						"devServerTarget": "admin:serve"
-					},
-					"configurations": {
-						"production": {
-							"devServerTarget": "admin:serve:production"
-						}
-					}
-				},
-				"lint": {
-					"builder": "@angular-devkit/build-angular:tslint",
-					"options": {
-						"tsConfig": ["apps/admin-e2e/tsconfig.e2e.json"],
-						"exclude": ["**/node_modules/**", "!apps/admin-e2e/**/*"]
-					}
-				}
-			}
-		},
 		"data": {
 			"root": "libs/data",
 			"sourceRoot": "libs/data/src",
@@ -403,6 +266,127 @@
 			"schematics": {
 				"@nrwl/angular:component": {
 					"style": "scss"
+				}
+			}
+		},
+		"kid-money": {
+			"projectType": "application",
+			"schematics": {
+				"@nrwl/angular:component": {
+					"style": "scss"
+				}
+			},
+			"root": "apps/kid-money",
+			"sourceRoot": "apps/kid-money/src",
+			"prefix": "gilly",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"showCircularDependencies": false,
+						"outputPath": "dist/apps/kid-money",
+						"index": "apps/kid-money/src/index.html",
+						"main": "apps/kid-money/src/main.ts",
+						"polyfills": "apps/kid-money/src/polyfills.ts",
+						"tsConfig": "apps/kid-money/tsconfig.app.json",
+						"aot": true,
+						"assets": ["apps/kid-money/src/favicon.ico", "apps/kid-money/src/assets"],
+						"styles": ["apps/kid-money/src/styles.scss"],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/kid-money/src/environments/environment.ts",
+									"with": "apps/kid-money/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"extractCss": true,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "2mb",
+									"maximumError": "5mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "10kb"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"options": {
+						"browserTarget": "kid-money:build"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "kid-money:build:production"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "kid-money:build"
+					}
+				},
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": [
+							"apps/kid-money/tsconfig.app.json",
+							"apps/kid-money/tsconfig.spec.json"
+						],
+						"exclude": ["**/node_modules/**", "!apps/kid-money/**/*"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "apps/kid-money/jest.config.js",
+						"tsConfig": "apps/kid-money/tsconfig.spec.json",
+						"passWithNoTests": true,
+						"setupFile": "apps/kid-money/src/test-setup.ts"
+					}
+				}
+			}
+		},
+		"kid-money-e2e": {
+			"root": "apps/kid-money-e2e",
+			"sourceRoot": "apps/kid-money-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/kid-money-e2e/cypress.json",
+						"tsConfig": "apps/kid-money-e2e/tsconfig.e2e.json",
+						"devServerTarget": "kid-money:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "kid-money:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": ["apps/kid-money-e2e/tsconfig.e2e.json"],
+						"exclude": ["**/node_modules/**", "!apps/kid-money-e2e/**/*"]
+					}
 				}
 			}
 		}

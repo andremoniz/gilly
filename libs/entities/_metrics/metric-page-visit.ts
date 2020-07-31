@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 
 import { BaseModel } from '../base';
-import { Database } from './../../../../../../apps/dakimbo-server/src/database/database';
+import { Database } from './../../../apps/dakimbo-server/src/database/database';
 import { EntityTransaction } from './../base';
 
 @Entity({

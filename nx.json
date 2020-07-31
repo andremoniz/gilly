@@ -39,12 +39,12 @@
 			"tags": [],
 			"implicitDependencies": ["guessinator"]
 		},
-		"admin": {
+		"kid-money": {
 			"tags": []
 		},
-		"admin-e2e": {
+		"kid-money-e2e": {
 			"tags": [],
-			"implicitDependencies": ["admin"]
+			"implicitDependencies": ["kid-money"]
 		}
 	}
 }
