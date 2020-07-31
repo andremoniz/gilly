@@ -1,0 +1,34 @@
+<ng-container [ngSwitch]="item.type">
+	<ng-container *ngSwitchCase="'a'">
+		<a class="header-item text-white" routerLinkActive="active" (click)="handleLinkClick(item)">
+			{{ item.name }}
+		</a>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'button'">
+		<button nz-button (click)="item.buttonHandler()">{{ item.name }}</button>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'menu'">
+		<ul nz-menu nzMode="horizontal" nzTheme="primary" class="bg-primary text-white">
+			<li nz-submenu [nzTitle]="item.name">
+				<ul>
+					<li
+						nz-menu-item
+						*ngFor="let menuItem of item.menuItems"
+						routerLinkActive="active"
+						(click)="handleLinkClick(menuItem)"
+					>
+						<lib-header-item [item]="menuItem"></lib-header-item>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'divider'">
+		<li nz-menu-divider></li>
+	</ng-container>
+
+	<ng-container *ngSwitchDefault>{{ item.name }}</ng-container>
+</ng-container>

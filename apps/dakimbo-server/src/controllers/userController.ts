@@ -1,4 +1,4 @@
-import { User } from '@dakimbo/data';
+import { User } from '@entities';
 import * as bcrypt from 'bcryptjs';
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
@@ -11,8 +11,10 @@ class UserController {
 	static listAll = async (req: Request, res: Response) => {
 		//Get users from database
 		const userRepository = getRepository(User);
-		const users = await userRepository.find({
-			select: ['id', 'username', 'role', 'email', 'createDate'] //We dont want to send the passwords on response
+		const users = await userRepository.find();
+
+		users.forEach((user) => {
+			delete user.password;
 		});
 
 		//Send the users object
@@ -21,14 +23,15 @@ class UserController {
 
 	static getOneById = async (req: Request, res: Response) => {
 		//Get the ID from the url
-		const id: number = +req.params.id;
+		const id: string = req.params.id;
 
 		//Get the user from database
 		const userRepository = getRepository(User);
 		try {
-			const user = await userRepository.findOneOrFail(id, {
-				select: ['id', 'username', 'role'] //We dont want to send the password on response
-			});
+			const user = await userRepository.findOneOrFail(id);
+
+			delete user.password;
+
 			res.status(201).send(user);
 		} catch (error) {
 			res.status(404).send('User not found');
@@ -37,12 +40,12 @@ class UserController {
 
 	static newUser = async (req: Request, res: Response) => {
 		//Get parameters from the body
-		let { username, password, email, role } = req.body;
+		let { username, password, email, roles } = req.body;
 		let user = new User();
 		user.username = username;
 		user.password = password;
 		user.email = email;
-		user.role = role;
+		user.roles = roles;
 
 		// const { adminUser } = <any>jwt.verify(<string>res.getHeader('token'), config.jwtSecret);
 
@@ -77,7 +80,7 @@ class UserController {
 		const id = req.params.id;
 
 		//Get values from the body
-		const { username, password, role } = req.body;
+		const { username, password, roles, email, isLocked, numFailedLogin } = req.body;
 
 		const { adminUser } = <any>jwt.verify(<string>res.getHeader('token'), config.jwtSecret);
 
@@ -94,7 +97,10 @@ class UserController {
 
 		//Validate the new values on model
 		user.username = username;
-		user.role = role;
+		user.roles = roles;
+		user.email = email;
+		user.isLocked = isLocked;
+		user.numFailedLogin = numFailedLogin;
 
 		if (password) {
 			user.password = password;

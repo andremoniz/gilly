@@ -38,9 +38,12 @@ export class DataRead {
 			);
 	}
 
-	async readExternal(queryUrl): Promise<any> {
+	readExternal(queryUrl, headers?): Observable<any> {
 		let url = queryUrl;
-		return this.http.get(url);
+		return this.http.get(url, {
+			headers: headers,
+			reportProgress: true
+		});
 	}
 
 	private createSearchParams(query: HttpParams | string | any): HttpParams | string {
@@ -51,7 +54,7 @@ export class DataRead {
 		if (typeof query === 'string') {
 			let searchParams = new HttpParams();
 			const splitQuery = query.split('&');
-			splitQuery.forEach(param => {
+			splitQuery.forEach((param) => {
 				const keyValPair = param.split('=');
 				searchParams = searchParams.append(keyValPair[0], keyValPair[1]);
 			});
@@ -62,10 +65,10 @@ export class DataRead {
 			console.log(query);
 		} else {
 			// Parse object into HttpParams
-			Object.keys(query).forEach(key => {
+			Object.keys(query).forEach((key) => {
 				const queryVals = query[key];
 				if (Array.isArray(queryVals)) {
-					queryVals.forEach(qv => (newParams = newParams.append(key, qv)));
+					queryVals.forEach((qv) => (newParams = newParams.append(key, qv)));
 				} else {
 					newParams = newParams.append(key, queryVals);
 				}

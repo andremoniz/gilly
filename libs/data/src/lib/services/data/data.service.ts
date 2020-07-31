@@ -1,13 +1,13 @@
 import { HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { entityMap } from '@entities';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { entityMap } from '../../entities/_entity-map';
 import { DataDelete } from './_delete';
 import { DataRead } from './_read';
 import { DataSave } from './_save';
-import { DataServiceConfig } from './data-service-config.interface';
+import { DataServiceConfig } from './data-service.module';
 
 @Injectable({
 	providedIn: 'root'
@@ -32,7 +32,8 @@ export class DataService {
 		private DSV: DataSave,
 		private DR: DataRead,
 		private DD: DataDelete,
-		@Inject('dsConfig') config: DataServiceConfig
+		@Inject('dsConfig') config: DataServiceConfig,
+		@Inject('config') appConfig: any
 	) {
 		this.DSV.setDataService(this);
 		this.DR.setDataService(this);
@@ -41,10 +42,14 @@ export class DataService {
 		if (config) {
 			this.setupDataService(config);
 		}
+
+		if (appConfig) {
+			this.setupDataService(appConfig);
+		}
 	}
 
-	private setupDataService(config: DataServiceConfig) {
-		this.apiEndpoint = config.apiEndpoint;
+	private setupDataService(config: any) {
+		this.apiEndpoint = config.apiEndpoint || config.dataEndpoint;
 		this.tables = { ...config.tables, ...entityMap };
 		this.setupLocalProps();
 	}
@@ -64,7 +69,7 @@ export class DataService {
 		if (!table) return;
 		this.loadingMap[table] = new BehaviorSubject<boolean>(false);
 		this.cache[table] = [];
-		this.subjectMap[table] = new Subject<any>();
+		this.subjectMap[table] = new BehaviorSubject<any>(null);
 		this.activeMap[table] = null;
 	}
 
@@ -72,17 +77,34 @@ export class DataService {
 	 * PUBLIC API
 	 */
 	public getModelName<T>(model: T | any) {
-		if (model && model.name) {
-			return model.name;
+		if (model && (model.name || model.displayName || model.tableName)) {
+			if (model.displayName) {
+				return model.displayName;
+			}
+			if (model.tableName) {
+				return model.tableName;
+			} else {
+				return model.name;
+			}
 		} else {
 			return model;
 		}
 	}
 
+	public setData<T>(model: T, entities: any[] = []) {
+		this.cache[this.getModelName(model)] = [...entities];
+		this.subjectMap[this.getModelName(model)].next(this.cache[this.getModelName(model)]);
+	}
+
 	// SAVE
-	save<T>(model: T | any, objToSave?: T | any | T[] | any[]): Observable<T | T[]> {
+	save<T>(
+		model: T | any,
+		objToSave?: T | any | T[] | any[],
+		originalEntities?: T[] | any[] | any,
+		handleDeletes?: boolean
+	): Observable<T | T[]> {
 		if (!model) return of();
-		else return this.DSV.save(model, objToSave);
+		else return this.DSV.save(model, objToSave, originalEntities, handleDeletes);
 	}
 
 	// READ
@@ -91,8 +113,8 @@ export class DataService {
 		else return this.DR.read(model, query);
 	}
 
-	readExternal(url): Promise<any> {
-		return this.DR.readExternal(url);
+	readExternal(url, headers?): Observable<any> {
+		return this.DR.readExternal(url, headers);
 	}
 
 	// DELETE
@@ -161,7 +183,7 @@ interface CacheMap {
  * A mapping of every environment defined DB table to a subject so that CRUD applications can send notifications to all subject subscribers
  */
 interface SubjectMap {
-	[tableName: string]: Subject<any>;
+	[tableName: string]: BehaviorSubject<any>;
 }
 
 /**

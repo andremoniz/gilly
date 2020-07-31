@@ -1,16 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { InjectionToken, ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf, InjectionToken } from '@angular/core';
 
 import { DataDelete } from './_delete';
 import { DataRead } from './_read';
-import { DataSave } from './_save';
-import { DataServiceConfig } from './data-service-config.interface';
 import { DataService } from './data.service';
-import { DataServiceHeaderInterceptor } from './interceptors/header.interceptor';
+import { DataSave } from './_save';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { DataServiceHeaderInterceptor } from './interceptors/header.interceptor';
 
 const configToken = new InjectionToken<DataServiceConfig>('dataServiceConfig');
+
+export interface DataServiceConfig {
+	apiEndpoint?: string;
+	tables?: any;
+}
 
 @NgModule({
 	declarations: [],

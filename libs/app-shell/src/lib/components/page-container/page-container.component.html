@@ -1,0 +1,18 @@
+<div class="container-wrapper">
+	<div class="container-header">
+		<ng-container [ngTemplateOutlet]="headerTemplate" *ngIf="headerTemplate"></ng-container>
+	</div>
+
+	<div
+		class="container-main"
+		[ngClass]="{ 'container-fluid': fluidMain }"
+		[style.margin-top]="!utilities.isSmallScreen ? '1.75rem' : ''"
+		*ngIf="mainTemplate"
+	>
+		<ng-container [ngTemplateOutlet]="mainTemplate"></ng-container>
+	</div>
+
+	<div class="container-footer border-top" *ngIf="footerTemplate">
+		<ng-container [ngTemplateOutlet]="footerTemplate"></ng-container>
+	</div>
+</div>

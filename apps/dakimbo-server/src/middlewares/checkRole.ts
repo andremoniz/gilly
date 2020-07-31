@@ -1,7 +1,8 @@
+import { User } from '@entities';
 import { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
-import { User } from '@dakimbo/data';
+import { checkUserRole } from './../../../../libs/utilities/src/lib/auth/checkUserRole';
 
 export const checkRole = (roles: Array<string>) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +19,7 @@ export const checkRole = (roles: Array<string>) => {
 		}
 
 		// Check if array of authorized roles includes the user's role
-		if (roles.indexOf(user.role) > -1) next();
+		if (checkUserRole(user, roles)) next();
 		else res.status(401).send();
 	};
 };

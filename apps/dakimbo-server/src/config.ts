@@ -1,4 +1,4 @@
-import { entityMap } from '@dakimbo/data';
+import { entityMap } from '@entities';
 
 const isProd = process.env.IS_PROD === 'true';
 const pathToEntities = isProd ? './database/entities/**/*.js' : './database/entities/**/*.ts';

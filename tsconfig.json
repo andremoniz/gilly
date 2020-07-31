@@ -1,24 +1,31 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "react-native-sqlite-storage": ["dummy.ts"],
-      "@dakimbo/data": ["libs/data/src/index.ts"]
-    }
-  },
-  "exclude": ["node_modules", "tmp"]
+	"compileOnSave": false,
+	"compilerOptions": {
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": false,
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"importHelpers": true,
+		"target": "es2015",
+		"module": "esnext",
+		"typeRoots": ["node_modules/@types"],
+		"lib": ["es2017", "dom"],
+		"skipLibCheck": true,
+		"skipDefaultLibCheck": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"paths": {
+			"react-native-sqlite-storage": ["dummy.ts"],
+			"@config": ["config/frontend/index.ts", "config/backend/index.ts"],
+			"@entities": ["apps/dakimbo-server/src/database/entities/index.ts"],
+			"@lib/app-shell": ["libs/app-shell/src/index.ts"],
+			"@lib/data": ["libs/data/src/index.ts"],
+			"@lib/ui-components": ["libs/ui-components/src/index.ts"],
+			"@lib/utilities": ["libs/utilities/src/index.ts"]
+		}
+	},
+	"exclude": ["node_modules", "tmp"]
 }

@@ -1,0 +1,7 @@
+<fc-form
+	[title]="selectedUser?.username"
+	[fields]="fields"
+	[model]="selectedUser"
+	(delete)="delete($event)"
+	(save)="save($event)"
+></fc-form>

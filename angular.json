@@ -1,141 +1,423 @@
 {
-  "version": 1,
-  "projects": {
-    "guessinator": {
-      "projectType": "application",
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "apps/guessinator",
-      "sourceRoot": "apps/guessinator/src",
-      "prefix": "gilly",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/apps/guessinator",
-            "index": "apps/guessinator/src/index.html",
-            "main": "apps/guessinator/src/main.ts",
-            "polyfills": "apps/guessinator/src/polyfills.ts",
-            "tsConfig": "apps/guessinator/tsconfig.app.json",
-            "aot": true,
-            "assets": [
-              "apps/guessinator/src/favicon.ico",
-              "apps/guessinator/src/assets"
-            ],
-            "styles": ["apps/guessinator/src/styles.scss"],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/guessinator/src/environments/environment.ts",
-                  "with": "apps/guessinator/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "guessinator:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "guessinator:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "guessinator:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/guessinator/tsconfig.app.json",
-              "apps/guessinator/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/guessinator/**/*"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/guessinator/jest.config.js",
-            "tsConfig": "apps/guessinator/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "apps/guessinator/src/test-setup.ts"
-          }
-        }
-      }
-    },
-    "guessinator-e2e": {
-      "root": "apps/guessinator-e2e",
-      "sourceRoot": "apps/guessinator-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/guessinator-e2e/cypress.json",
-            "tsConfig": "apps/guessinator-e2e/tsconfig.e2e.json",
-            "devServerTarget": "guessinator:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "guessinator:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["apps/guessinator-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/guessinator-e2e/**/*"]
-          }
-        }
-      }
-    }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
-  "schematics": {
-    "@nrwl/angular:application": {
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "unitTestRunner": "jest"
-    }
-  },
-  "defaultProject": "guessinator"
+	"version": 1,
+	"projects": {
+		"dakimbo-server": {
+			"root": "apps/dakimbo-server",
+			"sourceRoot": "apps/dakimbo-server/src",
+			"projectType": "application",
+			"prefix": "dakimbo-server",
+			"schematics": {},
+			"architect": {
+				"build": {
+					"builder": "@nrwl/node:build",
+					"options": {
+						"showCircularDependencies": false,
+						"outputPath": "dist/dakimbo-server",
+						"main": "apps/dakimbo-server/src/main.ts",
+						"tsConfig": "apps/dakimbo-server/tsconfig.app.json"
+					},
+					"configurations": {
+						"production": {
+							"optimization": true,
+							"extractLicenses": false,
+							"inspect": false,
+							"deleteOutputPath": false,
+							"fileReplacements": [
+								{
+									"replace": "apps/dakimbo-server/src/environments/environment.ts",
+									"with": "apps/dakimbo-server/src/environments/environment.prod.ts"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "@nrwl/node:execute",
+					"options": {
+						"buildTarget": "dakimbo-server:build"
+					}
+				},
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": [
+							"apps/dakimbo-server/tsconfig.app.json",
+							"apps/dakimbo-server/tsconfig.spec.json"
+						],
+						"exclude": ["**/node_modules/**", "!apps/dakimbo-server/**"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "apps/dakimbo-server/jest.config.js",
+						"tsConfig": "apps/dakimbo-server/tsconfig.spec.json",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"admin": {
+			"projectType": "application",
+			"schematics": {
+				"@nrwl/angular:component": {
+					"style": "scss"
+				}
+			},
+			"root": "apps/admin",
+			"sourceRoot": "apps/admin/src",
+			"prefix": "sof",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"showCircularDependencies": false,
+						"outputPath": "dist/draco-server/public/admin",
+						"index": "apps/admin/src/index.html",
+						"main": "apps/admin/src/main.ts",
+						"polyfills": "apps/admin/src/polyfills.ts",
+						"tsConfig": "apps/admin/tsconfig.app.json",
+						"aot": true,
+						"assets": [
+							"apps/admin/src/favicon.ico",
+							"apps/admin/src/assets",
+							{
+								"glob": "**/*",
+								"input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+								"output": "/assets/"
+							}
+						],
+						"styles": [
+							"apps/admin/src/styles.scss",
+							"libs/app-shell/src/index.scss",
+							"node_modules/ng-zorro-antd/ng-zorro-antd.dark.css",
+							"node_modules/primeflex/primeflex.min.css",
+							"node_modules/primeicons/primeicons.css",
+							"node_modules/primeng/resources/themes/nova-dark/theme.css",
+							"node_modules/primeng/resources/primeng.min.css"
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/admin/src/environments/environment.ts",
+									"with": "apps/admin/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": true,
+							"extractCss": true,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "5mb",
+									"maximumError": "10mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "15kb"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"options": {
+						"browserTarget": "admin:build"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "admin:build:production"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "admin:build"
+					}
+				},
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": [
+							"apps/admin/tsconfig.app.json",
+							"apps/admin/tsconfig.spec.json"
+						],
+						"exclude": ["**/node_modules/**", "!apps/admin/**"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "apps/admin/jest.config.js",
+						"tsConfig": "apps/admin/tsconfig.spec.json",
+						"passWithNoTests": true,
+						"setupFile": "apps/admin/src/test-setup.ts"
+					}
+				}
+			}
+		},
+		"admin-e2e": {
+			"root": "apps/admin-e2e",
+			"sourceRoot": "apps/admin-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/admin-e2e/cypress.json",
+						"tsConfig": "apps/admin-e2e/tsconfig.e2e.json",
+						"devServerTarget": "admin:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "admin:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": ["apps/admin-e2e/tsconfig.e2e.json"],
+						"exclude": ["**/node_modules/**", "!apps/admin-e2e/**"]
+					}
+				}
+			}
+		},
+		"data": {
+			"root": "libs/data",
+			"sourceRoot": "libs/data/src",
+			"projectType": "library",
+			"schematics": {},
+			"architect": {
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": ["libs/data/tsconfig.lib.json", "libs/data/tsconfig.spec.json"],
+						"exclude": ["**/node_modules/**", "!libs/data/**"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "libs/data/jest.config.js",
+						"tsConfig": "libs/data/tsconfig.spec.json",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"guessinator": {
+			"projectType": "application",
+			"schematics": {
+				"@nrwl/angular:component": {
+					"style": "scss"
+				}
+			},
+			"root": "apps/guessinator",
+			"sourceRoot": "apps/guessinator/src",
+			"prefix": "gilly",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"showCircularDependencies": false,
+						"outputPath": "dist/dakimbo-server/public/guessinator",
+						"index": "apps/guessinator/src/index.html",
+						"main": "apps/guessinator/src/main.ts",
+						"polyfills": "apps/guessinator/src/polyfills.ts",
+						"tsConfig": "apps/guessinator/tsconfig.app.json",
+						"aot": true,
+						"assets": [
+							"apps/guessinator/src/favicon.ico",
+							"apps/guessinator/src/assets"
+						],
+						"styles": ["apps/guessinator/src/styles.scss"],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/guessinator/src/environments/environment.ts",
+									"with": "apps/guessinator/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"extractCss": true,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"deleteOutputPath": false,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "2mb",
+									"maximumError": "5mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "10kb"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"options": {
+						"browserTarget": "guessinator:build"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "guessinator:build:production"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "guessinator:build"
+					}
+				},
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": [
+							"apps/guessinator/tsconfig.app.json",
+							"apps/guessinator/tsconfig.spec.json"
+						],
+						"exclude": ["**/node_modules/**", "!apps/guessinator/**/*"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "apps/guessinator/jest.config.js",
+						"tsConfig": "apps/guessinator/tsconfig.spec.json",
+						"passWithNoTests": true,
+						"setupFile": "apps/guessinator/src/test-setup.ts"
+					}
+				}
+			}
+		},
+		"guessinator-e2e": {
+			"root": "apps/guessinator-e2e",
+			"sourceRoot": "apps/guessinator-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/guessinator-e2e/cypress.json",
+						"tsConfig": "apps/guessinator-e2e/tsconfig.e2e.json",
+						"devServerTarget": "guessinator:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "guessinator:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": ["apps/guessinator-e2e/tsconfig.e2e.json"],
+						"exclude": ["**/node_modules/**", "!apps/guessinator-e2e/**/*"]
+					}
+				}
+			}
+		},
+		"app-shell": {
+			"projectType": "library",
+			"root": "libs/app-shell",
+			"sourceRoot": "libs/app-shell/src",
+			"prefix": "sof",
+			"architect": {
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": [
+							"libs/app-shell/tsconfig.lib.json",
+							"libs/app-shell/tsconfig.spec.json"
+						],
+						"exclude": ["**/node_modules/**", "!libs/app-shell/**"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "libs/app-shell/jest.config.js",
+						"tsConfig": "libs/app-shell/tsconfig.spec.json",
+						"passWithNoTests": true,
+						"setupFile": "libs/app-shell/src/test-setup.ts"
+					}
+				}
+			},
+			"schematics": {
+				"@nrwl/angular:component": {
+					"style": "scss"
+				}
+			}
+		},
+		"utilities": {
+			"projectType": "library",
+			"root": "libs/utilities",
+			"sourceRoot": "libs/utilities/src",
+			"prefix": "utility",
+			"architect": {
+				"lint": {
+					"builder": "@angular-devkit/build-angular:tslint",
+					"options": {
+						"tsConfig": [
+							"libs/utilities/tsconfig.lib.json",
+							"libs/utilities/tsconfig.spec.json"
+						],
+						"exclude": ["**/node_modules/**", "!libs/utilities/**"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "libs/utilities/jest.config.js",
+						"tsConfig": "libs/utilities/tsconfig.spec.json",
+						"passWithNoTests": true,
+						"setupFile": "libs/utilities/src/test-setup.ts"
+					}
+				}
+			},
+			"schematics": {
+				"@nrwl/angular:component": {
+					"style": "scss"
+				}
+			}
+		}
+	},
+	"cli": {
+		"defaultCollection": "@nrwl/angular"
+	},
+	"schematics": {
+		"@nrwl/angular:application": {
+			"unitTestRunner": "jest",
+			"e2eTestRunner": "cypress"
+		},
+		"@nrwl/angular:library": {
+			"unitTestRunner": "jest"
+		}
+	},
+	"defaultProject": "guessinator"
 }

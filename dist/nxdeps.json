@@ -90,6 +90,252 @@
           ]
         }
       },
+      "dakimbo-server": {
+        "name": "dakimbo-server",
+        "type": "app",
+        "data": {
+          "root": "apps/dakimbo-server",
+          "sourceRoot": "apps/dakimbo-server/src",
+          "projectType": "application",
+          "prefix": "dakimbo-server",
+          "schematics": {},
+          "architect": {
+            "build": {
+              "builder": "@nrwl/node:build",
+              "options": {
+                "showCircularDependencies": false,
+                "outputPath": "dist/dakimbo-server",
+                "main": "apps/dakimbo-server/src/main.ts",
+                "tsConfig": "apps/dakimbo-server/tsconfig.app.json"
+              },
+              "configurations": {
+                "production": {
+                  "optimization": true,
+                  "extractLicenses": false,
+                  "inspect": false,
+                  "deleteOutputPath": false,
+                  "fileReplacements": [
+                    {
+                      "replace": "apps/dakimbo-server/src/environments/environment.ts",
+                      "with": "apps/dakimbo-server/src/environments/environment.prod.ts"
+                    }
+                  ]
+                }
+              }
+            },
+            "serve": {
+              "builder": "@nrwl/node:execute",
+              "options": {
+                "buildTarget": "dakimbo-server:build"
+              }
+            },
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "apps/dakimbo-server/tsconfig.app.json",
+                  "apps/dakimbo-server/tsconfig.spec.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!apps/dakimbo-server/**"
+                ]
+              }
+            },
+            "test": {
+              "builder": "@nrwl/jest:jest",
+              "options": {
+                "jestConfig": "apps/dakimbo-server/jest.config.js",
+                "tsConfig": "apps/dakimbo-server/tsconfig.spec.json",
+                "passWithNoTests": true
+              }
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "apps/dakimbo-server/.env-example",
+              "ext": "",
+              "mtime": 1593961832063.2268
+            },
+            {
+              "file": "apps/dakimbo-server/jest.config.js",
+              "ext": ".js",
+              "mtime": 1593961832069.7275
+            },
+            {
+              "file": "apps/dakimbo-server/README.md",
+              "ext": ".md",
+              "mtime": 1596211603889.7761
+            },
+            {
+              "file": "apps/dakimbo-server/src/config.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "apps/dakimbo-server/src/controllers/authController.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "apps/dakimbo-server/src/controllers/data/data-transaction.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "apps/dakimbo-server/src/controllers/data/read.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "apps/dakimbo-server/src/controllers/dataController.ts",
+              "ext": ".ts",
+              "mtime": 1595952320121.5415
+            },
+            {
+              "file": "apps/dakimbo-server/src/controllers/metricsController.ts",
+              "ext": ".ts",
+              "mtime": 1587726333678.3257
+            },
+            {
+              "file": "apps/dakimbo-server/src/controllers/userController.ts",
+              "ext": ".ts",
+              "mtime": 1596212899400.4685
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/database.ts",
+              "ext": ".ts",
+              "mtime": 1595943455617.9915
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/auth/auth-action.ts",
+              "ext": ".ts",
+              "mtime": 1595952320133.0518
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/auth/auth-entity.ts",
+              "ext": ".ts",
+              "mtime": 1595952320133.553
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts",
+              "ext": ".ts",
+              "mtime": 1595952320134.0537
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/auth/auth-role.ts",
+              "ext": ".ts",
+              "mtime": 1595952320134.554
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/auth/user.ts",
+              "ext": ".ts",
+              "mtime": 1595952320135.0532
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/base.ts",
+              "ext": ".ts",
+              "mtime": 1595952320135.5537
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/index.ts",
+              "ext": ".ts",
+              "mtime": 1596212818071.28
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/_entity-map.ts",
+              "ext": ".ts",
+              "mtime": 1596212545454.0793
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-view.ts",
+              "ext": ".ts",
+              "mtime": 1595616381620.6492
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-visit.ts",
+              "ext": ".ts",
+              "mtime": 1596212330472.282
+            },
+            {
+              "file": "apps/dakimbo-server/src/database/migrations/CreateAdminUser.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "apps/dakimbo-server/src/main.ts",
+              "ext": ".ts",
+              "mtime": 1593961832143.2407
+            },
+            {
+              "file": "apps/dakimbo-server/src/middlewares/checkJwt.ts",
+              "ext": ".ts",
+              "mtime": 1595952320123.043
+            },
+            {
+              "file": "apps/dakimbo-server/src/middlewares/checkRole.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "apps/dakimbo-server/src/public/index.html",
+              "ext": ".html",
+              "mtime": 1593961832199.2505
+            },
+            {
+              "file": "apps/dakimbo-server/src/routes/auth.ts",
+              "ext": ".ts",
+              "mtime": 1593961832206.2517
+            },
+            {
+              "file": "apps/dakimbo-server/src/routes/data.ts",
+              "ext": ".ts",
+              "mtime": 1593961832213.253
+            },
+            {
+              "file": "apps/dakimbo-server/src/routes/index.ts",
+              "ext": ".ts",
+              "mtime": 1593961832219.7546
+            },
+            {
+              "file": "apps/dakimbo-server/src/routes/metrics.ts",
+              "ext": ".ts",
+              "mtime": 1593961832225.7556
+            },
+            {
+              "file": "apps/dakimbo-server/src/routes/user.ts",
+              "ext": ".ts",
+              "mtime": 1593961832232.7563
+            },
+            {
+              "file": "apps/dakimbo-server/src/utilities/logStamp.ts",
+              "ext": ".ts",
+              "mtime": 1593961832240.7576
+            },
+            {
+              "file": "apps/dakimbo-server/tsconfig.app.json",
+              "ext": ".json",
+              "mtime": 1593961832247.7595
+            },
+            {
+              "file": "apps/dakimbo-server/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1593961832249.259
+            },
+            {
+              "file": "apps/dakimbo-server/tsconfig.spec.json",
+              "ext": ".json",
+              "mtime": 1593961832254.7598
+            },
+            {
+              "file": "apps/dakimbo-server/tslint.json",
+              "ext": ".json",
+              "mtime": 1593961832256.7607
+            }
+          ]
+        }
+      },
       "guessinator": {
         "name": "guessinator",
         "type": "app",
@@ -107,7 +353,8 @@
             "build": {
               "builder": "@angular-devkit/build-angular:browser",
               "options": {
-                "outputPath": "dist/apps/guessinator",
+                "showCircularDependencies": false,
+                "outputPath": "dist/dakimbo-server/public/guessinator",
                 "index": "apps/guessinator/src/index.html",
                 "main": "apps/guessinator/src/main.ts",
                 "polyfills": "apps/guessinator/src/polyfills.ts",
@@ -138,6 +385,7 @@
                   "extractLicenses": true,
                   "vendorChunk": false,
                   "buildOptimizer": true,
+                  "deleteOutputPath": false,
                   "budgets": [
                     {
                       "type": "initial",
@@ -208,12 +456,12 @@
             {
               "file": "apps/guessinator/src/app/app.component.html",
               "ext": ".html",
-              "mtime": 1593961208162.8914
+              "mtime": 1593962432370.2368
             },
             {
               "file": "apps/guessinator/src/app/app.component.scss",
               "ext": ".scss",
-              "mtime": 1593961208164.3914
+              "mtime": 1593962143405.7874
             },
             {
               "file": "apps/guessinator/src/app/app.component.spec.ts",
@@ -228,7 +476,12 @@
             {
               "file": "apps/guessinator/src/app/app.module.ts",
               "ext": ".ts",
-              "mtime": 1593961208162.391
+              "mtime": 1593962432370.2368
+            },
+            {
+              "file": "apps/guessinator/src/app/landing-page/landing-page.componet.ts",
+              "ext": ".ts",
+              "mtime": 1593962432370.2368
             },
             {
               "file": "apps/guessinator/src/assets/.gitkeep",
@@ -298,11 +551,1073 @@
           ]
         }
       },
-      "@nrwl/angular": {
-        "type": "npm",
-        "name": "@nrwl/angular",
+      "admin-e2e": {
+        "name": "admin-e2e",
+        "type": "e2e",
         "data": {
-          "version": "9.5.1",
+          "root": "apps/admin-e2e",
+          "sourceRoot": "apps/admin-e2e/src",
+          "projectType": "application",
+          "architect": {
+            "e2e": {
+              "builder": "@nrwl/cypress:cypress",
+              "options": {
+                "cypressConfig": "apps/admin-e2e/cypress.json",
+                "tsConfig": "apps/admin-e2e/tsconfig.e2e.json",
+                "devServerTarget": "admin:serve"
+              },
+              "configurations": {
+                "production": {
+                  "devServerTarget": "admin:serve:production"
+                }
+              }
+            },
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "apps/admin-e2e/tsconfig.e2e.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!apps/admin-e2e/**"
+                ]
+              }
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "apps/admin-e2e/cypress.json",
+              "ext": ".json",
+              "mtime": 1595509940402.764
+            },
+            {
+              "file": "apps/admin-e2e/src/fixtures/example.json",
+              "ext": ".json",
+              "mtime": 1595509940403.264
+            },
+            {
+              "file": "apps/admin-e2e/src/integration/app.spec.ts",
+              "ext": ".ts",
+              "mtime": 1595509940403.7644
+            },
+            {
+              "file": "apps/admin-e2e/src/plugins/index.js",
+              "ext": ".js",
+              "mtime": 1595509940404.2668
+            },
+            {
+              "file": "apps/admin-e2e/src/support/app.po.ts",
+              "ext": ".ts",
+              "mtime": 1595509940404.7668
+            },
+            {
+              "file": "apps/admin-e2e/src/support/commands.ts",
+              "ext": ".ts",
+              "mtime": 1595509940404.7668
+            },
+            {
+              "file": "apps/admin-e2e/src/support/index.ts",
+              "ext": ".ts",
+              "mtime": 1595509940405.2666
+            },
+            {
+              "file": "apps/admin-e2e/tsconfig.e2e.json",
+              "ext": ".json",
+              "mtime": 1595509940405.2666
+            },
+            {
+              "file": "apps/admin-e2e/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1595509940405.767
+            },
+            {
+              "file": "apps/admin-e2e/tslint.json",
+              "ext": ".json",
+              "mtime": 1595509940405.767
+            }
+          ]
+        }
+      },
+      "app-shell": {
+        "name": "app-shell",
+        "type": "lib",
+        "data": {
+          "projectType": "library",
+          "root": "libs/app-shell",
+          "sourceRoot": "libs/app-shell/src",
+          "prefix": "sof",
+          "architect": {
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "libs/app-shell/tsconfig.lib.json",
+                  "libs/app-shell/tsconfig.spec.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!libs/app-shell/**"
+                ]
+              }
+            },
+            "test": {
+              "builder": "@nrwl/jest:jest",
+              "options": {
+                "jestConfig": "libs/app-shell/jest.config.js",
+                "tsConfig": "libs/app-shell/tsconfig.spec.json",
+                "passWithNoTests": true,
+                "setupFile": "libs/app-shell/src/test-setup.ts"
+              }
+            }
+          },
+          "schematics": {
+            "@nrwl/angular:component": {
+              "style": "scss"
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "libs/app-shell/jest.config.js",
+              "ext": ".js",
+              "mtime": 1587663668150.8855
+            },
+            {
+              "file": "libs/app-shell/README.md",
+              "ext": ".md",
+              "mtime": 1587663668147.3853
+            },
+            {
+              "file": "libs/app-shell/src/index.scss",
+              "ext": ".scss",
+              "mtime": 1587665945131.2212
+            },
+            {
+              "file": "libs/app-shell/src/index.ts",
+              "ext": ".ts",
+              "mtime": 1596055162501.792
+            },
+            {
+              "file": "libs/app-shell/src/lib/app-shell.module.spec.ts",
+              "ext": ".ts",
+              "mtime": 1587663668149.8857
+            },
+            {
+              "file": "libs/app-shell/src/lib/app-shell.module.ts",
+              "ext": ".ts",
+              "mtime": 1596212899397.966
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.html",
+              "ext": ".html",
+              "mtime": 1595595184653.6155
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.scss",
+              "ext": ".scss",
+              "mtime": 1588361568233.9756
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1587664115716.7068
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.ts",
+              "ext": ".ts",
+              "mtime": 1596055162502.7021
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/app-layout.module.ts",
+              "ext": ".ts",
+              "mtime": 1587664115755.2139
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.html",
+              "ext": ".html",
+              "mtime": 1595618021112.8037
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.scss",
+              "ext": ".scss",
+              "mtime": 1587664115764.215
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1587664115766.2158
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.ts",
+              "ext": ".ts",
+              "mtime": 1595597296849.274
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/error-page/error-page.component.html",
+              "ext": ".html",
+              "mtime": 1591100986015.0383
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/error-page/error-page.component.scss",
+              "ext": ".scss",
+              "mtime": 1587664115846.2297
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/error-page/error-page.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1587664115847.7295
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/error-page/error-page.component.ts",
+              "ext": ".ts",
+              "mtime": 1587664115849.2312
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/error-page/error-page.module.ts",
+              "ext": ".ts",
+              "mtime": 1587664115884.236
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/login/login.component.html",
+              "ext": ".html",
+              "mtime": 1593642413986.057
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/login/login.component.scss",
+              "ext": ".scss",
+              "mtime": 1587664115888.2368
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/login/login.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1587664115892.2373
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/login/login.component.ts",
+              "ext": ".ts",
+              "mtime": 1595840813941.7258
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/login/login.module.ts",
+              "ext": ".ts",
+              "mtime": 1588361568234.9756
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/page-container/page-container.component.html",
+              "ext": ".html",
+              "mtime": 1596055162503.2024
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/page-container/page-container.component.scss",
+              "ext": ".scss",
+              "mtime": 1596055162503.2024
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/page-container/page-container.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1596055162503.2024
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/page-container/page-container.component.ts",
+              "ext": ".ts",
+              "mtime": 1596055162503.703
+            },
+            {
+              "file": "libs/app-shell/src/lib/components/page-container/page-container.module.ts",
+              "ext": ".ts",
+              "mtime": 1596055162504.7043
+            },
+            {
+              "file": "libs/app-shell/src/lib/guards/auth.guard.ts",
+              "ext": ".ts",
+              "mtime": 1587664115655.1965
+            },
+            {
+              "file": "libs/app-shell/src/lib/guards/role.guard.ts",
+              "ext": ".ts",
+              "mtime": 1595952320131.5515
+            },
+            {
+              "file": "libs/app-shell/src/lib/interceptors/auth.interceptor.ts",
+              "ext": ".ts",
+              "mtime": 1587664115655.1965
+            },
+            {
+              "file": "libs/app-shell/src/lib/interceptors/ensure-https.interceptor.ts",
+              "ext": ".ts",
+              "mtime": 1587664115663.198
+            },
+            {
+              "file": "libs/app-shell/src/lib/interceptors/logging.interceptor.ts",
+              "ext": ".ts",
+              "mtime": 1587664115668.1982
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/alerts.service.ts",
+              "ext": ".ts",
+              "mtime": 1588255022795.5413
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/auth.service.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/error/customErrorHandler.ts",
+              "ext": ".ts",
+              "mtime": 1587758080936.157
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/error/error.service.ts",
+              "ext": ".ts",
+              "mtime": 1587758080937.657
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/error/server-errors.interceptor.ts",
+              "ext": ".ts",
+              "mtime": 1587758080945.158
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/icon.service.ts",
+              "ext": ".ts",
+              "mtime": 1587664115719.2078
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/location-name.service.ts",
+              "ext": ".ts",
+              "mtime": 1587664115754.7136
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/message.service.ts",
+              "ext": ".ts",
+              "mtime": 1587664115757.7144
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/metrics.service.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.9678
+            },
+            {
+              "file": "libs/app-shell/src/lib/services/ng-notification.service.ts",
+              "ext": ".ts",
+              "mtime": 1596117073758.4756
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/active-link.scss",
+              "ext": ".scss",
+              "mtime": 1587664115754.7136
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/app-loading.scss",
+              "ext": ".scss",
+              "mtime": 1587664115757.2139
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/themes/mat-theme.scss",
+              "ext": ".scss",
+              "mtime": 1587664115765.7153
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/themes/_palletes.scss",
+              "ext": ".scss",
+              "mtime": 1587664115763.715
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/_fonts.scss",
+              "ext": ".scss",
+              "mtime": 1587664115655.1965
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/_reset.scss",
+              "ext": ".scss",
+              "mtime": 1587664115660.6997
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/_variables.scss",
+              "ext": ".scss",
+              "mtime": 1587664115668.6985
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/scss/_vendor.scss",
+              "ext": ".scss",
+              "mtime": 1591100696358.0088
+            },
+            {
+              "file": "libs/app-shell/src/lib/_styles/styles.scss",
+              "ext": ".scss",
+              "mtime": 1596033987163.0627
+            },
+            {
+              "file": "libs/app-shell/src/test-setup.ts",
+              "ext": ".ts",
+              "mtime": 1587663668151.8857
+            },
+            {
+              "file": "libs/app-shell/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1587663668150.3857
+            },
+            {
+              "file": "libs/app-shell/tsconfig.lib.json",
+              "ext": ".json",
+              "mtime": 1587663668147.3853
+            },
+            {
+              "file": "libs/app-shell/tsconfig.spec.json",
+              "ext": ".json",
+              "mtime": 1587663668151.3857
+            },
+            {
+              "file": "libs/app-shell/tslint.json",
+              "ext": ".json",
+              "mtime": 1587663668147.885
+            }
+          ]
+        }
+      },
+      "utilities": {
+        "name": "utilities",
+        "type": "lib",
+        "data": {
+          "projectType": "library",
+          "root": "libs/utilities",
+          "sourceRoot": "libs/utilities/src",
+          "prefix": "utility",
+          "architect": {
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "libs/utilities/tsconfig.lib.json",
+                  "libs/utilities/tsconfig.spec.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!libs/utilities/**"
+                ]
+              }
+            },
+            "test": {
+              "builder": "@nrwl/jest:jest",
+              "options": {
+                "jestConfig": "libs/utilities/jest.config.js",
+                "tsConfig": "libs/utilities/tsconfig.spec.json",
+                "passWithNoTests": true,
+                "setupFile": "libs/utilities/src/test-setup.ts"
+              }
+            }
+          },
+          "schematics": {
+            "@nrwl/angular:component": {
+              "style": "scss"
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "libs/utilities/jest.config.js",
+              "ext": ".js",
+              "mtime": 1587982917784.1885
+            },
+            {
+              "file": "libs/utilities/README.md",
+              "ext": ".md",
+              "mtime": 1587982917783.1877
+            },
+            {
+              "file": "libs/utilities/src/index.ts",
+              "ext": ".ts",
+              "mtime": 1595952320139.057
+            },
+            {
+              "file": "libs/utilities/src/lib/auth/checkModelAllowedRoles.ts",
+              "ext": ".ts",
+              "mtime": 1595952320140.0576
+            },
+            {
+              "file": "libs/utilities/src/lib/auth/checkUserRole.ts",
+              "ext": ".ts",
+              "mtime": 1596212899397.966
+            },
+            {
+              "file": "libs/utilities/src/lib/services/filter-sort.service.ts",
+              "ext": ".ts",
+              "mtime": 1592926618560.3853
+            },
+            {
+              "file": "libs/utilities/src/lib/services/utility.service.ts",
+              "ext": ".ts",
+              "mtime": 1596055162508.7075
+            },
+            {
+              "file": "libs/utilities/src/lib/utilities/convertByteToHuman.ts",
+              "ext": ".ts",
+              "mtime": 1588361568272.4824
+            },
+            {
+              "file": "libs/utilities/src/lib/utilities/deepClone.ts",
+              "ext": ".ts",
+              "mtime": 1594203232689.0188
+            },
+            {
+              "file": "libs/utilities/src/lib/utilities/getUniqueProps.ts",
+              "ext": ".ts",
+              "mtime": 1594137920009.38
+            },
+            {
+              "file": "libs/utilities/src/lib/utilities/transformValToTypescript.ts",
+              "ext": ".ts",
+              "mtime": 1587982917908.2102
+            },
+            {
+              "file": "libs/utilities/src/lib/utilities.module.spec.ts",
+              "ext": ".ts",
+              "mtime": 1587982917787.1885
+            },
+            {
+              "file": "libs/utilities/src/lib/utilities.module.ts",
+              "ext": ".ts",
+              "mtime": 1587982917788.1892
+            },
+            {
+              "file": "libs/utilities/src/test-setup.ts",
+              "ext": ".ts",
+              "mtime": 1587982917791.1895
+            },
+            {
+              "file": "libs/utilities/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1587982917791.6902
+            },
+            {
+              "file": "libs/utilities/tsconfig.lib.json",
+              "ext": ".json",
+              "mtime": 1587982917793.1895
+            },
+            {
+              "file": "libs/utilities/tsconfig.spec.json",
+              "ext": ".json",
+              "mtime": 1587982917793.6897
+            },
+            {
+              "file": "libs/utilities/tslint.json",
+              "ext": ".json",
+              "mtime": 1587982917794.1897
+            }
+          ]
+        }
+      },
+      "admin": {
+        "name": "admin",
+        "type": "app",
+        "data": {
+          "projectType": "application",
+          "schematics": {
+            "@nrwl/angular:component": {
+              "style": "scss"
+            }
+          },
+          "root": "apps/admin",
+          "sourceRoot": "apps/admin/src",
+          "prefix": "sof",
+          "architect": {
+            "build": {
+              "builder": "@angular-devkit/build-angular:browser",
+              "options": {
+                "showCircularDependencies": false,
+                "outputPath": "dist/draco-server/public/admin",
+                "index": "apps/admin/src/index.html",
+                "main": "apps/admin/src/main.ts",
+                "polyfills": "apps/admin/src/polyfills.ts",
+                "tsConfig": "apps/admin/tsconfig.app.json",
+                "aot": true,
+                "assets": [
+                  "apps/admin/src/favicon.ico",
+                  "apps/admin/src/assets",
+                  {
+                    "glob": "**/*",
+                    "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                    "output": "/assets/"
+                  }
+                ],
+                "styles": [
+                  "apps/admin/src/styles.scss",
+                  "libs/app-shell/src/index.scss",
+                  "node_modules/ng-zorro-antd/ng-zorro-antd.dark.css",
+                  "node_modules/primeflex/primeflex.min.css",
+                  "node_modules/primeicons/primeicons.css",
+                  "node_modules/primeng/resources/themes/nova-dark/theme.css",
+                  "node_modules/primeng/resources/primeng.min.css"
+                ],
+                "scripts": []
+              },
+              "configurations": {
+                "production": {
+                  "fileReplacements": [
+                    {
+                      "replace": "apps/admin/src/environments/environment.ts",
+                      "with": "apps/admin/src/environments/environment.prod.ts"
+                    }
+                  ],
+                  "optimization": true,
+                  "outputHashing": "all",
+                  "sourceMap": true,
+                  "extractCss": true,
+                  "namedChunks": false,
+                  "extractLicenses": true,
+                  "vendorChunk": false,
+                  "buildOptimizer": true,
+                  "budgets": [
+                    {
+                      "type": "initial",
+                      "maximumWarning": "5mb",
+                      "maximumError": "10mb"
+                    },
+                    {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "6kb",
+                      "maximumError": "15kb"
+                    }
+                  ]
+                }
+              }
+            },
+            "serve": {
+              "builder": "@angular-devkit/build-angular:dev-server",
+              "options": {
+                "browserTarget": "admin:build"
+              },
+              "configurations": {
+                "production": {
+                  "browserTarget": "admin:build:production"
+                }
+              }
+            },
+            "extract-i18n": {
+              "builder": "@angular-devkit/build-angular:extract-i18n",
+              "options": {
+                "browserTarget": "admin:build"
+              }
+            },
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "apps/admin/tsconfig.app.json",
+                  "apps/admin/tsconfig.spec.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!apps/admin/**"
+                ]
+              }
+            },
+            "test": {
+              "builder": "@nrwl/jest:jest",
+              "options": {
+                "jestConfig": "apps/admin/jest.config.js",
+                "tsConfig": "apps/admin/tsconfig.spec.json",
+                "passWithNoTests": true,
+                "setupFile": "apps/admin/src/test-setup.ts"
+              }
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "apps/admin/browserslist",
+              "ext": "",
+              "mtime": 1595509940406.2673
+            },
+            {
+              "file": "apps/admin/jest.config.js",
+              "ext": ".js",
+              "mtime": 1595509940406.2673
+            },
+            {
+              "file": "apps/admin/src/app/app-routing.module.ts",
+              "ext": ".ts",
+              "mtime": 1596212227318.717
+            },
+            {
+              "file": "apps/admin/src/app/app.component.html",
+              "ext": ".html",
+              "mtime": 1595510488331.7893
+            },
+            {
+              "file": "apps/admin/src/app/app.component.scss",
+              "ext": ".scss",
+              "mtime": 1595511184462.6096
+            },
+            {
+              "file": "apps/admin/src/app/app.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1595509940407.7683
+            },
+            {
+              "file": "apps/admin/src/app/app.component.ts",
+              "ext": ".ts",
+              "mtime": 1596212271183.4397
+            },
+            {
+              "file": "apps/admin/src/app/app.module.ts",
+              "ext": ".ts",
+              "mtime": 1596212227318.717
+            },
+            {
+              "file": "apps/admin/src/app/features/data-tools/data-tools.component.ts",
+              "ext": ".ts",
+              "mtime": 1596201524920.2512
+            },
+            {
+              "file": "apps/admin/src/app/features/data-tools/data-tools.module.ts",
+              "ext": ".ts",
+              "mtime": 1596212227319.2178
+            },
+            {
+              "file": "apps/admin/src/app/features/form-creator/admin-form-creator.module.ts",
+              "ext": ".ts",
+              "mtime": 1595588006626.4436
+            },
+            {
+              "file": "apps/admin/src/app/features/metrics/metrics.component.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.4668
+            },
+            {
+              "file": "apps/admin/src/app/features/metrics/metrics.module.ts",
+              "ext": ".ts",
+              "mtime": 1595842894563.2566
+            },
+            {
+              "file": "apps/admin/src/app/features/overview/overview.component.ts",
+              "ext": ".ts",
+              "mtime": 1596201524920.7517
+            },
+            {
+              "file": "apps/admin/src/app/features/overview/overview.module.ts",
+              "ext": ".ts",
+              "mtime": 1595598621061.0906
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/edit-user/edit-user.component.html",
+              "ext": ".html",
+              "mtime": 1595621629389.4844
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/edit-user/edit-user.component.spec.ts",
+              "ext": ".ts",
+              "mtime": 1595619833108.231
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/rbac/rbac.service.ts",
+              "ext": ".ts",
+              "mtime": 1596212227319.2178
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/rbac/roles/roles-header.component.ts",
+              "ext": ".ts",
+              "mtime": 1595952320114.5366
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/rbac/roles/roles-list.component.ts",
+              "ext": ".ts",
+              "mtime": 1595952320115.0366
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/rbac/roles-management.component.ts",
+              "ext": ".ts",
+              "mtime": 1595952320114.0354
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/rbac/tree-management/rbac-tree-management.component.ts",
+              "ext": ".ts",
+              "mtime": 1595952320115.537
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/user-management.component.ts",
+              "ext": ".ts",
+              "mtime": 1596117208747.3762
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/user-management.module.ts",
+              "ext": ".ts",
+              "mtime": 1596212227324.7224
+            },
+            {
+              "file": "apps/admin/src/app/features/user-management/user-management.service.ts",
+              "ext": ".ts",
+              "mtime": 1596212899398.9678
+            },
+            {
+              "file": "apps/admin/src/assets/.gitkeep",
+              "ext": "",
+              "mtime": 1595509940408.7693
+            },
+            {
+              "file": "apps/admin/src/assets/appLogo.png",
+              "ext": ".png",
+              "mtime": 1595622069748
+            },
+            {
+              "file": "apps/admin/src/environments/environment.prod.ts",
+              "ext": ".ts",
+              "mtime": 1595622150438.8018
+            },
+            {
+              "file": "apps/admin/src/environments/environment.ts",
+              "ext": ".ts",
+              "mtime": 1595622150438.8018
+            },
+            {
+              "file": "apps/admin/src/favicon.ico",
+              "ext": ".ico",
+              "mtime": 1595622132936.7603
+            },
+            {
+              "file": "apps/admin/src/index.html",
+              "ext": ".html",
+              "mtime": 1596212271183.4397
+            },
+            {
+              "file": "apps/admin/src/main.ts",
+              "ext": ".ts",
+              "mtime": 1595509940410.271
+            },
+            {
+              "file": "apps/admin/src/polyfills.ts",
+              "ext": ".ts",
+              "mtime": 1595510626765.1284
+            },
+            {
+              "file": "apps/admin/src/styles.scss",
+              "ext": ".scss",
+              "mtime": 1595844531661.3389
+            },
+            {
+              "file": "apps/admin/src/test-setup.ts",
+              "ext": ".ts",
+              "mtime": 1595509940411.2717
+            },
+            {
+              "file": "apps/admin/tsconfig.app.json",
+              "ext": ".json",
+              "mtime": 1595509940411.2717
+            },
+            {
+              "file": "apps/admin/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1595509940411.2717
+            },
+            {
+              "file": "apps/admin/tsconfig.spec.json",
+              "ext": ".json",
+              "mtime": 1595509940411.772
+            },
+            {
+              "file": "apps/admin/tslint.json",
+              "ext": ".json",
+              "mtime": 1595509940411.772
+            }
+          ]
+        }
+      },
+      "data": {
+        "name": "data",
+        "type": "lib",
+        "data": {
+          "root": "libs/data",
+          "sourceRoot": "libs/data/src",
+          "projectType": "library",
+          "schematics": {},
+          "architect": {
+            "lint": {
+              "builder": "@angular-devkit/build-angular:tslint",
+              "options": {
+                "tsConfig": [
+                  "libs/data/tsconfig.lib.json",
+                  "libs/data/tsconfig.spec.json"
+                ],
+                "exclude": [
+                  "**/node_modules/**",
+                  "!libs/data/**"
+                ]
+              }
+            },
+            "test": {
+              "builder": "@nrwl/jest:jest",
+              "options": {
+                "jestConfig": "libs/data/jest.config.js",
+                "tsConfig": "libs/data/tsconfig.spec.json",
+                "passWithNoTests": true
+              }
+            }
+          },
+          "tags": [],
+          "files": [
+            {
+              "file": "libs/data/jest.config.js",
+              "ext": ".js",
+              "mtime": 1593961763780.7263
+            },
+            {
+              "file": "libs/data/README.md",
+              "ext": ".md",
+              "mtime": 1593961763779.726
+            },
+            {
+              "file": "libs/data/src/index.ts",
+              "ext": ".ts",
+              "mtime": 1596212818071.28
+            },
+            {
+              "file": "libs/data/src/lib/composites/location.ts",
+              "ext": ".ts",
+              "mtime": 1591791261535.8955
+            },
+            {
+              "file": "libs/data/src/lib/services/data/data-service.module.ts",
+              "ext": ".ts",
+              "mtime": 1593542608171.6267
+            },
+            {
+              "file": "libs/data/src/lib/services/data/data.service.ts",
+              "ext": ".ts",
+              "mtime": 1596212951630.246
+            },
+            {
+              "file": "libs/data/src/lib/services/data/interceptors/GenericModelHttpParams.ts",
+              "ext": ".ts",
+              "mtime": 1587982563584.5356
+            },
+            {
+              "file": "libs/data/src/lib/services/data/interceptors/header.interceptor.ts",
+              "ext": ".ts",
+              "mtime": 1587982563585.036
+            },
+            {
+              "file": "libs/data/src/lib/services/data/interceptors/loading.interceptor.ts",
+              "ext": ".ts",
+              "mtime": 1588601868379.6428
+            },
+            {
+              "file": "libs/data/src/lib/services/data/_delete.ts",
+              "ext": ".ts",
+              "mtime": 1594040538305.5747
+            },
+            {
+              "file": "libs/data/src/lib/services/data/_read.ts",
+              "ext": ".ts",
+              "mtime": 1594137919989.8765
+            },
+            {
+              "file": "libs/data/src/lib/services/data/_save.ts",
+              "ext": ".ts",
+              "mtime": 1594312135745.3337
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/data-importer-complete.component.ts",
+              "ext": ".ts",
+              "mtime": 1594203232683.0176
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/data-importer-input.component.ts",
+              "ext": ".ts",
+              "mtime": 1594137919993.877
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/data-importer-output.component.ts",
+              "ext": ".ts",
+              "mtime": 1594137919994.8774
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/data-importer-preview.component.ts",
+              "ext": ".ts",
+              "mtime": 1594137919995.3774
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/data-importer.component.ts",
+              "ext": ".ts",
+              "mtime": 1594206143399.4678
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/data-importer.module.ts",
+              "ext": ".ts",
+              "mtime": 1594205020826.0122
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/data-importer.service.ts",
+              "ext": ".ts",
+              "mtime": 1596212227325.2234
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-delimited.component.ts",
+              "ext": ".ts",
+              "mtime": 1594203232686.0186
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-excel.component.ts",
+              "ext": ".ts",
+              "mtime": 1594137920000.3787
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-json.component.ts",
+              "ext": ".ts",
+              "mtime": 1594203232687.0186
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-type.abstract.ts",
+              "ext": ".ts",
+              "mtime": 1594137920001.8784
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-url.component.ts",
+              "ext": ".ts",
+              "mtime": 1596212227325.2234
+            },
+            {
+              "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-xml.component.ts",
+              "ext": ".ts",
+              "mtime": 1594203232687.5186
+            },
+            {
+              "file": "libs/data/tsconfig.json",
+              "ext": ".json",
+              "mtime": 1593961763906.249
+            },
+            {
+              "file": "libs/data/tsconfig.lib.json",
+              "ext": ".json",
+              "mtime": 1593961763911.7493
+            },
+            {
+              "file": "libs/data/tsconfig.spec.json",
+              "ext": ".json",
+              "mtime": 1593961763917.2505
+            },
+            {
+              "file": "libs/data/tslint.json",
+              "ext": ".json",
+              "mtime": 1593961763923.2512
+            }
+          ]
+        }
+      },
+      "@angular-devkit/core": {
+        "type": "npm",
+        "name": "@angular-devkit/core",
+        "data": {
+          "version": "^9.1.6",
+          "files": []
+        }
+      },
+      "@angular-devkit/schematics": {
+        "type": "npm",
+        "name": "@angular-devkit/schematics",
+        "data": {
+          "version": "^9.1.6",
           "files": []
         }
       },
@@ -310,7 +1625,15 @@
         "type": "npm",
         "name": "@angular/animations",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
+          "files": []
+        }
+      },
+      "@angular/cdk": {
+        "type": "npm",
+        "name": "@angular/cdk",
+        "data": {
+          "version": "^9.2.3",
           "files": []
         }
       },
@@ -318,7 +1641,7 @@
         "type": "npm",
         "name": "@angular/common",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
           "files": []
         }
       },
@@ -326,7 +1649,7 @@
         "type": "npm",
         "name": "@angular/compiler",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
           "files": []
         }
       },
@@ -334,7 +1657,7 @@
         "type": "npm",
         "name": "@angular/core",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
           "files": []
         }
       },
@@ -342,7 +1665,23 @@
         "type": "npm",
         "name": "@angular/forms",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
+          "files": []
+        }
+      },
+      "@angular/localize": {
+        "type": "npm",
+        "name": "@angular/localize",
+        "data": {
+          "version": "^9.1.9",
+          "files": []
+        }
+      },
+      "@angular/material": {
+        "type": "npm",
+        "name": "@angular/material",
+        "data": {
+          "version": "^9.2.3",
           "files": []
         }
       },
@@ -350,7 +1689,7 @@
         "type": "npm",
         "name": "@angular/platform-browser",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
           "files": []
         }
       },
@@ -358,7 +1697,15 @@
         "type": "npm",
         "name": "@angular/platform-browser-dynamic",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
+          "files": []
+        }
+      },
+      "@angular/pwa": {
+        "type": "npm",
+        "name": "@angular/pwa",
+        "data": {
+          "version": "^0.901.7",
           "files": []
         }
       },
@@ -366,7 +1713,247 @@
         "type": "npm",
         "name": "@angular/router",
         "data": {
-          "version": "^9.1.0",
+          "version": "^9.1.7",
+          "files": []
+        }
+      },
+      "@angular/service-worker": {
+        "type": "npm",
+        "name": "@angular/service-worker",
+        "data": {
+          "version": "^9.1.7",
+          "files": []
+        }
+      },
+      "@asymmetrik/ngx-leaflet": {
+        "type": "npm",
+        "name": "@asymmetrik/ngx-leaflet",
+        "data": {
+          "version": "^6.0.1",
+          "files": []
+        }
+      },
+      "@datorama/akita": {
+        "type": "npm",
+        "name": "@datorama/akita",
+        "data": {
+          "version": "^4.23.2",
+          "files": []
+        }
+      },
+      "@datorama/akita-ng-entity-service": {
+        "type": "npm",
+        "name": "@datorama/akita-ng-entity-service",
+        "data": {
+          "version": "^2.0.0",
+          "files": []
+        }
+      },
+      "@datorama/akita-ng-router-store": {
+        "type": "npm",
+        "name": "@datorama/akita-ng-router-store",
+        "data": {
+          "version": "^5.1.0",
+          "files": []
+        }
+      },
+      "@fortawesome/angular-fontawesome": {
+        "type": "npm",
+        "name": "@fortawesome/angular-fontawesome",
+        "data": {
+          "version": "^0.6.1",
+          "files": []
+        }
+      },
+      "@fortawesome/fontawesome-svg-core": {
+        "type": "npm",
+        "name": "@fortawesome/fontawesome-svg-core",
+        "data": {
+          "version": "^1.2.28",
+          "files": []
+        }
+      },
+      "@fortawesome/free-solid-svg-icons": {
+        "type": "npm",
+        "name": "@fortawesome/free-solid-svg-icons",
+        "data": {
+          "version": "^5.13.0",
+          "files": []
+        }
+      },
+      "@ng-bootstrap/ng-bootstrap": {
+        "type": "npm",
+        "name": "@ng-bootstrap/ng-bootstrap",
+        "data": {
+          "version": "^5.3.0",
+          "files": []
+        }
+      },
+      "@ngx-formly/bootstrap": {
+        "type": "npm",
+        "name": "@ngx-formly/bootstrap",
+        "data": {
+          "version": "^5.6.1",
+          "files": []
+        }
+      },
+      "@ngx-formly/core": {
+        "type": "npm",
+        "name": "@ngx-formly/core",
+        "data": {
+          "version": "^5.6.1",
+          "files": []
+        }
+      },
+      "@ngx-formly/material": {
+        "type": "npm",
+        "name": "@ngx-formly/material",
+        "data": {
+          "version": "^5.6.1",
+          "files": []
+        }
+      },
+      "@ngx-formly/ng-zorro-antd": {
+        "type": "npm",
+        "name": "@ngx-formly/ng-zorro-antd",
+        "data": {
+          "version": "0.0.1",
+          "files": []
+        }
+      },
+      "@ngx-formly/primeng": {
+        "type": "npm",
+        "name": "@ngx-formly/primeng",
+        "data": {
+          "version": "^5.9.1",
+          "files": []
+        }
+      },
+      "@ngx-formly/schematics": {
+        "type": "npm",
+        "name": "@ngx-formly/schematics",
+        "data": {
+          "version": "^5.6.1",
+          "files": []
+        }
+      },
+      "@nrwl/angular": {
+        "type": "npm",
+        "name": "@nrwl/angular",
+        "data": {
+          "version": "^9.3.0",
+          "files": []
+        }
+      },
+      "@nrwl/schematics": {
+        "type": "npm",
+        "name": "@nrwl/schematics",
+        "data": {
+          "version": "^8.12.11",
+          "files": []
+        }
+      },
+      "@schematics/angular": {
+        "type": "npm",
+        "name": "@schematics/angular",
+        "data": {
+          "version": "^9.1.6",
+          "files": []
+        }
+      },
+      "@swimlane/ngx-charts": {
+        "type": "npm",
+        "name": "@swimlane/ngx-charts",
+        "data": {
+          "version": "^13.0.0",
+          "files": []
+        }
+      },
+      "@swimlane/ngx-datatable": {
+        "type": "npm",
+        "name": "@swimlane/ngx-datatable",
+        "data": {
+          "version": "^16.0.3",
+          "files": []
+        }
+      },
+      "@types/leaflet": {
+        "type": "npm",
+        "name": "@types/leaflet",
+        "data": {
+          "version": "^1.5.12",
+          "files": []
+        }
+      },
+      "angular-gantt-schedule-timeline-calendar": {
+        "type": "npm",
+        "name": "angular-gantt-schedule-timeline-calendar",
+        "data": {
+          "version": "^1.1.22",
+          "files": []
+        }
+      },
+      "angular-resizable-element": {
+        "type": "npm",
+        "name": "angular-resizable-element",
+        "data": {
+          "version": "^3.3.0",
+          "files": []
+        }
+      },
+      "axios": {
+        "type": "npm",
+        "name": "axios",
+        "data": {
+          "version": "^0.19.0",
+          "files": []
+        }
+      },
+      "bcryptjs": {
+        "type": "npm",
+        "name": "bcryptjs",
+        "data": {
+          "version": "^2.4.3",
+          "files": []
+        }
+      },
+      "bootstrap": {
+        "type": "npm",
+        "name": "bootstrap",
+        "data": {
+          "version": "^4.5.0",
+          "files": []
+        }
+      },
+      "bootswatch": {
+        "type": "npm",
+        "name": "bootswatch",
+        "data": {
+          "version": "^4.5.0",
+          "files": []
+        }
+      },
+      "class-validator": {
+        "type": "npm",
+        "name": "class-validator",
+        "data": {
+          "version": "^0.11.0",
+          "files": []
+        }
+      },
+      "client-certificate-auth": {
+        "type": "npm",
+        "name": "client-certificate-auth",
+        "data": {
+          "version": "^0.3.0",
+          "files": []
+        }
+      },
+      "compression": {
+        "type": "npm",
+        "name": "compression",
+        "data": {
+          "version": "^1.7.4",
           "files": []
         }
       },
@@ -378,19 +1965,35 @@
           "files": []
         }
       },
-      "rxjs": {
+      "cors": {
         "type": "npm",
-        "name": "rxjs",
+        "name": "cors",
         "data": {
-          "version": "~6.5.4",
+          "version": "^2.8.5",
           "files": []
         }
       },
-      "zone.js": {
+      "d3": {
         "type": "npm",
-        "name": "zone.js",
+        "name": "d3",
         "data": {
-          "version": "^0.10.2",
+          "version": "^5.9.2",
+          "files": []
+        }
+      },
+      "date-fns": {
+        "type": "npm",
+        "name": "date-fns",
+        "data": {
+          "version": "^2.14.0",
+          "files": []
+        }
+      },
+      "error-stack-parser": {
+        "type": "npm",
+        "name": "error-stack-parser",
+        "data": {
+          "version": "^2.0.2",
           "files": []
         }
       },
@@ -399,6 +2002,22 @@
         "name": "express",
         "data": {
           "version": "4.17.1",
+          "files": []
+        }
+      },
+      "gzip-all": {
+        "type": "npm",
+        "name": "gzip-all",
+        "data": {
+          "version": "^1.0.0",
+          "files": []
+        }
+      },
+      "hammerjs": {
+        "type": "npm",
+        "name": "hammerjs",
+        "data": {
+          "version": "^2.0.8",
           "files": []
         }
       },
@@ -418,6 +2037,22 @@
           "files": []
         }
       },
+      "leaflet": {
+        "type": "npm",
+        "name": "leaflet",
+        "data": {
+          "version": "^1.6.0",
+          "files": []
+        }
+      },
+      "lodash": {
+        "type": "npm",
+        "name": "lodash",
+        "data": {
+          "version": "^4.17.15",
+          "files": []
+        }
+      },
       "mongodb": {
         "type": "npm",
         "name": "mongodb",
@@ -434,11 +2069,67 @@
           "files": []
         }
       },
-      "typeorm": {
+      "natural": {
         "type": "npm",
-        "name": "typeorm",
+        "name": "natural",
         "data": {
-          "version": "^0.2.20",
+          "version": "^0.6.3",
+          "files": []
+        }
+      },
+      "ng-zorro-antd": {
+        "type": "npm",
+        "name": "ng-zorro-antd",
+        "data": {
+          "version": "^9.3.0",
+          "files": []
+        }
+      },
+      "ngx-quicklink": {
+        "type": "npm",
+        "name": "ngx-quicklink",
+        "data": {
+          "version": "^0.2.1",
+          "files": []
+        }
+      },
+      "ngx-take-until-destroy": {
+        "type": "npm",
+        "name": "ngx-take-until-destroy",
+        "data": {
+          "version": "^5.4.0",
+          "files": []
+        }
+      },
+      "node-cron": {
+        "type": "npm",
+        "name": "node-cron",
+        "data": {
+          "version": "^2.0.3",
+          "files": []
+        }
+      },
+      "nodemailer": {
+        "type": "npm",
+        "name": "nodemailer",
+        "data": {
+          "version": "^6.3.1",
+          "files": []
+        }
+      },
+      "nodemon": {
+        "type": "npm",
+        "name": "nodemon",
+        "data": {
+          "version": "^1.19.4",
+          "files": []
+        }
+      },
+      "pdf2json": {
+        "type": "npm",
+        "name": "pdf2json",
+        "data": {
+          "version": "^1.2.0",
           "files": []
         }
       },
@@ -450,35 +2141,99 @@
           "files": []
         }
       },
-      "cors": {
+      "pm2": {
         "type": "npm",
-        "name": "cors",
+        "name": "pm2",
         "data": {
-          "version": "^2.8.5",
+          "version": "^4.4.0",
           "files": []
         }
       },
-      "compression": {
+      "popper.js": {
         "type": "npm",
-        "name": "compression",
+        "name": "popper.js",
         "data": {
-          "version": "^1.7.4",
+          "version": "^1.14.6",
           "files": []
         }
       },
-      "class-validator": {
+      "primeflex": {
         "type": "npm",
-        "name": "class-validator",
+        "name": "primeflex",
         "data": {
-          "version": "^0.11.0",
+          "version": "^2.0.0-rc.1",
           "files": []
         }
       },
-      "bcryptjs": {
+      "primeicons": {
         "type": "npm",
-        "name": "bcryptjs",
+        "name": "primeicons",
         "data": {
-          "version": "^2.4.3",
+          "version": "^4.0.0",
+          "files": []
+        }
+      },
+      "primeng": {
+        "type": "npm",
+        "name": "primeng",
+        "data": {
+          "version": "^9.1.3",
+          "files": []
+        }
+      },
+      "reflect-metadata": {
+        "type": "npm",
+        "name": "reflect-metadata",
+        "data": {
+          "version": "^0.1.13",
+          "files": []
+        }
+      },
+      "rfdc": {
+        "type": "npm",
+        "name": "rfdc",
+        "data": {
+          "version": "^1.1.4",
+          "files": []
+        }
+      },
+      "rxjs": {
+        "type": "npm",
+        "name": "rxjs",
+        "data": {
+          "version": "^6.5.5",
+          "files": []
+        }
+      },
+      "typeorm": {
+        "type": "npm",
+        "name": "typeorm",
+        "data": {
+          "version": "^0.2.20",
+          "files": []
+        }
+      },
+      "uuid": {
+        "type": "npm",
+        "name": "uuid",
+        "data": {
+          "version": "^8.3.0",
+          "files": []
+        }
+      },
+      "xlsx": {
+        "type": "npm",
+        "name": "xlsx",
+        "data": {
+          "version": "^0.14.4",
+          "files": []
+        }
+      },
+      "zone.js": {
+        "type": "npm",
+        "name": "zone.js",
+        "data": {
+          "version": "^0.10.2",
           "files": []
         }
       },
@@ -494,7 +2249,7 @@
         "type": "npm",
         "name": "@angular/cli",
         "data": {
-          "version": "9.1.7",
+          "version": "9.1.0",
           "files": []
         }
       },
@@ -502,7 +2257,7 @@
         "type": "npm",
         "name": "@angular/compiler-cli",
         "data": {
-          "version": "9.1.7",
+          "version": "^9.1.7",
           "files": []
         }
       },
@@ -510,7 +2265,23 @@
         "type": "npm",
         "name": "@angular/language-service",
         "data": {
-          "version": "9.1.7",
+          "version": "^9.1.7",
+          "files": []
+        }
+      },
+      "@compodoc/compodoc": {
+        "type": "npm",
+        "name": "@compodoc/compodoc",
+        "data": {
+          "version": "^1.1.11",
+          "files": []
+        }
+      },
+      "@datorama/akita-ngdevtools": {
+        "type": "npm",
+        "name": "@datorama/akita-ngdevtools",
+        "data": {
+          "version": "^1.0.4",
           "files": []
         }
       },
@@ -538,6 +2309,14 @@
           "files": []
         }
       },
+      "@nrwl/node": {
+        "type": "npm",
+        "name": "@nrwl/node",
+        "data": {
+          "version": "9.3.0",
+          "files": []
+        }
+      },
       "@nrwl/workspace": {
         "type": "npm",
         "name": "@nrwl/workspace",
@@ -546,11 +2325,67 @@
           "files": []
         }
       },
+      "@types/bcryptjs": {
+        "type": "npm",
+        "name": "@types/bcryptjs",
+        "data": {
+          "version": "^2.4.2",
+          "files": []
+        }
+      },
+      "@types/body-parser": {
+        "type": "npm",
+        "name": "@types/body-parser",
+        "data": {
+          "version": "^1.17.1",
+          "files": []
+        }
+      },
+      "@types/cors": {
+        "type": "npm",
+        "name": "@types/cors",
+        "data": {
+          "version": "^2.8.6",
+          "files": []
+        }
+      },
+      "@types/d3": {
+        "type": "npm",
+        "name": "@types/d3",
+        "data": {
+          "version": "^5.7.1",
+          "files": []
+        }
+      },
+      "@types/express": {
+        "type": "npm",
+        "name": "@types/express",
+        "data": {
+          "version": "4.17.0",
+          "files": []
+        }
+      },
       "@types/helmet": {
         "type": "npm",
         "name": "@types/helmet",
         "data": {
           "version": "0.0.45",
+          "files": []
+        }
+      },
+      "@types/jasmine": {
+        "type": "npm",
+        "name": "@types/jasmine",
+        "data": {
+          "version": "^2.8.16",
+          "files": []
+        }
+      },
+      "@types/jasminewd2": {
+        "type": "npm",
+        "name": "@types/jasminewd2",
+        "data": {
+          "version": "~2.0.3",
           "files": []
         }
       },
@@ -570,11 +2405,35 @@
           "files": []
         }
       },
+      "@types/lodash": {
+        "type": "npm",
+        "name": "@types/lodash",
+        "data": {
+          "version": "^4.14.153",
+          "files": []
+        }
+      },
+      "@types/mocha": {
+        "type": "npm",
+        "name": "@types/mocha",
+        "data": {
+          "version": "^5.2.7",
+          "files": []
+        }
+      },
       "@types/node": {
         "type": "npm",
         "name": "@types/node",
         "data": {
-          "version": "~8.9.4",
+          "version": "^8.9.5",
+          "files": []
+        }
+      },
+      "@types/pg": {
+        "type": "npm",
+        "name": "@types/pg",
+        "data": {
+          "version": "^7.11.2",
           "files": []
         }
       },
@@ -586,11 +2445,19 @@
           "files": []
         }
       },
+      "concurrently": {
+        "type": "npm",
+        "name": "concurrently",
+        "data": {
+          "version": "^5.2.0",
+          "files": []
+        }
+      },
       "cypress": {
         "type": "npm",
         "name": "cypress",
         "data": {
-          "version": "^4.1.0",
+          "version": "^4.5.0",
           "files": []
         }
       },
@@ -610,6 +2477,14 @@
           "files": []
         }
       },
+      "faker": {
+        "type": "npm",
+        "name": "faker",
+        "data": {
+          "version": "^4.1.0",
+          "files": []
+        }
+      },
       "jest": {
         "type": "npm",
         "name": "jest",
@@ -626,11 +2501,27 @@
           "files": []
         }
       },
+      "ng-mocks": {
+        "type": "npm",
+        "name": "ng-mocks",
+        "data": {
+          "version": "^9.4.0",
+          "files": []
+        }
+      },
       "prettier": {
         "type": "npm",
         "name": "prettier",
         "data": {
           "version": "2.0.4",
+          "files": []
+        }
+      },
+      "puppeteer": {
+        "type": "npm",
+        "name": "puppeteer",
+        "data": {
+          "version": "^2.1.1",
           "files": []
         }
       },
@@ -666,19 +2557,19 @@
           "files": []
         }
       },
-      "@nrwl/node": {
+      "uglify-js": {
         "type": "npm",
-        "name": "@nrwl/node",
+        "name": "uglify-js",
         "data": {
-          "version": "9.3.0",
+          "version": "^3.9.3",
           "files": []
         }
       },
-      "@types/express": {
+      "webpack-bundle-analyzer": {
         "type": "npm",
-        "name": "@types/express",
+        "name": "webpack-bundle-analyzer",
         "data": {
-          "version": "4.17.0",
+          "version": "^3.6.1",
           "files": []
         }
       }
@@ -694,6 +2585,63 @@
           "type": "static",
           "source": "guessinator-e2e",
           "target": "@nrwl/cypress"
+        }
+      ],
+      "dakimbo-server": [
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "utilities"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "class-validator"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "express"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "jsonwebtoken"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "typeorm"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "bcryptjs"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "dotenv"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "reflect-metadata"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "compression"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "cors"
+        },
+        {
+          "type": "static",
+          "source": "dakimbo-server",
+          "target": "helmet"
         }
       ],
       "guessinator": [
@@ -723,54 +2671,347 @@
           "target": "jest-preset-angular"
         }
       ],
-      "@nrwl/angular": [],
+      "admin-e2e": [
+        {
+          "type": "implicit",
+          "source": "admin-e2e",
+          "target": "admin"
+        },
+        {
+          "type": "static",
+          "source": "admin-e2e",
+          "target": "@nrwl/cypress"
+        }
+      ],
+      "app-shell": [
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "utilities"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "@angular/core"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "@angular/common"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "@angular/forms"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "ng-zorro-antd"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "@angular/router"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "rxjs"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "error-stack-parser"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "@fortawesome/free-solid-svg-icons"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "@datorama/akita-ng-entity-service"
+        },
+        {
+          "type": "static",
+          "source": "app-shell",
+          "target": "jest-preset-angular"
+        }
+      ],
+      "utilities": [
+        {
+          "type": "static",
+          "source": "utilities",
+          "target": "@angular/common"
+        },
+        {
+          "type": "static",
+          "source": "utilities",
+          "target": "@angular/core"
+        },
+        {
+          "type": "static",
+          "source": "utilities",
+          "target": "@angular/router"
+        },
+        {
+          "type": "static",
+          "source": "utilities",
+          "target": "date-fns"
+        },
+        {
+          "type": "static",
+          "source": "utilities",
+          "target": "@angular/cdk"
+        },
+        {
+          "type": "static",
+          "source": "utilities",
+          "target": "rfdc"
+        },
+        {
+          "type": "static",
+          "source": "utilities",
+          "target": "jest-preset-angular"
+        }
+      ],
+      "admin": [
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "app-shell"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "data"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "@angular/core"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "@angular/router"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "@angular/platform-browser"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "ng-zorro-antd"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "@angular/common"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "rxjs"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "@angular/material"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "@angular/forms"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "@angular/platform-browser-dynamic"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "zone.js"
+        },
+        {
+          "type": "static",
+          "source": "admin",
+          "target": "jest-preset-angular"
+        }
+      ],
+      "data": [
+        {
+          "type": "static",
+          "source": "data",
+          "target": "utilities"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "typeorm"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "@angular/common"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "@angular/core"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "rxjs"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "@angular/router"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "@angular/forms"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "ng-zorro-antd"
+        },
+        {
+          "type": "static",
+          "source": "data",
+          "target": "xlsx"
+        }
+      ],
+      "@angular-devkit/core": [],
+      "@angular-devkit/schematics": [],
       "@angular/animations": [],
+      "@angular/cdk": [],
       "@angular/common": [],
       "@angular/compiler": [],
       "@angular/core": [],
       "@angular/forms": [],
+      "@angular/localize": [],
+      "@angular/material": [],
       "@angular/platform-browser": [],
       "@angular/platform-browser-dynamic": [],
+      "@angular/pwa": [],
       "@angular/router": [],
+      "@angular/service-worker": [],
+      "@asymmetrik/ngx-leaflet": [],
+      "@datorama/akita": [],
+      "@datorama/akita-ng-entity-service": [],
+      "@datorama/akita-ng-router-store": [],
+      "@fortawesome/angular-fontawesome": [],
+      "@fortawesome/fontawesome-svg-core": [],
+      "@fortawesome/free-solid-svg-icons": [],
+      "@ng-bootstrap/ng-bootstrap": [],
+      "@ngx-formly/bootstrap": [],
+      "@ngx-formly/core": [],
+      "@ngx-formly/material": [],
+      "@ngx-formly/ng-zorro-antd": [],
+      "@ngx-formly/primeng": [],
+      "@ngx-formly/schematics": [],
+      "@nrwl/angular": [],
+      "@nrwl/schematics": [],
+      "@schematics/angular": [],
+      "@swimlane/ngx-charts": [],
+      "@swimlane/ngx-datatable": [],
+      "@types/leaflet": [],
+      "angular-gantt-schedule-timeline-calendar": [],
+      "angular-resizable-element": [],
+      "axios": [],
+      "bcryptjs": [],
+      "bootstrap": [],
+      "bootswatch": [],
+      "class-validator": [],
+      "client-certificate-auth": [],
+      "compression": [],
       "core-js": [],
-      "rxjs": [],
-      "zone.js": [],
+      "cors": [],
+      "d3": [],
+      "date-fns": [],
+      "error-stack-parser": [],
       "express": [],
+      "gzip-all": [],
+      "hammerjs": [],
       "helmet": [],
       "jsonwebtoken": [],
+      "leaflet": [],
+      "lodash": [],
       "mongodb": [],
       "mssql": [],
-      "typeorm": [],
+      "natural": [],
+      "ng-zorro-antd": [],
+      "ngx-quicklink": [],
+      "ngx-take-until-destroy": [],
+      "node-cron": [],
+      "nodemailer": [],
+      "nodemon": [],
+      "pdf2json": [],
       "pg": [],
-      "cors": [],
-      "compression": [],
-      "class-validator": [],
-      "bcryptjs": [],
+      "pm2": [],
+      "popper.js": [],
+      "primeflex": [],
+      "primeicons": [],
+      "primeng": [],
+      "reflect-metadata": [],
+      "rfdc": [],
+      "rxjs": [],
+      "typeorm": [],
+      "uuid": [],
+      "xlsx": [],
+      "zone.js": [],
       "@angular-devkit/build-angular": [],
       "@angular/cli": [],
       "@angular/compiler-cli": [],
       "@angular/language-service": [],
+      "@compodoc/compodoc": [],
+      "@datorama/akita-ngdevtools": [],
       "@nrwl/cypress": [],
       "@nrwl/express": [],
       "@nrwl/jest": [],
+      "@nrwl/node": [],
       "@nrwl/workspace": [],
+      "@types/bcryptjs": [],
+      "@types/body-parser": [],
+      "@types/cors": [],
+      "@types/d3": [],
+      "@types/express": [],
       "@types/helmet": [],
+      "@types/jasmine": [],
+      "@types/jasminewd2": [],
       "@types/jest": [],
       "@types/jsonwebtoken": [],
+      "@types/lodash": [],
+      "@types/mocha": [],
       "@types/node": [],
+      "@types/pg": [],
       "codelyzer": [],
+      "concurrently": [],
       "cypress": [],
       "dotenv": [],
       "eslint": [],
+      "faker": [],
       "jest": [],
       "jest-preset-angular": [],
+      "ng-mocks": [],
       "prettier": [],
+      "puppeteer": [],
       "ts-jest": [],
       "ts-node": [],
       "tslint": [],
       "typescript": [],
-      "@nrwl/node": [],
-      "@types/express": []
+      "uglify-js": [],
+      "webpack-bundle-analyzer": []
     }
   },
   "fileMap": {
@@ -826,6 +3067,188 @@
         "mtime": 1593961208166.3916
       }
     ],
+    "dakimbo-server": [
+      {
+        "file": "apps/dakimbo-server/.env-example",
+        "ext": "",
+        "mtime": 1593961832063.2268
+      },
+      {
+        "file": "apps/dakimbo-server/jest.config.js",
+        "ext": ".js",
+        "mtime": 1593961832069.7275
+      },
+      {
+        "file": "apps/dakimbo-server/README.md",
+        "ext": ".md",
+        "mtime": 1596211603889.7761
+      },
+      {
+        "file": "apps/dakimbo-server/src/config.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "apps/dakimbo-server/src/controllers/authController.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "apps/dakimbo-server/src/controllers/data/data-transaction.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "apps/dakimbo-server/src/controllers/data/read.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "apps/dakimbo-server/src/controllers/dataController.ts",
+        "ext": ".ts",
+        "mtime": 1595952320121.5415
+      },
+      {
+        "file": "apps/dakimbo-server/src/controllers/metricsController.ts",
+        "ext": ".ts",
+        "mtime": 1587726333678.3257
+      },
+      {
+        "file": "apps/dakimbo-server/src/controllers/userController.ts",
+        "ext": ".ts",
+        "mtime": 1596212899400.4685
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/database.ts",
+        "ext": ".ts",
+        "mtime": 1595943455617.9915
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/auth/auth-action.ts",
+        "ext": ".ts",
+        "mtime": 1595952320133.0518
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/auth/auth-entity.ts",
+        "ext": ".ts",
+        "mtime": 1595952320133.553
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/auth/auth-role-permission.ts",
+        "ext": ".ts",
+        "mtime": 1595952320134.0537
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/auth/auth-role.ts",
+        "ext": ".ts",
+        "mtime": 1595952320134.554
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/auth/user.ts",
+        "ext": ".ts",
+        "mtime": 1595952320135.0532
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/base.ts",
+        "ext": ".ts",
+        "mtime": 1595952320135.5537
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/index.ts",
+        "ext": ".ts",
+        "mtime": 1596212818071.28
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/_entity-map.ts",
+        "ext": ".ts",
+        "mtime": 1596212545454.0793
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-view.ts",
+        "ext": ".ts",
+        "mtime": 1595616381620.6492
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/entities/_metrics/metric-page-visit.ts",
+        "ext": ".ts",
+        "mtime": 1596212330472.282
+      },
+      {
+        "file": "apps/dakimbo-server/src/database/migrations/CreateAdminUser.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "apps/dakimbo-server/src/main.ts",
+        "ext": ".ts",
+        "mtime": 1593961832143.2407
+      },
+      {
+        "file": "apps/dakimbo-server/src/middlewares/checkJwt.ts",
+        "ext": ".ts",
+        "mtime": 1595952320123.043
+      },
+      {
+        "file": "apps/dakimbo-server/src/middlewares/checkRole.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "apps/dakimbo-server/src/public/index.html",
+        "ext": ".html",
+        "mtime": 1593961832199.2505
+      },
+      {
+        "file": "apps/dakimbo-server/src/routes/auth.ts",
+        "ext": ".ts",
+        "mtime": 1593961832206.2517
+      },
+      {
+        "file": "apps/dakimbo-server/src/routes/data.ts",
+        "ext": ".ts",
+        "mtime": 1593961832213.253
+      },
+      {
+        "file": "apps/dakimbo-server/src/routes/index.ts",
+        "ext": ".ts",
+        "mtime": 1593961832219.7546
+      },
+      {
+        "file": "apps/dakimbo-server/src/routes/metrics.ts",
+        "ext": ".ts",
+        "mtime": 1593961832225.7556
+      },
+      {
+        "file": "apps/dakimbo-server/src/routes/user.ts",
+        "ext": ".ts",
+        "mtime": 1593961832232.7563
+      },
+      {
+        "file": "apps/dakimbo-server/src/utilities/logStamp.ts",
+        "ext": ".ts",
+        "mtime": 1593961832240.7576
+      },
+      {
+        "file": "apps/dakimbo-server/tsconfig.app.json",
+        "ext": ".json",
+        "mtime": 1593961832247.7595
+      },
+      {
+        "file": "apps/dakimbo-server/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1593961832249.259
+      },
+      {
+        "file": "apps/dakimbo-server/tsconfig.spec.json",
+        "ext": ".json",
+        "mtime": 1593961832254.7598
+      },
+      {
+        "file": "apps/dakimbo-server/tslint.json",
+        "ext": ".json",
+        "mtime": 1593961832256.7607
+      }
+    ],
     "guessinator": [
       {
         "file": "apps/guessinator/browserslist",
@@ -840,12 +3263,12 @@
       {
         "file": "apps/guessinator/src/app/app.component.html",
         "ext": ".html",
-        "mtime": 1593961208162.8914
+        "mtime": 1593962432370.2368
       },
       {
         "file": "apps/guessinator/src/app/app.component.scss",
         "ext": ".scss",
-        "mtime": 1593961208164.3914
+        "mtime": 1593962143405.7874
       },
       {
         "file": "apps/guessinator/src/app/app.component.spec.ts",
@@ -860,7 +3283,12 @@
       {
         "file": "apps/guessinator/src/app/app.module.ts",
         "ext": ".ts",
-        "mtime": 1593961208162.391
+        "mtime": 1593962432370.2368
+      },
+      {
+        "file": "apps/guessinator/src/app/landing-page/landing-page.componet.ts",
+        "ext": ".ts",
+        "mtime": 1593962432370.2368
       },
       {
         "file": "apps/guessinator/src/assets/.gitkeep",
@@ -926,6 +3354,791 @@
         "file": "apps/guessinator/tslint.json",
         "ext": ".json",
         "mtime": 1593961208156.89
+      }
+    ],
+    "admin-e2e": [
+      {
+        "file": "apps/admin-e2e/cypress.json",
+        "ext": ".json",
+        "mtime": 1595509940402.764
+      },
+      {
+        "file": "apps/admin-e2e/src/fixtures/example.json",
+        "ext": ".json",
+        "mtime": 1595509940403.264
+      },
+      {
+        "file": "apps/admin-e2e/src/integration/app.spec.ts",
+        "ext": ".ts",
+        "mtime": 1595509940403.7644
+      },
+      {
+        "file": "apps/admin-e2e/src/plugins/index.js",
+        "ext": ".js",
+        "mtime": 1595509940404.2668
+      },
+      {
+        "file": "apps/admin-e2e/src/support/app.po.ts",
+        "ext": ".ts",
+        "mtime": 1595509940404.7668
+      },
+      {
+        "file": "apps/admin-e2e/src/support/commands.ts",
+        "ext": ".ts",
+        "mtime": 1595509940404.7668
+      },
+      {
+        "file": "apps/admin-e2e/src/support/index.ts",
+        "ext": ".ts",
+        "mtime": 1595509940405.2666
+      },
+      {
+        "file": "apps/admin-e2e/tsconfig.e2e.json",
+        "ext": ".json",
+        "mtime": 1595509940405.2666
+      },
+      {
+        "file": "apps/admin-e2e/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1595509940405.767
+      },
+      {
+        "file": "apps/admin-e2e/tslint.json",
+        "ext": ".json",
+        "mtime": 1595509940405.767
+      }
+    ],
+    "app-shell": [
+      {
+        "file": "libs/app-shell/jest.config.js",
+        "ext": ".js",
+        "mtime": 1587663668150.8855
+      },
+      {
+        "file": "libs/app-shell/README.md",
+        "ext": ".md",
+        "mtime": 1587663668147.3853
+      },
+      {
+        "file": "libs/app-shell/src/index.scss",
+        "ext": ".scss",
+        "mtime": 1587665945131.2212
+      },
+      {
+        "file": "libs/app-shell/src/index.ts",
+        "ext": ".ts",
+        "mtime": 1596055162501.792
+      },
+      {
+        "file": "libs/app-shell/src/lib/app-shell.module.spec.ts",
+        "ext": ".ts",
+        "mtime": 1587663668149.8857
+      },
+      {
+        "file": "libs/app-shell/src/lib/app-shell.module.ts",
+        "ext": ".ts",
+        "mtime": 1596212899397.966
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.html",
+        "ext": ".html",
+        "mtime": 1595595184653.6155
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.scss",
+        "ext": ".scss",
+        "mtime": 1588361568233.9756
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1587664115716.7068
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/app-layout.component.ts",
+        "ext": ".ts",
+        "mtime": 1596055162502.7021
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/app-layout.module.ts",
+        "ext": ".ts",
+        "mtime": 1587664115755.2139
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.html",
+        "ext": ".html",
+        "mtime": 1595618021112.8037
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.scss",
+        "ext": ".scss",
+        "mtime": 1587664115764.215
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1587664115766.2158
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/app-layout/header/header-item.component.ts",
+        "ext": ".ts",
+        "mtime": 1595597296849.274
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/error-page/error-page.component.html",
+        "ext": ".html",
+        "mtime": 1591100986015.0383
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/error-page/error-page.component.scss",
+        "ext": ".scss",
+        "mtime": 1587664115846.2297
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/error-page/error-page.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1587664115847.7295
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/error-page/error-page.component.ts",
+        "ext": ".ts",
+        "mtime": 1587664115849.2312
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/error-page/error-page.module.ts",
+        "ext": ".ts",
+        "mtime": 1587664115884.236
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/login/login.component.html",
+        "ext": ".html",
+        "mtime": 1593642413986.057
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/login/login.component.scss",
+        "ext": ".scss",
+        "mtime": 1587664115888.2368
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/login/login.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1587664115892.2373
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/login/login.component.ts",
+        "ext": ".ts",
+        "mtime": 1595840813941.7258
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/login/login.module.ts",
+        "ext": ".ts",
+        "mtime": 1588361568234.9756
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/page-container/page-container.component.html",
+        "ext": ".html",
+        "mtime": 1596055162503.2024
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/page-container/page-container.component.scss",
+        "ext": ".scss",
+        "mtime": 1596055162503.2024
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/page-container/page-container.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1596055162503.2024
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/page-container/page-container.component.ts",
+        "ext": ".ts",
+        "mtime": 1596055162503.703
+      },
+      {
+        "file": "libs/app-shell/src/lib/components/page-container/page-container.module.ts",
+        "ext": ".ts",
+        "mtime": 1596055162504.7043
+      },
+      {
+        "file": "libs/app-shell/src/lib/guards/auth.guard.ts",
+        "ext": ".ts",
+        "mtime": 1587664115655.1965
+      },
+      {
+        "file": "libs/app-shell/src/lib/guards/role.guard.ts",
+        "ext": ".ts",
+        "mtime": 1595952320131.5515
+      },
+      {
+        "file": "libs/app-shell/src/lib/interceptors/auth.interceptor.ts",
+        "ext": ".ts",
+        "mtime": 1587664115655.1965
+      },
+      {
+        "file": "libs/app-shell/src/lib/interceptors/ensure-https.interceptor.ts",
+        "ext": ".ts",
+        "mtime": 1587664115663.198
+      },
+      {
+        "file": "libs/app-shell/src/lib/interceptors/logging.interceptor.ts",
+        "ext": ".ts",
+        "mtime": 1587664115668.1982
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/alerts.service.ts",
+        "ext": ".ts",
+        "mtime": 1588255022795.5413
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/auth.service.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/error/customErrorHandler.ts",
+        "ext": ".ts",
+        "mtime": 1587758080936.157
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/error/error.service.ts",
+        "ext": ".ts",
+        "mtime": 1587758080937.657
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/error/server-errors.interceptor.ts",
+        "ext": ".ts",
+        "mtime": 1587758080945.158
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/icon.service.ts",
+        "ext": ".ts",
+        "mtime": 1587664115719.2078
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/location-name.service.ts",
+        "ext": ".ts",
+        "mtime": 1587664115754.7136
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/message.service.ts",
+        "ext": ".ts",
+        "mtime": 1587664115757.7144
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/metrics.service.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.9678
+      },
+      {
+        "file": "libs/app-shell/src/lib/services/ng-notification.service.ts",
+        "ext": ".ts",
+        "mtime": 1596117073758.4756
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/active-link.scss",
+        "ext": ".scss",
+        "mtime": 1587664115754.7136
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/app-loading.scss",
+        "ext": ".scss",
+        "mtime": 1587664115757.2139
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/themes/mat-theme.scss",
+        "ext": ".scss",
+        "mtime": 1587664115765.7153
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/themes/_palletes.scss",
+        "ext": ".scss",
+        "mtime": 1587664115763.715
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/_fonts.scss",
+        "ext": ".scss",
+        "mtime": 1587664115655.1965
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/_reset.scss",
+        "ext": ".scss",
+        "mtime": 1587664115660.6997
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/_variables.scss",
+        "ext": ".scss",
+        "mtime": 1587664115668.6985
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/scss/_vendor.scss",
+        "ext": ".scss",
+        "mtime": 1591100696358.0088
+      },
+      {
+        "file": "libs/app-shell/src/lib/_styles/styles.scss",
+        "ext": ".scss",
+        "mtime": 1596033987163.0627
+      },
+      {
+        "file": "libs/app-shell/src/test-setup.ts",
+        "ext": ".ts",
+        "mtime": 1587663668151.8857
+      },
+      {
+        "file": "libs/app-shell/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1587663668150.3857
+      },
+      {
+        "file": "libs/app-shell/tsconfig.lib.json",
+        "ext": ".json",
+        "mtime": 1587663668147.3853
+      },
+      {
+        "file": "libs/app-shell/tsconfig.spec.json",
+        "ext": ".json",
+        "mtime": 1587663668151.3857
+      },
+      {
+        "file": "libs/app-shell/tslint.json",
+        "ext": ".json",
+        "mtime": 1587663668147.885
+      }
+    ],
+    "utilities": [
+      {
+        "file": "libs/utilities/jest.config.js",
+        "ext": ".js",
+        "mtime": 1587982917784.1885
+      },
+      {
+        "file": "libs/utilities/README.md",
+        "ext": ".md",
+        "mtime": 1587982917783.1877
+      },
+      {
+        "file": "libs/utilities/src/index.ts",
+        "ext": ".ts",
+        "mtime": 1595952320139.057
+      },
+      {
+        "file": "libs/utilities/src/lib/auth/checkModelAllowedRoles.ts",
+        "ext": ".ts",
+        "mtime": 1595952320140.0576
+      },
+      {
+        "file": "libs/utilities/src/lib/auth/checkUserRole.ts",
+        "ext": ".ts",
+        "mtime": 1596212899397.966
+      },
+      {
+        "file": "libs/utilities/src/lib/services/filter-sort.service.ts",
+        "ext": ".ts",
+        "mtime": 1592926618560.3853
+      },
+      {
+        "file": "libs/utilities/src/lib/services/utility.service.ts",
+        "ext": ".ts",
+        "mtime": 1596055162508.7075
+      },
+      {
+        "file": "libs/utilities/src/lib/utilities/convertByteToHuman.ts",
+        "ext": ".ts",
+        "mtime": 1588361568272.4824
+      },
+      {
+        "file": "libs/utilities/src/lib/utilities/deepClone.ts",
+        "ext": ".ts",
+        "mtime": 1594203232689.0188
+      },
+      {
+        "file": "libs/utilities/src/lib/utilities/getUniqueProps.ts",
+        "ext": ".ts",
+        "mtime": 1594137920009.38
+      },
+      {
+        "file": "libs/utilities/src/lib/utilities/transformValToTypescript.ts",
+        "ext": ".ts",
+        "mtime": 1587982917908.2102
+      },
+      {
+        "file": "libs/utilities/src/lib/utilities.module.spec.ts",
+        "ext": ".ts",
+        "mtime": 1587982917787.1885
+      },
+      {
+        "file": "libs/utilities/src/lib/utilities.module.ts",
+        "ext": ".ts",
+        "mtime": 1587982917788.1892
+      },
+      {
+        "file": "libs/utilities/src/test-setup.ts",
+        "ext": ".ts",
+        "mtime": 1587982917791.1895
+      },
+      {
+        "file": "libs/utilities/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1587982917791.6902
+      },
+      {
+        "file": "libs/utilities/tsconfig.lib.json",
+        "ext": ".json",
+        "mtime": 1587982917793.1895
+      },
+      {
+        "file": "libs/utilities/tsconfig.spec.json",
+        "ext": ".json",
+        "mtime": 1587982917793.6897
+      },
+      {
+        "file": "libs/utilities/tslint.json",
+        "ext": ".json",
+        "mtime": 1587982917794.1897
+      }
+    ],
+    "admin": [
+      {
+        "file": "apps/admin/browserslist",
+        "ext": "",
+        "mtime": 1595509940406.2673
+      },
+      {
+        "file": "apps/admin/jest.config.js",
+        "ext": ".js",
+        "mtime": 1595509940406.2673
+      },
+      {
+        "file": "apps/admin/src/app/app-routing.module.ts",
+        "ext": ".ts",
+        "mtime": 1596212227318.717
+      },
+      {
+        "file": "apps/admin/src/app/app.component.html",
+        "ext": ".html",
+        "mtime": 1595510488331.7893
+      },
+      {
+        "file": "apps/admin/src/app/app.component.scss",
+        "ext": ".scss",
+        "mtime": 1595511184462.6096
+      },
+      {
+        "file": "apps/admin/src/app/app.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1595509940407.7683
+      },
+      {
+        "file": "apps/admin/src/app/app.component.ts",
+        "ext": ".ts",
+        "mtime": 1596212271183.4397
+      },
+      {
+        "file": "apps/admin/src/app/app.module.ts",
+        "ext": ".ts",
+        "mtime": 1596212227318.717
+      },
+      {
+        "file": "apps/admin/src/app/features/data-tools/data-tools.component.ts",
+        "ext": ".ts",
+        "mtime": 1596201524920.2512
+      },
+      {
+        "file": "apps/admin/src/app/features/data-tools/data-tools.module.ts",
+        "ext": ".ts",
+        "mtime": 1596212227319.2178
+      },
+      {
+        "file": "apps/admin/src/app/features/form-creator/admin-form-creator.module.ts",
+        "ext": ".ts",
+        "mtime": 1595588006626.4436
+      },
+      {
+        "file": "apps/admin/src/app/features/metrics/metrics.component.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.4668
+      },
+      {
+        "file": "apps/admin/src/app/features/metrics/metrics.module.ts",
+        "ext": ".ts",
+        "mtime": 1595842894563.2566
+      },
+      {
+        "file": "apps/admin/src/app/features/overview/overview.component.ts",
+        "ext": ".ts",
+        "mtime": 1596201524920.7517
+      },
+      {
+        "file": "apps/admin/src/app/features/overview/overview.module.ts",
+        "ext": ".ts",
+        "mtime": 1595598621061.0906
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/edit-user/edit-user.component.html",
+        "ext": ".html",
+        "mtime": 1595621629389.4844
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/edit-user/edit-user.component.spec.ts",
+        "ext": ".ts",
+        "mtime": 1595619833108.231
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/rbac/rbac.service.ts",
+        "ext": ".ts",
+        "mtime": 1596212227319.2178
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/rbac/roles/roles-header.component.ts",
+        "ext": ".ts",
+        "mtime": 1595952320114.5366
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/rbac/roles/roles-list.component.ts",
+        "ext": ".ts",
+        "mtime": 1595952320115.0366
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/rbac/roles-management.component.ts",
+        "ext": ".ts",
+        "mtime": 1595952320114.0354
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/rbac/tree-management/rbac-tree-management.component.ts",
+        "ext": ".ts",
+        "mtime": 1595952320115.537
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/user-management.component.ts",
+        "ext": ".ts",
+        "mtime": 1596117208747.3762
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/user-management.module.ts",
+        "ext": ".ts",
+        "mtime": 1596212227324.7224
+      },
+      {
+        "file": "apps/admin/src/app/features/user-management/user-management.service.ts",
+        "ext": ".ts",
+        "mtime": 1596212899398.9678
+      },
+      {
+        "file": "apps/admin/src/assets/.gitkeep",
+        "ext": "",
+        "mtime": 1595509940408.7693
+      },
+      {
+        "file": "apps/admin/src/assets/appLogo.png",
+        "ext": ".png",
+        "mtime": 1595622069748
+      },
+      {
+        "file": "apps/admin/src/environments/environment.prod.ts",
+        "ext": ".ts",
+        "mtime": 1595622150438.8018
+      },
+      {
+        "file": "apps/admin/src/environments/environment.ts",
+        "ext": ".ts",
+        "mtime": 1595622150438.8018
+      },
+      {
+        "file": "apps/admin/src/favicon.ico",
+        "ext": ".ico",
+        "mtime": 1595622132936.7603
+      },
+      {
+        "file": "apps/admin/src/index.html",
+        "ext": ".html",
+        "mtime": 1596212271183.4397
+      },
+      {
+        "file": "apps/admin/src/main.ts",
+        "ext": ".ts",
+        "mtime": 1595509940410.271
+      },
+      {
+        "file": "apps/admin/src/polyfills.ts",
+        "ext": ".ts",
+        "mtime": 1595510626765.1284
+      },
+      {
+        "file": "apps/admin/src/styles.scss",
+        "ext": ".scss",
+        "mtime": 1595844531661.3389
+      },
+      {
+        "file": "apps/admin/src/test-setup.ts",
+        "ext": ".ts",
+        "mtime": 1595509940411.2717
+      },
+      {
+        "file": "apps/admin/tsconfig.app.json",
+        "ext": ".json",
+        "mtime": 1595509940411.2717
+      },
+      {
+        "file": "apps/admin/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1595509940411.2717
+      },
+      {
+        "file": "apps/admin/tsconfig.spec.json",
+        "ext": ".json",
+        "mtime": 1595509940411.772
+      },
+      {
+        "file": "apps/admin/tslint.json",
+        "ext": ".json",
+        "mtime": 1595509940411.772
+      }
+    ],
+    "data": [
+      {
+        "file": "libs/data/jest.config.js",
+        "ext": ".js",
+        "mtime": 1593961763780.7263
+      },
+      {
+        "file": "libs/data/README.md",
+        "ext": ".md",
+        "mtime": 1593961763779.726
+      },
+      {
+        "file": "libs/data/src/index.ts",
+        "ext": ".ts",
+        "mtime": 1596212818071.28
+      },
+      {
+        "file": "libs/data/src/lib/composites/location.ts",
+        "ext": ".ts",
+        "mtime": 1591791261535.8955
+      },
+      {
+        "file": "libs/data/src/lib/services/data/data-service.module.ts",
+        "ext": ".ts",
+        "mtime": 1593542608171.6267
+      },
+      {
+        "file": "libs/data/src/lib/services/data/data.service.ts",
+        "ext": ".ts",
+        "mtime": 1596212951630.246
+      },
+      {
+        "file": "libs/data/src/lib/services/data/interceptors/GenericModelHttpParams.ts",
+        "ext": ".ts",
+        "mtime": 1587982563584.5356
+      },
+      {
+        "file": "libs/data/src/lib/services/data/interceptors/header.interceptor.ts",
+        "ext": ".ts",
+        "mtime": 1587982563585.036
+      },
+      {
+        "file": "libs/data/src/lib/services/data/interceptors/loading.interceptor.ts",
+        "ext": ".ts",
+        "mtime": 1588601868379.6428
+      },
+      {
+        "file": "libs/data/src/lib/services/data/_delete.ts",
+        "ext": ".ts",
+        "mtime": 1594040538305.5747
+      },
+      {
+        "file": "libs/data/src/lib/services/data/_read.ts",
+        "ext": ".ts",
+        "mtime": 1594137919989.8765
+      },
+      {
+        "file": "libs/data/src/lib/services/data/_save.ts",
+        "ext": ".ts",
+        "mtime": 1594312135745.3337
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/data-importer-complete.component.ts",
+        "ext": ".ts",
+        "mtime": 1594203232683.0176
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/data-importer-input.component.ts",
+        "ext": ".ts",
+        "mtime": 1594137919993.877
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/data-importer-output.component.ts",
+        "ext": ".ts",
+        "mtime": 1594137919994.8774
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/data-importer-preview.component.ts",
+        "ext": ".ts",
+        "mtime": 1594137919995.3774
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/data-importer.component.ts",
+        "ext": ".ts",
+        "mtime": 1594206143399.4678
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/data-importer.module.ts",
+        "ext": ".ts",
+        "mtime": 1594205020826.0122
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/data-importer.service.ts",
+        "ext": ".ts",
+        "mtime": 1596212227325.2234
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-delimited.component.ts",
+        "ext": ".ts",
+        "mtime": 1594203232686.0186
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-excel.component.ts",
+        "ext": ".ts",
+        "mtime": 1594137920000.3787
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-json.component.ts",
+        "ext": ".ts",
+        "mtime": 1594203232687.0186
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-type.abstract.ts",
+        "ext": ".ts",
+        "mtime": 1594137920001.8784
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-url.component.ts",
+        "ext": ".ts",
+        "mtime": 1596212227325.2234
+      },
+      {
+        "file": "libs/data/src/lib/ui-components/data-importer/import-types/data-importer-xml.component.ts",
+        "ext": ".ts",
+        "mtime": 1594203232687.5186
+      },
+      {
+        "file": "libs/data/tsconfig.json",
+        "ext": ".json",
+        "mtime": 1593961763906.249
+      },
+      {
+        "file": "libs/data/tsconfig.lib.json",
+        "ext": ".json",
+        "mtime": 1593961763911.7493
+      },
+      {
+        "file": "libs/data/tsconfig.spec.json",
+        "ext": ".json",
+        "mtime": 1593961763917.2505
+      },
+      {
+        "file": "libs/data/tslint.json",
+        "ext": ".json",
+        "mtime": 1593961763923.2512
       }
     ]
   }

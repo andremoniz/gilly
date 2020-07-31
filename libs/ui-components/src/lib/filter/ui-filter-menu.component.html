@@ -1,0 +1,101 @@
+<div class="mb-3 pb-1 border-bottom d-flex justify-content-between">
+	<div>
+		<!-- <div>
+			Filter Drill Down
+			<nz-switch
+				[(ngModel)]="uiFilterService.filterDrillDown"
+				(ngModelChange)="toggleFilterDrillDown($event)"
+			></nz-switch>
+		</div> -->
+	</div>
+
+	<div class="d-flex flex-row align-items-center">
+		<!-- <button nz-button class="bg-warning text-white mr-3" (click)="removeAllValues()">
+			Reset All
+		</button> -->
+		<h5>Total: {{ uiFilterService.originalData.length }}</h5>
+	</div>
+</div>
+
+<form [formGroup]="uiFilterService.filterForm" *ngIf="uiFilterService.filterForm">
+	<div class="filter-list">
+		<div class="filter-list-item border" *ngFor="let prop of uiFilterService.getUniqueProps()">
+			<div class="filter-list-content">
+				<h5 class="p-1 w-100 bg-secondary text-white">
+					{{ utilities.prettyPrint(prop) }}
+				</h5>
+
+				<ng-container [ngSwitch]="uiFilterService.propTypeMap[prop]">
+					<ng-container *ngSwitchCase="'date'">
+						<div [formGroupName]="prop">
+							<nz-range-picker
+								[formControlName]="prop"
+								[nzRanges]="dateRanges"
+								[nzPlaceHolder]="['Start', 'End']"
+							></nz-range-picker>
+
+							<div class="d-flex justify-content-end">
+								<p
+									class="clickable"
+									style="font-size: 0.9rem; color: blue;"
+									(click)="clearDateInput($event, prop)"
+								>
+									Clear
+								</p>
+							</div>
+						</div>
+					</ng-container>
+
+					<ng-container *ngSwitchDefault>
+						<div class="d-flex flex-column" [formGroupName]="prop">
+							<ng-container
+								*ngFor="
+									let v of uiFilterService.getUniqueValuesForProp(prop).values;
+									let i = index
+								"
+							>
+								<label
+									nz-checkbox
+									[formControlName]="v.value"
+									*ngIf="i <= 4 || uiFilterService.uniqueValues[prop].showMore"
+								>
+									<span>
+										{{ v.value.length > 25 ? v.value.slice(0, 25) : v.value }}
+									</span>
+									<span style="font-size: 0.8rem;" class="ml-auto text-primary">
+										{{ v.count }}
+									</span>
+								</label>
+
+								<p
+									*ngIf="i === 6 && !uiFilterService.uniqueValues[prop].showMore"
+									class="clickable"
+									style="font-size: 0.9rem; color: blue;"
+									(click)="
+										uiFilterService.uniqueValues[
+											prop
+										].showMore = !uiFilterService.uniqueValues[prop].showMore
+									"
+								>
+									Show More...
+								</p>
+								<p
+									*ngIf="i === 6 && uiFilterService.uniqueValues[prop].showMore"
+									class="clickable"
+									style="font-size: 0.9rem; color: blue;"
+									(click)="
+										uiFilterService.uniqueValues[
+											prop
+										].showMore = !uiFilterService.uniqueValues[prop].showMore
+									"
+								>
+									Show Less...
+								</p>
+							</ng-container>
+						</div>
+					</ng-container>
+				</ng-container>
+			</div>
+		</div>
+	</div>
+</form>

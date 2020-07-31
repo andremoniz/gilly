@@ -1,0 +1,26 @@
+<nz-layout class="container-wrapper">
+
+    <nz-header class="container-header bg-primary" *ngIf="!hideHeader">
+        <img class="mr-1" [src]="appLogo" height="64" width="64" *ngIf="appLogo" />
+        <a href="#" class="text-white">{{ appTitle }}</a>
+
+        <div #leftItems class="mr-auto ml-5">
+            <lib-header-item class="mr-3" [item]="item" *ngFor="let item of headerItems"></lib-header-item>
+        </div>
+
+        <div #rightItems class="ml-auto">
+            <ng-container *ngIf="!auth.isAuthenticated()">
+                <lib-header-item [item]="item" *ngFor="let item of nonAuthItems"></lib-header-item>
+            </ng-container>
+
+            <ng-container *ngIf="auth.isAuthenticated()">
+                <lib-header-item [item]="item" *ngFor="let item of authItems" [style.display]="auth.isActionAuthorized(item.name, item.expectedRoles) ? 'block' : 'none'"></lib-header-item>
+            </ng-container>
+        </div>
+    </nz-header>
+
+    <nz-content class="container-main">
+        <router-outlet></router-outlet>
+    </nz-content>
+
+</nz-layout>
