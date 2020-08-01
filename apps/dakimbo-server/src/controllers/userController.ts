@@ -99,12 +99,6 @@ class UserController {
 			UserController.hashPassword(user);
 		}
 
-		const errors = await validate(user);
-		if (errors.length > 0) {
-			res.status(400).send(errors);
-			return;
-		}
-
 		//Try to save, if fails, that means username already in use
 		try {
 			await userRepository.save(user);
@@ -112,6 +106,7 @@ class UserController {
 			res.status(409).send('username already in use');
 			return;
 		}
+
 		//After all send a 204 (no content, but accepted) response
 		console.log(`EDIT USER: ${user.username} | BY ADMIN: ${adminUser}`);
 		res.status(204).send();

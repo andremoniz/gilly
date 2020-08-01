@@ -2,9 +2,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppLayoutModule } from '@lib/app-shell';
+import { AppLayoutModule, AppShellModule, PageContainerModule } from '@lib/app-shell';
 
-import { AppShellModule } from '../../../../libs/app-shell/src/lib/app-shell.module';
 import { environment } from './../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,7 +24,8 @@ import { AppComponent } from './app.component';
 			appName: environment.appTitle,
 			userMetrics: environment.userMetrics
 		}),
-		AppLayoutModule
+		AppLayoutModule,
+		PageContainerModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

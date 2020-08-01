@@ -1,4 +1,4 @@
-@import './scss/vendor';
+// @import './scss/vendor';
 @import './scss/reset';
 
 @import './scss/app-loading';
@@ -50,27 +50,3 @@ html {
 }
 
 // OVERRIDES
-.ant-menu-horizontal > .ant-menu-item,
-.ant-menu-horizontal > .ant-menu-submenu {
-	border-bottom: none !important;
-}
-
-.ant-menu-horizontal {
-	border-bottom: none !important;
-}
-
-.ant-form-item {
-	margin: 0 0 0.5rem 0 !important;
-}
-
-.ant-form-item-label {
-	padding: 0 !important;
-}
-
-.ant-form-item-label > label {
-	font-size: 0.9rem !important;
-}
-
-mwlResizable {
-	box-sizing: border-box; // required for the enableGhostResize option to work
-}

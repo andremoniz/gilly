@@ -903,7 +903,7 @@ var UserController = /** @class */ (function () {
         });
     }); };
     UserController.editUser = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
-        var id, _a, username, password, roles, email, isLocked, numFailedLogin, adminUser, userRepository, user, error_2, errors, e_2;
+        var id, _a, username, password, roles, email, isLocked, numFailedLogin, adminUser, userRepository, user, error_2, e_2;
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -934,25 +934,18 @@ var UserController = /** @class */ (function () {
                         user.password = password;
                         UserController.hashPassword(user);
                     }
-                    return [4 /*yield*/, validate(user)];
+                    _b.label = 5;
                 case 5:
-                    errors = _b.sent();
-                    if (errors.length > 0) {
-                        res.status(400).send(errors);
-                        return [2 /*return*/];
-                    }
-                    _b.label = 6;
-                case 6:
-                    _b.trys.push([6, 8, , 9]);
+                    _b.trys.push([5, 7, , 8]);
                     return [4 /*yield*/, userRepository.save(user)];
-                case 7:
+                case 6:
                     _b.sent();
-                    return [3 /*break*/, 9];
-                case 8:
+                    return [3 /*break*/, 8];
+                case 7:
                     e_2 = _b.sent();
                     res.status(409).send('username already in use');
                     return [2 /*return*/];
-                case 9:
+                case 8:
                     //After all send a 204 (no content, but accepted) response
                     console.log("EDIT USER: " + user.username + " | BY ADMIN: " + adminUser);
                     res.status(204).send();

@@ -290,7 +290,10 @@
 						"polyfills": "apps/kid-money/src/polyfills.ts",
 						"tsConfig": "apps/kid-money/tsconfig.app.json",
 						"aot": true,
-						"assets": ["apps/kid-money/src/favicon.ico", "apps/kid-money/src/assets"],
+						"assets": [
+							"apps/kid-money/src/favicon.ico",
+							"apps/kid-money/src/assets"
+						],
 						"styles": ["apps/kid-money/src/styles.scss"],
 						"scripts": []
 					},
