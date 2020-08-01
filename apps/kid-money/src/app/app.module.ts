@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule, AppShellModule, PageContainerModule } from '@lib/app-shell';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 
 import { environment } from './../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +18,9 @@ import { AppComponent } from './app.component';
 
 		AppRoutingModule,
 		HttpClientModule,
+
+		CardModule,
+		ButtonModule,
 
 		AppShellModule.forRoot({
 			serverEndpoint: environment.serverUrl,

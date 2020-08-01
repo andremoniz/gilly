@@ -1,7 +1,24 @@
 <lib-page-container>
-    <ng-template #header>
-        <div class="w-100 bg-primary">
-            Kid Money
-        </div>
-    </ng-template>
+	<ng-template #header>
+		<div class="w-100 bg-primary">
+			<img src="assets/icons/icon-36x36.png" />
+		</div>
+	</ng-template>
+	<ng-template #main>
+		<p-card header="Kid #1" subheader="Birthday" styleClass="ui-card-shadow bg-white m-3">
+			<p-header>
+				<img
+					src="Card"
+					src="assets/images/daiga-ellaby-JZ51o_-UOY8-unsplash.jpg"
+					height="300"
+				/>
+			</p-header>
+			<div>
+				<h4>Money</h4>
+			</div>
+			<p-footer>
+				<button pButton label="View" icon="pi-eye" class="bg-primary text-white"></button>
+			</p-footer>
+		</p-card>
+	</ng-template>
 </lib-page-container>

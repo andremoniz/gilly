@@ -292,7 +292,8 @@
 						"aot": true,
 						"assets": [
 							"apps/kid-money/src/favicon.ico",
-							"apps/kid-money/src/assets"
+							"apps/kid-money/src/assets",
+							"apps/kid-money/src/assets/primeicons.css"
 						],
 						"styles": ["apps/kid-money/src/styles.scss"],
 						"scripts": []
