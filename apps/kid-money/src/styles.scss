@@ -5,10 +5,6 @@ $primary: #ffb53d;
 $secondary: #3d9bff;
 $info: #d23dff;
 
-:root {
-	--primary-color: #3d9bff;
-}
-
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/_variables';
 @import '~bootstrap/scss/_mixins';
@@ -16,12 +12,14 @@ $info: #d23dff;
 
 @import '../../../node_modules/primeflex/primeflex.css';
 @import '../../../node_modules/primeicons/primeicons.css';
-@import '../../../node_modules/primeng/resources/themes/nova-light/theme.css';
 @import '../../../node_modules/primeng/resources/primeng.min.css';
+
+@import './assets/styles/nova-dark/theme.css';
 
 @import '../../../libs/app-shell/src/index.scss';
 
 body {
 	font-family: 'Bubblegum Sans';
-	background-color: #dedede;
+	background-color: $secondary;
+	// background-color: #dedede;
 }
