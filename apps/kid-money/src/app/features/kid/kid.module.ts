@@ -12,10 +12,20 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
 
+import { KidMoneyCardComponent } from './kid-money-card/kid-money-card.component';
+import { KidToolbarComponent } from './kid-toolbar/kid-toolbar.component';
+import { KidTransactionCardComponent } from './kid-transaction-card/kid-transaction-card.component';
+import { KidTransactionInfoComponent } from './kid-transaction-card/kid-transaction-info.component';
 import { KidComponent } from './kid.component';
 
 @NgModule({
-	declarations: [KidComponent],
+	declarations: [
+		KidComponent,
+		KidToolbarComponent,
+		KidMoneyCardComponent,
+		KidTransactionCardComponent,
+		KidTransactionInfoComponent
+	],
 	imports: [
 		CommonModule,
 		FormsModule,

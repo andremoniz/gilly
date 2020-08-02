@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { entityMap } from '@entities';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { DataDelete } from './_delete';
@@ -70,7 +70,7 @@ export class DataService {
 		this.loadingMap[table] = new BehaviorSubject<boolean>(false);
 		this.cache[table] = [];
 		this.subjectMap[table] = new BehaviorSubject<any>(null);
-		this.activeMap[table] = null;
+		this.activeMap[table] = new BehaviorSubject<any>(null);
 	}
 
 	/**
@@ -148,17 +148,20 @@ export class DataService {
 
 	setActive<T>(model: T | any, entity?: any | string) {
 		if (!entity) {
-			this.activeMap[this.getModelName(model)] = null;
+			this.activeMap[this.getModelName(model)].next(null);
 		} else {
-			this.activeMap[this.getModelName(model)] = this.selectOneValue(
-				model,
-				entity.id ? entity.id : entity
+			this.activeMap[this.getModelName(model)].next(
+				this.selectOneValue(model, entity.id ? entity.id : entity)
 			);
 		}
 	}
 
-	selectActive<T>(model: T | any): any {
+	selectActive(model: any): Observable<any> {
 		return this.activeMap[this.getModelName(model)];
+	}
+
+	getActive<T>(model: T | any): any {
+		return this.activeMap[this.getModelName(model)].getValue();
 	}
 
 	saveActive<T>(model: T | any): Observable<T | T[]> {
@@ -190,7 +193,7 @@ interface SubjectMap {
  * A mapping of a currently selected entity for each table
  */
 interface ActiveMap {
-	[tableName: string]: any;
+	[tableName: string]: BehaviorSubject<any>;
 }
 
 /**
