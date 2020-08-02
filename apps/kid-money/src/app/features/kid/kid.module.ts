@@ -51,7 +51,6 @@ import { KidComponent } from './kid.component';
 		InputTextareaModule,
 		InputNumberModule,
 		FileUploadModule,
-		ToastModule,
 
 		PageContainerModule,
 

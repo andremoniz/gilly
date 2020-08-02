@@ -1498,7 +1498,7 @@ var Picture = /** @class */ (function (_super) {
             });
         });
     };
-    var _a, _b;
+    var _a, _b, _c;
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
@@ -1512,12 +1512,24 @@ var Picture = /** @class */ (function (_super) {
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
     ], Picture.prototype, "extension", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ type: 'bytea' }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Picture.prototype, "data", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+    ], Picture.prototype, "lastModifiedDate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], Picture.prototype, "size", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"]; }, function (kid) { return kid.pictures; }),
-        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"] !== "undefined" && _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"]) === "function" ? _a : Object)
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"] !== "undefined" && _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"]) === "function" ? _b : Object)
     ], Picture.prototype, "kid", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]; }, function (kmTransaction) { return kmTransaction.pictures; }),
-        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"] !== "undefined" && _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]) === "function" ? _b : Object)
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_c = typeof _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"] !== "undefined" && _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]) === "function" ? _c : Object)
     ], Picture.prototype, "kmTransaction", void 0);
     Picture = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
@@ -2261,7 +2273,7 @@ var Kid = /** @class */ (function (_super) {
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], Kid.prototype, "transactions", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"]; }, function (picture) { return picture.kid; }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"]; }, function (picture) { return picture.kid; }, { cascade: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], Kid.prototype, "pictures", void 0);
     Kid = Kid_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([

@@ -15,8 +15,14 @@ export class Picture extends BaseModel {
 	@Column({ nullable: true })
 	extension?: string;
 
-	// @Column({ type: 'longblob' })
-	// data?: Buffer;
+	@Column({ type: 'bytea' })
+	data?: string;
+
+	@Column({ nullable: true })
+	lastModifiedDate?: Date;
+
+	@Column({ nullable: true })
+	size: number;
 
 	// RELATIONSHIPS
 	@ManyToOne((type) => Kid, (kid) => kid.pictures)
@@ -30,4 +36,14 @@ export class Picture extends BaseModel {
 			entity.extension = entity.name.split('.')[1];
 		}
 	}
+
+	// @Column('bytea', { nullable: false, name: 'Content' })
+	// contentHex?: string;
+
+	// private _Content: Buffer | undefined;
+
+	// get Content(): Buffer {
+	// 	if (!this._Content) this._Content = new Buffer(this.contentHex, 'hex');
+	// 	return this._Content;
+	// }
 }

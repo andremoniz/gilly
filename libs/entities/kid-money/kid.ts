@@ -7,7 +7,7 @@ import { KMTransaction } from './km-transaction';
 @Entity()
 export class Kid extends BaseModel {
 	static displayName = 'Kid';
-	
+
 	@Column({ nullable: true })
 	firstName: string;
 
@@ -35,7 +35,7 @@ export class Kid extends BaseModel {
 	@OneToMany((type) => KMTransaction, (kmTransaction) => kmTransaction.kid, { cascade: true })
 	transactions?: KMTransaction[];
 
-	@OneToMany((type) => Picture, (picture) => picture.kid)
+	@OneToMany((type) => Picture, (picture) => picture.kid, { cascade: true })
 	pictures?: Picture[];
 
 	static relationships = [

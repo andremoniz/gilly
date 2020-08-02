@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Kid } from '@entities';
+import { Kid, Picture } from '@entities';
 import { DataService } from '@lib/data';
 import { take } from 'rxjs/operators';
 
@@ -21,6 +21,11 @@ import { take } from 'rxjs/operators';
 							(ngSubmit)="onSubmit()"
 							class="d-flex flex-wrap"
 						>
+							<!-- <div *ngFor="let picture of pictures">
+								{{ picture.name }}
+								<img [src]="getPictureSrc(picture)" />
+							</div> -->
+
 							<div class="mb-5 col-12 border-bottom pb-3">
 								<p style="font-weight:bold;font-size:1.25;" for="money">
 									Current Money
@@ -106,8 +111,6 @@ import { take } from 'rxjs/operators';
 							</div>
 
 							<div class="mb-5 col-12">
-								<p-toast [style]="{ marginTop: '80px' }"></p-toast>
-
 								<h4 class="w-100 border-bottom">Pictures</h4>
 								<p-fileUpload
 									#picauto
@@ -226,6 +229,8 @@ export class EditKidComponent implements OnInit, OnDestroy {
 			transaction: [],
 			pictures: kid.pictures || []
 		});
+
+		this.pictures = kid.pictures;
 	}
 
 	onSubmit() {
@@ -242,10 +247,28 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		console.log('Delete', this.kidForm.value);
 	}
 
-	uploadPictures(event) {
+	async uploadPictures(event) {
 		for (let file of event.files) {
 			console.log(file);
-			this.pictures.push(file);
+			let blob = await fetch(file.objectURL.changingThisBreaksApplicationSecurity).then((r) =>
+				r.blob()
+			);
+			// .then((blobFile) => new File([blobFile], file.name, { type: 'image/png' }));
+			this.pictures.push({
+				name: file.name,
+				size: file.size,
+				lastModified: file.lastModified,
+				type: file.type,
+				data: blob
+			});
 		}
+	}
+
+	getPictureSrc(picture: any) {
+		return `data:image/jpg;base64,${this.toBase64(picture.data.data)}`;
+	}
+
+	toBase64(arr) {
+		return btoa(arr.reduce((data, byte) => data + String.fromCharCode(byte), ''));
 	}
 }
