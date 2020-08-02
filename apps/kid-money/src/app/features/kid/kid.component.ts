@@ -10,22 +10,25 @@ import { DataService } from '@lib/data';
 			<lib-page-container>
 				<ng-template #header>
 					<p-toolbar class="w-100">
-						<div class="ui-toolbar-group-left"></div>
+						<div class="w-100 d-flex align-items-center justify-content-between">
+							<div class="text-white">
+								<h4>
+									{{ getKidFullName(activeKid) }}
+								</h4>
+							</div>
 
-						<div class="ui-toolbar-group-right">
-							<button
-								pButton
-								#createTransaction
-								type="button"
-								icon="pi pi-plus"
-								(click)="createTransaction()"
-							></button>
+							<div>
+								<button
+									pButton
+									type="button"
+									icon="pi pi-plus"
+									(click)="createTransaction()"
+								></button>
+							</div>
 						</div>
 					</p-toolbar>
 				</ng-template>
-				<ng-template #main>
-					{{ activeKid.firstName }}
-				</ng-template>
+				<ng-template #main> </ng-template>
 			</lib-page-container>
 		</ng-container>
 		<ng-template #createKid>
@@ -46,6 +49,10 @@ export class KidComponent implements OnInit {
 			const kidId = params['id'];
 			this.dataService.setActive(Kid, kidId);
 		});
+	}
+
+	getKidFullName(kid: Kid) {
+		return Kid.getKidFullName(kid);
 	}
 
 	createTransaction() {

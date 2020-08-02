@@ -28,6 +28,7 @@ import { Kid } from '@entities';
 						label="View"
 						icon="pi pi-eye"
 						class="bg-primary text-white"
+						[routerLink]="['/kid', kid.id]"
 					></button>
 				</div>
 			</p-footer>
