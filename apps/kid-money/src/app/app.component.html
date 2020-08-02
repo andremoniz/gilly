@@ -6,5 +6,8 @@
 	</ng-template>
 	<ng-template #main>
 		<router-outlet></router-outlet>
+		<ng-container *ngIf="!auth.isAuthenticated()">
+			<lib-login></lib-login>
+		</ng-container>
 	</ng-template>
 </lib-page-container>

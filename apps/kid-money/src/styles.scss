@@ -17,6 +17,8 @@ $info: #d23dff;
 
 @import './assets/styles/nova-dark/theme.css';
 
+@import '../../../node_modules/ng-zorro-antd/ng-zorro-antd.compact.min.css';
+
 @import '../../../libs/app-shell/src/index.scss';
 
 body {
