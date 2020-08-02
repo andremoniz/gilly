@@ -157,7 +157,7 @@ export class DataService {
 		}
 	}
 
-	selectActive<T>(model: T | any): T {
+	selectActive<T>(model: T | any): any {
 		return this.activeMap[this.getModelName(model)];
 	}
 

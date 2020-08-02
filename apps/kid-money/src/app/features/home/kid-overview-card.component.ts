@@ -7,7 +7,7 @@ import { Kid } from '@entities';
 		<p-card
 			[header]="getKidFullName(kid)"
 			[subheader]="kid.birthday | date: 'mediumDate'"
-			styleClass="ui-card-shadow bg-white m-3"
+			styleClass="ui-card-shadow bg-white mt-3"
 			*ngIf="kid"
 		>
 			<p-header>
@@ -26,7 +26,7 @@ import { Kid } from '@entities';
 					<button
 						pButton
 						label="View"
-						icon="pi-eye"
+						icon="pi pi-eye"
 						class="bg-primary text-white"
 					></button>
 				</div>
