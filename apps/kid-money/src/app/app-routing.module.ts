@@ -3,19 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { appLibRoutes } from '@lib/app-shell';
 
 const routes: Routes = [
-	// {
-	// 	path: 'landing',
-	// 	loadChildren: () =>
-	// 		import('./features/landing/landing.module').then((m) => m.LandingModule),
-	// 	data: { animation: 'Landing' },
-	// 	canActivate: []
-	// },
-	// {
-	// 	path: '',
-	// 	redirectTo: '',
-	// 	pathMatch: 'full',
-	// 	canActivate: []
-	// }
+	{
+		path: 'home',
+		loadChildren: () => import('./features/home/home.module').then((m) => m.HomeModule),
+		data: { animation: 'Home', breadcrumb: 'Home' },
+		canActivate: []
+	},
+	{
+		path: '',
+		redirectTo: 'home',
+		pathMatch: 'full',
+		canActivate: []
+	}
 ];
 
 @NgModule({

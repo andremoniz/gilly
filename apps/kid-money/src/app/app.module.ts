@@ -19,9 +19,6 @@ import { AppComponent } from './app.component';
 		AppRoutingModule,
 		HttpClientModule,
 
-		CardModule,
-		ButtonModule,
-
 		AppShellModule.forRoot({
 			serverEndpoint: environment.serverUrl,
 			dataEndpoint: environment.dataUrl,
