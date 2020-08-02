@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Kid } from '@entities';
 import { DataService } from '@lib/data';
+import { take } from 'rxjs/operators';
 
 @Component({
 	selector: 'edit-kid',
@@ -107,7 +108,6 @@ import { DataService } from '@lib/data';
 								<h4 class="w-100 border-bottom">Pictures</h4>
 								<p-fileUpload
 									#picauto
-									formControlName="pictures"
 									multiple="multiple"
 									accept="image/*"
 									maxFileSize="10000000"
@@ -166,6 +166,7 @@ import { DataService } from '@lib/data';
 export class EditKidComponent implements OnInit, OnDestroy {
 	kidForm: FormGroup = this.fb.group({});
 
+	kids$;
 	activeKid$;
 	pictures: any[] = [];
 
@@ -177,8 +178,8 @@ export class EditKidComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		this.route.params.subscribe((params) => {
-			const kidId = params['id'];
+		this.kids$ = this.dataService.selectAll(Kid).subscribe((kids) => {
+			const kidId = this.route.snapshot.params['id'];
 			this.dataService.setActive(Kid, kidId);
 		});
 
@@ -191,13 +192,21 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		if (this.activeKid$) {
 			this.activeKid$.unsubscribe();
 		}
+		if (this.kids$) {
+			this.kids$.unsubscribe();
+		}
 	}
 
 	createKidForm(kid?: Kid) {
+		if (!kid) {
+			this.kidForm = this.fb.group({});
+			return;
+		}
 		this.kidForm = this.fb.group({
+			id: kid.id,
 			firstName: kid.firstName || '',
 			lastName: kid.lastName || '',
-			birthday: kid.birthday || '',
+			birthday: kid.birthday || null,
 			gender: kid.gender || '',
 			notes: kid.notes || '',
 			money: kid.money || '',
@@ -208,7 +217,12 @@ export class EditKidComponent implements OnInit, OnDestroy {
 
 	onSubmit() {
 		const updatedKid = { ...this.kidForm.value, pictures: this.pictures };
-		console.log(updatedKid);
+		this.dataService
+			.save(Kid, updatedKid)
+			.pipe(take(1))
+			.subscribe((res) => {
+				console.log(res);
+			});
 	}
 
 	onDelete() {

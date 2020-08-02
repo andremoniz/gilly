@@ -38,7 +38,8 @@ import { KMTransaction } from './../../../../../../libs/entities/kid-money/km-tr
 	],
 	encapsulation: ViewEncapsulation.None
 })
-export class KidComponent implements OnInit {
+export class KidComponent implements OnInit, OnDestroy {
+	kids$;
 
 	constructor(
 		public dataService: DataService,
@@ -47,10 +48,15 @@ export class KidComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		this.route.params.subscribe((params) => {
-			const kidId = params['id'];
+		this.kids$ = this.dataService.selectAll(Kid).subscribe((kids) => {
+			const kidId = this.route.snapshot.params['id'];
 			this.dataService.setActive(Kid, kidId);
 		});
 	}
 
+	ngOnDestroy() {
+		if (this.kids$) {
+			this.kids$.unsubscribe();
+		}
+	}
 }
