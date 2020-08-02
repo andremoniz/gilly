@@ -1465,7 +1465,7 @@ var dateFormat = function () {
 /*!**************************************!*\
   !*** ./libs/entities/_entity-map.ts ***!
   \**************************************/
-/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission, MetricPageView, MetricPageVisit */
+/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission, MetricPageView, MetricPageVisit, Kid */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1478,6 +1478,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
 /* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
 /* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
+/* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./kid-money/kid */ "./libs/entities/kid-money/kid.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_6__["User"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__["AuthAction"]; });
@@ -1491,6 +1492,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageView", function() { return _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageVisit", function() { return _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Kid", function() { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__["Kid"]; });
+
 
 
 
@@ -1508,8 +1512,11 @@ var entityMap = {
     AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__["AuthRolePermission"],
     // METRICS
     MetricPageView: _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"],
-    MetricPageVisit: _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"]
+    MetricPageVisit: _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"],
+    // KID MONEY
+    Kid: _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__["Kid"]
 };
+
 
 
 
@@ -2070,6 +2077,68 @@ var BaseModel = /** @class */ (function () {
     ], BaseModel.prototype, "modifyUser", void 0);
     return BaseModel;
 }());
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/kid-money/kid.ts":
+/*!****************************************!*\
+  !*** ./libs/entities/kid-money/kid.ts ***!
+  \****************************************/
+/*! exports provided: Kid */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Kid", function() { return Kid; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+
+
+
+var Kid = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Kid, _super);
+    function Kid() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Kid.prototype, "firstName", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Kid.prototype, "lastName", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Kid.prototype, "middleName", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Kid.prototype, "fullName", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+    ], Kid.prototype, "birthday", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Kid.prototype, "gender", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], Kid.prototype, "money", void 0);
+    Kid = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
+    ], Kid);
+    return Kid;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
 
 
 

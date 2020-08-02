@@ -1,8 +1,8 @@
 {
-  "name": "KidMoney",
-  "short_name": "KidMoney",
-  "theme_color": "#4A6C6F",
-  "background_color": "#405475",
+  "name": "Kid Money",
+  "short_name": "KM",
+  "theme_color": "#ffb53d",
+  "background_color": "#3d9bff",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",

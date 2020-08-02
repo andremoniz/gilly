@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Kid } from '@entities';
 
 @Component({
 	selector: 'km-home',
@@ -15,7 +16,7 @@ import { Component, OnInit } from '@angular/core';
 	styles: [``]
 })
 export class KMHomeComponent implements OnInit {
-	kids: any[] = [
+	kids: Kid[] = [
 		{
 			firstName: 'John',
 			lastName: 'Smith',

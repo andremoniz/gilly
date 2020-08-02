@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Kid } from '@entities';
 
 @Component({
 	selector: 'kid-overview-card',
@@ -35,16 +36,7 @@ import { Component, Input, OnInit } from '@angular/core';
 	styles: [``]
 })
 export class KidOverviewCardComponent implements OnInit {
-	@Input() kid: {
-		firstName: string;
-		lastName?: string;
-		fullName?: string;
-		birthday?: Date;
-		gender?: string;
-		pictures?: any[];
-		money?: number;
-		transactions?: any[];
-	};
+	@Input() kid: Kid;
 
 	constructor() {}
 

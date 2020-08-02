@@ -5,6 +5,7 @@ import { AuthEntity } from './auth/auth-entity';
 import { AuthRole } from './auth/auth-role';
 import { AuthRolePermission } from './auth/auth-role-permission';
 import { User } from './auth/user';
+import { Kid } from './kid-money/kid';
 
 export const entityMap = {
 	// AUTH
@@ -16,7 +17,10 @@ export const entityMap = {
 
 	// METRICS
 	MetricPageView,
-	MetricPageVisit
+	MetricPageVisit,
+
+	// KID MONEY
+	Kid
 };
 
 export { User } from './auth/user';
@@ -26,3 +30,4 @@ export { AuthRole } from './auth/auth-role';
 export { AuthRolePermission } from './auth/auth-role-permission';
 export { MetricPageView } from './_metrics/metric-page-view';
 export { MetricPageVisit } from './_metrics/metric-page-visit';
+export { Kid } from './kid-money/kid';
