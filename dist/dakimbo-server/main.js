@@ -1461,39 +1461,115 @@ var dateFormat = function () {
 
 /***/ }),
 
+/***/ "./libs/entities/_common/picture.ts":
+/*!******************************************!*\
+  !*** ./libs/entities/_common/picture.ts ***!
+  \******************************************/
+/*! exports provided: Picture */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Picture", function() { return Picture; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../kid-money/kid */ "./libs/entities/kid-money/kid.ts");
+/* harmony import */ var _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../kid-money/km-transaction */ "./libs/entities/kid-money/km-transaction.ts");
+
+
+
+
+
+var Picture = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Picture, _super);
+    function Picture() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Picture.preProcess = function (entity, dbConnection) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                if (entity.name) {
+                    entity.extension = entity.name.split('.')[1];
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    var _a, _b;
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Picture.prototype, "location", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Picture.prototype, "name", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Picture.prototype, "extension", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"]; }, function (kid) { return kid.pictures; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"] !== "undefined" && _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"]) === "function" ? _a : Object)
+    ], Picture.prototype, "kid", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]; }, function (kmTransaction) { return kmTransaction.pictures; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"] !== "undefined" && _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]) === "function" ? _b : Object)
+    ], Picture.prototype, "kmTransaction", void 0);
+    Picture = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
+    ], Picture);
+    return Picture;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+
+
+
+/***/ }),
+
 /***/ "./libs/entities/_entity-map.ts":
 /*!**************************************!*\
   !*** ./libs/entities/_entity-map.ts ***!
   \**************************************/
-/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission, MetricPageView, MetricPageVisit, Kid */
+/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission, MetricPageView, MetricPageVisit, Picture, Kid, KMTransaction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entityMap", function() { return entityMap; });
-/* harmony import */ var _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_metrics/metric-page-view */ "./libs/entities/_metrics/metric-page-view.ts");
-/* harmony import */ var _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_metrics/metric-page-visit */ "./libs/entities/_metrics/metric-page-visit.ts");
-/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth/auth-action */ "./libs/entities/auth/auth-action.ts");
-/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-entity */ "./libs/entities/auth/auth-entity.ts");
-/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
-/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
-/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
-/* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./kid-money/kid */ "./libs/entities/kid-money/kid.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_6__["User"]; });
+/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_common/picture */ "./libs/entities/_common/picture.ts");
+/* harmony import */ var _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_metrics/metric-page-view */ "./libs/entities/_metrics/metric-page-view.ts");
+/* harmony import */ var _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_metrics/metric-page-visit */ "./libs/entities/_metrics/metric-page-visit.ts");
+/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-action */ "./libs/entities/auth/auth-action.ts");
+/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/auth-entity */ "./libs/entities/auth/auth-entity.ts");
+/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
+/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
+/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
+/* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./kid-money/kid */ "./libs/entities/kid-money/kid.ts");
+/* harmony import */ var _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./kid-money/km-transaction */ "./libs/entities/kid-money/km-transaction.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_7__["User"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__["AuthAction"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__["AuthEntity"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__["AuthRolePermission"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_6__["AuthRolePermission"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageView", function() { return _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageView", function() { return _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_1__["MetricPageView"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageVisit", function() { return _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageVisit", function() { return _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_2__["MetricPageVisit"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Kid", function() { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__["Kid"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Picture", function() { return _common_picture__WEBPACK_IMPORTED_MODULE_0__["Picture"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Kid", function() { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__["Kid"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "KMTransaction", function() { return _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__["KMTransaction"]; });
+
+
 
 
 
@@ -1505,17 +1581,22 @@ __webpack_require__.r(__webpack_exports__);
 
 var entityMap = {
     // AUTH
-    User: _auth_user__WEBPACK_IMPORTED_MODULE_6__["User"],
-    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"],
-    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__["AuthAction"],
-    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__["AuthEntity"],
-    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__["AuthRolePermission"],
+    User: _auth_user__WEBPACK_IMPORTED_MODULE_7__["User"],
+    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"],
+    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"],
+    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"],
+    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_6__["AuthRolePermission"],
     // METRICS
-    MetricPageView: _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"],
-    MetricPageVisit: _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"],
+    MetricPageView: _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_1__["MetricPageView"],
+    MetricPageVisit: _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_2__["MetricPageVisit"],
+    // COMMON
+    Picture: _common_picture__WEBPACK_IMPORTED_MODULE_0__["Picture"],
     // KID MONEY
-    Kid: _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__["Kid"]
+    Kid: _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__["Kid"],
+    KMTransaction: _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__["KMTransaction"]
 };
+
+
 
 
 
@@ -2096,7 +2177,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_common/picture */ "./libs/entities/_common/picture.ts");
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _km_transaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./km-transaction */ "./libs/entities/kid-money/km-transaction.ts");
+
+
 
 
 
@@ -2105,7 +2190,35 @@ var Kid = /** @class */ (function (_super) {
     function Kid() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var _a;
+    Kid_1 = Kid;
+    Kid.preProcess = function (entity, dbConnection) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            var nameSplit, i;
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                if (entity.firstName || entity.middleName || entity.lastName) {
+                    entity.fullName = Kid_1.getKidFullName(entity);
+                }
+                else if (entity.fullName) {
+                    nameSplit = entity.name.split(' ');
+                    entity.firstName = nameSplit[0];
+                    if (nameSplit.length > 2) {
+                        entity.middleName = nameSplit[1];
+                        for (i = 2; i < nameSplit.length; i++) {
+                            entity.lastName += nameSplit[i];
+                        }
+                    }
+                    else {
+                        entity.lastName = nameSplit[1];
+                    }
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    Kid.getKidFullName = function (kid) {
+        return "" + (kid.firstName || '') + (kid.firstName ? ' ' : '') + (kid.middleName || '') + (kid.middleName ? ' ' : '') + (kid.lastName || '');
+    };
+    var Kid_1, _a;
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
@@ -2134,11 +2247,81 @@ var Kid = /** @class */ (function (_super) {
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], Kid.prototype, "money", void 0);
-    Kid = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]; }, function (kmTransaction) { return kmTransaction.kid; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], Kid.prototype, "transactions", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"]; }, function (picture) { return picture.kid; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], Kid.prototype, "pictures", void 0);
+    Kid = Kid_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
     ], Kid);
     return Kid;
-}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+}(_base__WEBPACK_IMPORTED_MODULE_3__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/kid-money/km-transaction.ts":
+/*!***************************************************!*\
+  !*** ./libs/entities/kid-money/km-transaction.ts ***!
+  \***************************************************/
+/*! exports provided: KMTransaction */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KMTransaction", function() { return KMTransaction; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../_common/picture */ "./libs/entities/_common/picture.ts");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _kid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./kid */ "./libs/entities/kid-money/kid.ts");
+
+
+
+
+
+var KMTransaction = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(KMTransaction, _super);
+    function KMTransaction() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "income", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "cost", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "previousAmount", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "newAmount", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_1__["Picture"]; }, function (picture) { return picture.kmTransaction; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], KMTransaction.prototype, "pictures", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["ManyToOne"])(function (type) { return _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]; }, function (kid) { return kid.transactions; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"] !== "undefined" && _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]) === "function" ? _a : Object)
+    ], KMTransaction.prototype, "kid", void 0);
+    KMTransaction = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Entity"])()
+    ], KMTransaction);
+    return KMTransaction;
+}(_base__WEBPACK_IMPORTED_MODULE_3__["BaseModel"]));
 
 
 

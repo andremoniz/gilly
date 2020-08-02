@@ -1,0 +1,25 @@
+import { Picture } from './../_common/picture';
+import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import { BaseModel } from '../base';
+import { Kid } from './kid';
+
+@Entity()
+export class KMTransaction extends BaseModel {
+	@Column({ nullable: true })
+	income?: number;
+
+	@Column({ nullable: true })
+	cost?: number;
+
+	@Column({ nullable: true })
+	previousAmount: number;
+
+	@Column({ nullable: true })
+	newAmount: number;
+
+	@OneToMany((type) => Picture, (picture) => picture.kmTransaction)
+	pictures?: Picture[];
+
+	@ManyToOne((type) => Kid, (kid) => kid.transactions)
+	kid: Kid;
+}
