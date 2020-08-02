@@ -10,6 +10,9 @@ export class KMTransaction extends BaseModel {
 	name?: string;
 
 	@Column({ nullable: true })
+	type?: string;
+
+	@Column({ nullable: true })
 	income?: number;
 
 	@Column({ nullable: true })

@@ -2299,6 +2299,10 @@ var KMTransaction = /** @class */ (function (_super) {
     ], KMTransaction.prototype, "name", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], KMTransaction.prototype, "type", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], KMTransaction.prototype, "income", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([

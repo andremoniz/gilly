@@ -39,26 +39,32 @@ export class AppComponent {
 					{
 						id: 1,
 						name: 'Bulldozer Toy',
-						cost: 10
+						type: 'Toy',
+						cost: 10,
+						createDate: new Date()
 					},
 					{
 						id: 2,
 						name: 'Broke the door handle',
+						type: 'Destruction',
 						cost: 100
 					},
 					{
 						id: 3,
 						name: 'Talk back to Mom',
+						type: 'Disrespect',
 						cost: 20
 					},
 					{
 						id: 4,
 						name: 'Hotwheels Cars',
+						type: 'Toy',
 						cost: 5
 					},
 					{
 						id: 5,
 						name: 'Skittles',
+						type: 'Candy',
 						cost: 1
 					}
 				]
