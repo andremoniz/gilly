@@ -6,30 +6,42 @@ import { Kid } from '@entities';
 @Component({
 	selector: 'kid-toolbar',
 	template: `
-			<p-toolbar class="w-100">
-				<div class="w-100 d-flex align-items-center justify-content-between">
-					<div class="text-white">
-						<span style="font-size:1.5rem;font-weight:bold;">
-							{{ getKidFullName(activeKid) }}
-						</span>
-					</div>
-
-					<div>
-						<button
-							pButton
-							type="button"
-							icon="pi pi-plus"
-							(click)="kidService.createTransaction()"
-						></button>
-					</div>
+		<p-toolbar class="w-100">
+			<div class="w-100 d-flex align-items-center justify-content-between">
+				<div class="text-white">
+					<span style="font-size:1.5rem;font-weight:bold;">
+						{{ getKidFullName(activeKid) }}
+					</span>
 				</div>
-			</p-toolbar>
+
+				<div>
+					<button
+						pButton
+						icon="pi pi-briefcase"
+						class="mr-1"
+						(click)="kidService.showChores()"
+					></button>
+					<button
+						pButton
+						icon="pi pi-pencil"
+						title="Edit a kid's information"
+						class="mr-3"
+						(click)="kidService.editKid()"
+					></button>
+					<button
+						pButton
+						icon="pi pi-plus"
+						(click)="kidService.createTransaction()"
+					></button>
+				</div>
+			</div>
+		</p-toolbar>
 	`,
 	styles: [``]
 })
 export class KidToolbarComponent implements OnInit {
-    @Input() activeKid: Kid;
-    
+	@Input() activeKid: Kid;
+
 	constructor(public kidService: KidService) {}
 
 	ngOnInit(): void {}
