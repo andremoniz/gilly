@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Kid } from '@entities';
 import { DataService } from '@lib/data';
 
 @Component({
@@ -33,9 +35,18 @@ import { DataService } from '@lib/data';
 	styles: [``]
 })
 export class KidComponent implements OnInit {
-	constructor(public dataService: DataService) {}
+	constructor(
+		public dataService: DataService,
+		private router: Router,
+		private route: ActivatedRoute
+	) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.route.params.subscribe((params) => {
+			const kidId = params['id'];
+			this.dataService.setActive(Kid, kidId);
+		});
+	}
 
 	createTransaction() {
 		console.log('Create Transaction!');
