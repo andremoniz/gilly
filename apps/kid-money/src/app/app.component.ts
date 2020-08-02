@@ -34,7 +34,34 @@ export class AppComponent {
 				lastName: 'Smith',
 				birthday: new Date('04/02/2009'),
 				gender: 'F',
-				money: 459
+				money: 459,
+				transactions: [
+					{
+						id: 1,
+						name: 'Bulldozer Toy',
+						cost: 10
+					},
+					{
+						id: 2,
+						name: 'Broke the door handle',
+						cost: 100
+					},
+					{
+						id: 3,
+						name: 'Talk back to Mom',
+						cost: 20
+					},
+					{
+						id: 4,
+						name: 'Hotwheels Cars',
+						cost: 5
+					},
+					{
+						id: 5,
+						name: 'Skittles',
+						cost: 1
+					}
+				]
 			}
 		]);
 	}

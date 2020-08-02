@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 
 import { KidComponent } from './kid.component';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
 	declarations: [KidComponent],
@@ -14,6 +15,7 @@ import { KidComponent } from './kid.component';
 
 		ToolbarModule,
 		ButtonModule,
+		CardModule,
 
 		PageContainerModule,
 
