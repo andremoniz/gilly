@@ -8,10 +8,6 @@ export class KidService {
 		console.log('Create Transaction!');
 	}
 
-	editKid() {
-		console.log('Edit Kid');
-	}
-
 	showChores() {
 		console.log('Show Chores');
 	}

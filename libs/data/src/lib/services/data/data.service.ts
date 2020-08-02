@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { entityMap } from '@entities';
-import { BehaviorSubject, BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { DataDelete } from './_delete';

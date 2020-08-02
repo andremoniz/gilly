@@ -26,7 +26,7 @@ import { Kid } from '@entities';
 						icon="pi pi-pencil"
 						title="Edit a kid's information"
 						class="mr-3"
-						(click)="kidService.editKid()"
+						[routerLink]="['./edit']"
 					></button>
 					<button
 						pButton
