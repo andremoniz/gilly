@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Kid } from '@entities';
 import { DataService } from '@lib/data';
+import { take } from 'rxjs/operators';
 
 @Component({
 	selector: 'edit-kid',
@@ -15,6 +16,7 @@ import { DataService } from '@lib/data';
 						styleClass="ui-card-shadow bg-white mt-3 mb-3"
 					>
 						<form
+							*ngIf="kidForm"
 							[formGroup]="kidForm"
 							(ngSubmit)="onSubmit()"
 							class="d-flex flex-wrap"
@@ -65,7 +67,9 @@ import { DataService } from '@lib/data';
 										[touchUI]="true"
 										[monthNavigator]="true"
 										[yearNavigator]="true"
+										yearRange="1950:2030"
 										[showTime]="true"
+										[showButtonBar]="true"
 										class="w-100"
 									></p-calendar>
 									<label for="lastName">Birthday</label>
@@ -107,7 +111,6 @@ import { DataService } from '@lib/data';
 								<h4 class="w-100 border-bottom">Pictures</h4>
 								<p-fileUpload
 									#picauto
-									formControlName="pictures"
 									multiple="multiple"
 									accept="image/*"
 									maxFileSize="10000000"
@@ -164,8 +167,9 @@ import { DataService } from '@lib/data';
 	encapsulation: ViewEncapsulation.None
 })
 export class EditKidComponent implements OnInit, OnDestroy {
-	kidForm: FormGroup = this.fb.group({});
+	kidForm: FormGroup;
 
+	kids$;
 	activeKid$;
 	pictures: any[] = [];
 
@@ -177,8 +181,8 @@ export class EditKidComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		this.route.params.subscribe((params) => {
-			const kidId = params['id'];
+		this.kids$ = this.dataService.selectAll(Kid).subscribe((kids) => {
+			const kidId = this.route.snapshot.params['id'];
 			this.dataService.setActive(Kid, kidId);
 		});
 
@@ -191,24 +195,47 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		if (this.activeKid$) {
 			this.activeKid$.unsubscribe();
 		}
+		if (this.kids$) {
+			this.kids$.unsubscribe();
+		}
 	}
 
 	createKidForm(kid?: Kid) {
+		if (!kid) {
+			this.kidForm = this.fb.group({
+				id: '',
+				firstName: '',
+				lastName: '',
+				birthday: null,
+				gender: '',
+				notes: '',
+				money: '',
+				transactions: [],
+				pictures: []
+			});
+			return;
+		}
 		this.kidForm = this.fb.group({
+			id: kid.id,
 			firstName: kid.firstName || '',
 			lastName: kid.lastName || '',
-			birthday: kid.birthday || '',
+			birthday: kid.birthday ? new Date(kid.birthday) : null,
 			gender: kid.gender || '',
 			notes: kid.notes || '',
 			money: kid.money || '',
-			transaction: kid.transactions || [],
+			transaction: [],
 			pictures: kid.pictures || []
 		});
 	}
 
 	onSubmit() {
 		const updatedKid = { ...this.kidForm.value, pictures: this.pictures };
-		console.log(updatedKid);
+		this.dataService
+			.save(Kid, updatedKid)
+			.pipe(take(1))
+			.subscribe((res) => {
+				console.log(res);
+			});
 	}
 
 	onDelete() {

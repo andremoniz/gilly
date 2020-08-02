@@ -6,6 +6,8 @@ import { KMTransaction } from './km-transaction';
 
 @Entity()
 export class Kid extends BaseModel {
+	static displayName = 'Kid';
+	
 	@Column({ nullable: true })
 	firstName: string;
 
@@ -27,18 +29,18 @@ export class Kid extends BaseModel {
 	@Column({ nullable: true })
 	notes?: string;
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, type: 'float4' })
 	money?: number;
 
-	@OneToMany((type) => KMTransaction, (kmTransaction) => kmTransaction.kid)
+	@OneToMany((type) => KMTransaction, (kmTransaction) => kmTransaction.kid, { cascade: true })
 	transactions?: KMTransaction[];
 
 	@OneToMany((type) => Picture, (picture) => picture.kid)
 	pictures?: Picture[];
 
-	static relationships: [
-		{ model: KMTransaction; name: 'transactions' },
-		{ model: Picture; name: 'pictures' }
+	static relationships = [
+		{ model: KMTransaction, name: 'transactions' },
+		{ model: Picture, name: 'pictures' }
 	];
 
 	static async preProcess?(entity, dbConnection) {

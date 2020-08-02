@@ -2219,6 +2219,11 @@ var Kid = /** @class */ (function (_super) {
         return "" + (kid.firstName || '') + (kid.firstName ? ' ' : '') + (kid.middleName || '') + (kid.middleName ? ' ' : '') + (kid.lastName || '');
     };
     var Kid_1, _a;
+    Kid.displayName = 'Kid';
+    Kid.relationships = [
+        { model: _km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"], name: 'transactions' },
+        { model: _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"], name: 'pictures' }
+    ];
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
@@ -2248,11 +2253,11 @@ var Kid = /** @class */ (function (_super) {
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
     ], Kid.prototype, "notes", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, type: 'float4' }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], Kid.prototype, "money", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]; }, function (kmTransaction) { return kmTransaction.kid; }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]; }, function (kmTransaction) { return kmTransaction.kid; }, { cascade: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], Kid.prototype, "transactions", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([

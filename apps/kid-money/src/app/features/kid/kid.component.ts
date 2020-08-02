@@ -1,10 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Kid } from '@entities';
 import { DataService } from '@lib/data';
-import { SelectItem } from 'primeng/api/selectitem';
-
-import { KMTransaction } from './../../../../../../libs/entities/kid-money/km-transaction';
 
 @Component({
 	selector: 'kid',
@@ -38,7 +35,8 @@ import { KMTransaction } from './../../../../../../libs/entities/kid-money/km-tr
 	],
 	encapsulation: ViewEncapsulation.None
 })
-export class KidComponent implements OnInit {
+export class KidComponent implements OnInit, OnDestroy {
+	kids$;
 
 	constructor(
 		public dataService: DataService,
@@ -47,10 +45,15 @@ export class KidComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		this.route.params.subscribe((params) => {
-			const kidId = params['id'];
+		this.kids$ = this.dataService.selectAll(Kid).subscribe((kids) => {
+			const kidId = this.route.snapshot.params['id'];
 			this.dataService.setActive(Kid, kidId);
 		});
 	}
 
+	ngOnDestroy() {
+		if (this.kids$) {
+			this.kids$.unsubscribe();
+		}
+	}
 }
