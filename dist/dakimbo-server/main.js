@@ -2245,6 +2245,10 @@ var Kid = /** @class */ (function (_super) {
     ], Kid.prototype, "gender", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Kid.prototype, "notes", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], Kid.prototype, "money", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
@@ -2277,10 +2281,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KMTransaction", function() { return KMTransaction; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../_common/picture */ "./libs/entities/_common/picture.ts");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../_common/picture */ "./libs/entities/_common/picture.ts");
 /* harmony import */ var _kid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./kid */ "./libs/entities/kid-money/kid.ts");
 
 
@@ -2294,34 +2298,42 @@ var KMTransaction = /** @class */ (function (_super) {
     }
     var _a;
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], KMTransaction.prototype, "name", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], KMTransaction.prototype, "type", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], KMTransaction.prototype, "income", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], KMTransaction.prototype, "cost", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], KMTransaction.prototype, "previousAmount", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Column"])({ nullable: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], KMTransaction.prototype, "newAmount", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_1__["Picture"]; }, function (picture) { return picture.kmTransaction; }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_3__["Picture"]; }, function (picture) { return picture.kmTransaction; }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], KMTransaction.prototype, "pictures", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["ManyToOne"])(function (type) { return _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]; }, function (kid) { return kid.transactions; }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]; }, function (kid) { return kid.transactions; }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"] !== "undefined" && _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]) === "function" ? _a : Object)
     ], KMTransaction.prototype, "kid", void 0);
     KMTransaction = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["Entity"])()
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
     ], KMTransaction);
     return KMTransaction;
-}(_base__WEBPACK_IMPORTED_MODULE_3__["BaseModel"]));
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
 
 
 

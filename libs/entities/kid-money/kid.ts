@@ -25,6 +25,9 @@ export class Kid extends BaseModel {
 	gender?: string;
 
 	@Column({ nullable: true })
+	notes?: string;
+
+	@Column({ nullable: true })
 	money?: number;
 
 	@OneToMany((type) => KMTransaction, (kmTransaction) => kmTransaction.kid)
