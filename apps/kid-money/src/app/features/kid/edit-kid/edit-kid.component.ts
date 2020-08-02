@@ -16,6 +16,7 @@ import { take } from 'rxjs/operators';
 						styleClass="ui-card-shadow bg-white mt-3 mb-3"
 					>
 						<form
+							*ngIf="kidForm"
 							[formGroup]="kidForm"
 							(ngSubmit)="onSubmit()"
 							class="d-flex flex-wrap"
@@ -66,7 +67,9 @@ import { take } from 'rxjs/operators';
 										[touchUI]="true"
 										[monthNavigator]="true"
 										[yearNavigator]="true"
+										yearRange="1950:2030"
 										[showTime]="true"
+										[showButtonBar]="true"
 										class="w-100"
 									></p-calendar>
 									<label for="lastName">Birthday</label>
@@ -164,7 +167,7 @@ import { take } from 'rxjs/operators';
 	encapsulation: ViewEncapsulation.None
 })
 export class EditKidComponent implements OnInit, OnDestroy {
-	kidForm: FormGroup = this.fb.group({});
+	kidForm: FormGroup;
 
 	kids$;
 	activeKid$;
@@ -199,18 +202,28 @@ export class EditKidComponent implements OnInit, OnDestroy {
 
 	createKidForm(kid?: Kid) {
 		if (!kid) {
-			this.kidForm = this.fb.group({});
+			this.kidForm = this.fb.group({
+				id: '',
+				firstName: '',
+				lastName: '',
+				birthday: null,
+				gender: '',
+				notes: '',
+				money: '',
+				transactions: [],
+				pictures: []
+			});
 			return;
 		}
 		this.kidForm = this.fb.group({
 			id: kid.id,
 			firstName: kid.firstName || '',
 			lastName: kid.lastName || '',
-			birthday: kid.birthday || null,
+			birthday: kid.birthday ? new Date(kid.birthday) : null,
 			gender: kid.gender || '',
 			notes: kid.notes || '',
 			money: kid.money || '',
-			transaction: kid.transactions || [],
+			transaction: [],
 			pictures: kid.pictures || []
 		});
 	}

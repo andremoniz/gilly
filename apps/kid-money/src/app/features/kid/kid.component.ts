@@ -1,10 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Kid } from '@entities';
 import { DataService } from '@lib/data';
-import { SelectItem } from 'primeng/api/selectitem';
-
-import { KMTransaction } from './../../../../../../libs/entities/kid-money/km-transaction';
 
 @Component({
 	selector: 'kid',
