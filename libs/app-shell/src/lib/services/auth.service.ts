@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '@entities';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { AppShellModuleConfig } from '../app-shell.module';
@@ -14,7 +14,7 @@ export class AuthService {
 
 	private user: User;
 
-	userLoggedIn$: Subject<User> = new Subject<User>();
+	userLoggedIn$ = new BehaviorSubject<User>(null);
 
 	userExpiredCheck;
 	updateUserExpired;
@@ -26,6 +26,9 @@ export class AuthService {
 	) {
 		this.config = config;
 
+		if (this.getUser()) {
+			this.userLoggedIn$.next(this.getUser());
+		}
 		// this.userExpiredCheck = setInterval(() => { // Check every minute if user is still valid, if not then boot 'em
 		//   if (!this.user || this.isUserExpired) {
 		//     this.logout();
@@ -47,12 +50,12 @@ export class AuthService {
 		if (!user) return;
 
 		this.user = user;
-		localStorage.setItem('sof_login', JSON.stringify(this.user));
+		localStorage.setItem('dakimbo_login', JSON.stringify(this.user));
 		if (user) {
 			// if we have a user, then setup the expiry to auto update every minute
 			this.updateUserExpired = setInterval(() => {
 				this.user.expiry = new Date(new Date().getTime() + 60 * 60 * 1 * 1000);
-				localStorage.setItem('sof_login', JSON.stringify(this.user));
+				localStorage.setItem('dakimbo_login', JSON.stringify(this.user));
 			}, 60 * 1000);
 
 			this.userLoggedIn$.next(user);
@@ -60,7 +63,7 @@ export class AuthService {
 	}
 
 	getUser(): User {
-		const storedUser: User = JSON.parse(localStorage.getItem('sof_login'));
+		const storedUser: User = JSON.parse(localStorage.getItem('dakimbo_login'));
 
 		if (!storedUser) {
 			return null;
@@ -88,12 +91,14 @@ export class AuthService {
 		newUser.jwt = res.jwt;
 		newUser.expiry = new Date(new Date().getTime() + 60 * 60 * 1 * 1000); // set expiration to one hour later;
 		this.setUser(newUser);
+
+		this.router.navigate(['/']);
 	}
 
 	logout() {
 		this.user = null;
 		clearInterval(this.updateUserExpired);
-		localStorage.removeItem('sof_login');
+		localStorage.removeItem('dakimbo_login');
 		this.router.navigate(['/']);
 	}
 
@@ -109,7 +114,7 @@ export class AuthService {
 	handleUnauthorized() {
 		this.user = null;
 		clearInterval(this.updateUserExpired);
-		localStorage.removeItem('sof_login');
+		localStorage.removeItem('dakimbo_login');
 		this.router.navigate(['not-authorized']);
 	}
 
