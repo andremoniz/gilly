@@ -1,3 +1,4 @@
+import { Picture } from './_common/picture';
 import { MetricPageView } from './_metrics/metric-page-view';
 import { MetricPageVisit } from './_metrics/metric-page-visit';
 import { AuthAction } from './auth/auth-action';
@@ -6,6 +7,7 @@ import { AuthRole } from './auth/auth-role';
 import { AuthRolePermission } from './auth/auth-role-permission';
 import { User } from './auth/user';
 import { Kid } from './kid-money/kid';
+import { KMTransaction } from './kid-money/km-transaction';
 
 export const entityMap = {
 	// AUTH
@@ -19,8 +21,12 @@ export const entityMap = {
 	MetricPageView,
 	MetricPageVisit,
 
+	// COMMON
+	Picture,
+
 	// KID MONEY
-	Kid
+	Kid,
+	KMTransaction
 };
 
 export { User } from './auth/user';
@@ -30,4 +36,6 @@ export { AuthRole } from './auth/auth-role';
 export { AuthRolePermission } from './auth/auth-role-permission';
 export { MetricPageView } from './_metrics/metric-page-view';
 export { MetricPageVisit } from './_metrics/metric-page-visit';
+export { Picture } from './_common/picture';
 export { Kid } from './kid-money/kid';
+export { KMTransaction } from './kid-money/km-transaction';

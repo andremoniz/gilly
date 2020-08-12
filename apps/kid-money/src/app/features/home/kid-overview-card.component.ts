@@ -5,9 +5,9 @@ import { Kid } from '@entities';
 	selector: 'kid-overview-card',
 	template: `
 		<p-card
-			[header]="kid.firstName"
+			[header]="getKidFullName(kid)"
 			[subheader]="kid.birthday | date: 'mediumDate'"
-			styleClass="ui-card-shadow bg-white m-3"
+			styleClass="ui-card-shadow bg-white mt-3"
 			*ngIf="kid"
 		>
 			<p-header>
@@ -26,8 +26,9 @@ import { Kid } from '@entities';
 					<button
 						pButton
 						label="View"
-						icon="pi-eye"
+						icon="pi pi-eye"
 						class="bg-primary text-white"
+						[routerLink]="['/kid', kid.id]"
 					></button>
 				</div>
 			</p-footer>
@@ -41,4 +42,8 @@ export class KidOverviewCardComponent implements OnInit {
 	constructor() {}
 
 	ngOnInit(): void {}
+
+	getKidFullName() {
+		return Kid.getKidFullName(this.kid);
+	}
 }

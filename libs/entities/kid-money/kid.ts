@@ -1,9 +1,13 @@
-import { Entity, Column } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
+import { Picture } from '../_common/picture';
 import { BaseModel } from '../base';
+import { KMTransaction } from './km-transaction';
 
 @Entity()
 export class Kid extends BaseModel {
+	static displayName = 'Kid';
+
 	@Column({ nullable: true })
 	firstName: string;
 
@@ -23,11 +27,42 @@ export class Kid extends BaseModel {
 	gender?: string;
 
 	@Column({ nullable: true })
+	notes?: string;
+
+	@Column({ nullable: true, type: 'float4' })
 	money?: number;
 
-	// @Column({ nullable: true })
-	// pictures: string;
+	@OneToMany((type) => KMTransaction, (kmTransaction) => kmTransaction.kid, { cascade: true })
+	transactions?: KMTransaction[];
 
-	// @Column({ nullable: true })
-	// transactions: string;
+	@OneToMany((type) => Picture, (picture) => picture.kid, { cascade: true })
+	pictures?: Picture[];
+
+	static relationships = [
+		{ model: KMTransaction, name: 'transactions' },
+		{ model: Picture, name: 'pictures' }
+	];
+
+	static async preProcess?(entity, dbConnection) {
+		if (entity.firstName || entity.middleName || entity.lastName) {
+			entity.fullName = Kid.getKidFullName(entity);
+		} else if (entity.fullName) {
+			const nameSplit = entity.name.split(' ');
+			entity.firstName = nameSplit[0];
+			if (nameSplit.length > 2) {
+				entity.middleName = nameSplit[1];
+				for (let i = 2; i < nameSplit.length; i++) {
+					entity.lastName += nameSplit[i];
+				}
+			} else {
+				entity.lastName = nameSplit[1];
+			}
+		}
+	}
+
+	static getKidFullName(kid: Kid) {
+		return `${kid.firstName || ''}${kid.firstName ? ' ' : ''}${kid.middleName || ''}${
+			kid.middleName ? ' ' : ''
+		}${kid.lastName || ''}`;
+	}
 }

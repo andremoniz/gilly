@@ -14,9 +14,9 @@ import { KidOverviewCardComponent } from './kid-overview-card.component';
 		CommonModule,
 
 		CardModule,
+		ButtonModule,
 
 		PageContainerModule,
-		ButtonModule,
 
 		RouterModule.forChild([{ path: '', component: KMHomeComponent }])
 	],
