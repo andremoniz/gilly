@@ -6,7 +6,7 @@ import { DataImporterService } from './data-importer.service';
 	selector: 'data-importer-input',
 	template: `
 		<div class="w-100 border-bottom mb-1">
-			<nz-select
+			<!-- <nz-select
 				nzShowSearch
 				nzAllowClear
 				nzPlaceHolder="Select your import type"
@@ -18,7 +18,7 @@ import { DataImporterService } from './data-importer.service';
 					[nzLabel]="importType"
 					[nzValue]="importType"
 				></nz-option>
-			</nz-select>
+			</nz-select> -->
 		</div>
 
 		<ng-container [ngSwitch]="dataImportService.selectedImportType">

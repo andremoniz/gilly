@@ -5,7 +5,7 @@ import { DataImporterService } from './data-importer.service';
 @Component({
 	selector: 'data-importer-complete',
 	template: `
-		<nz-result
+		<!-- <nz-result
 			nzStatus="success"
 			nzTitle="Successfully Imported {{ dataImporterService.selectedImportType }} into {{
 				dataImporterService.targetTable
@@ -18,7 +18,7 @@ import { DataImporterService } from './data-importer.service';
 					Exit
 				</button>
 			</div>
-		</nz-result>
+		</nz-result> -->
 	`,
 	styles: [``]
 })

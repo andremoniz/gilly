@@ -16,14 +16,14 @@ import { AbstractDataImporterType } from './data-importer-type.abstract';
 
 		<div class="col-12 mt-3">
 			<label>Delimiter</label>
-			<nz-select [(ngModel)]="delimiter" (ngModelChange)="delimiterChange($event)">
+			<!-- <nz-select [(ngModel)]="delimiter" (ngModelChange)="delimiterChange($event)">
 				<nz-option
 					*ngFor="let do of delimitTypes"
 					[nzLabel]="do.label"
 					[nzValue]="do.delimit"
 				>
 				</nz-option>
-			</nz-select>
+			</nz-select> -->
 		</div>
 
 		<div class="col-12 mt-3 mb-5">

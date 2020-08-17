@@ -1,35 +1,48 @@
 <div class="d-flex align-items-center justify-content-center container h-100 login-page">
+	<div class="d-flex flex-column justify-content-center mt-3 mb-3" style="width: 50%;">
+		<h2 class="text-center border-bottom w-100 display-4">Login</h2>
 
-    <div class="d-flex flex-column justify-content-center mt-3 mb-3" style="width:50%;">
-        <h2 class="text-center border-bottom w-100 display-4">Login</h2>
+		<form
+			[formGroup]="loginForm"
+			class="d-flex flex-column"
+			(ngSubmit)="onSubmit()"
+			*ngIf="loginForm"
+		>
+			<span class="p-float-label">
+				<input id="float-input" type="text" pInputText formControlName="identifier" />
+				<label for="float-input">Username</label>
+				<small
+					class="p-invalid"
+					*ngIf="identifier.invalid && (identifier.dirty || identifier.touched)"
+				>
+					Please input your username or e-mail!
+				</small>
+			</span>
+			<span class="p-float-label">
+				<input id="float-input" type="password" pInputText formControlName="password" />
+				<label for="float-input">Password</label>
+				<small
+					class="p-invalid"
+					*ngIf="password.invalid && (password.dirty || password.touched)"
+				>
+					Please input your Password!
+				</small>
+			</span>
 
-        <form nz-form [formGroup]="loginForm" class="d-flex flex-column" (ngSubmit)="onSubmit()" *ngIf="loginForm">
-            <nz-form-item class="w-100">
-                <nz-form-control nzErrorTip="Please input your username or e-mail!">
-                    <nz-input-group>
-                        <input type="text" nz-input formControlName="identifier" placeholder="Username" />
-                    </nz-input-group>
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item class="w-100">
-                <nz-form-control nzErrorTip="Please input your Password!">
-                    <nz-input-group>
-                        <input type="password" nz-input formControlName="password" placeholder="Password" />
-                    </nz-input-group>
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-                <nz-form-control>
-                    <button class="bg-primary w-100 text-white"
-                        [disabled]="identifier.invalid || password.invalid">Log in</button>
-                    <!-- <a class="text-white">Forgot password</a> -->
-                </nz-form-control>
-            </nz-form-item>
+			<button
+				pButton
+				pRipple
+				type="button"
+				label="Primary"
+				class="p-button-raised p-button-text"
+				[disabled]="identifier.invalid || password.invalid"
+			>
+				Log In
+			</button>
 
-            <div class="text-danger mt-3" *ngIf="errorMsg">
-                {{errorMsg}}
-            </div>
-        </form>
-    </div>
-
+			<div class="text-danger mt-3" *ngIf="errorMsg">
+				{{ errorMsg }}
+			</div>
+		</form>
+	</div>
 </div>

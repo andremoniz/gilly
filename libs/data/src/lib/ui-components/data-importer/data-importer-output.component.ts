@@ -20,7 +20,7 @@ import { DataImporterService } from './data-importer.service';
 					Get Target Fields
 				</button>
 			</div>
-			<input
+			<!-- <input
 				nz-input
 				[(ngModel)]="dataImporterService.targetTable"
 				[nzAutocomplete]="auto"
@@ -30,7 +30,7 @@ import { DataImporterService } from './data-importer.service';
 				[nzDataSource]="dataImporterService.tables"
 				nzBackfill
 				#auto
-			></nz-autocomplete>
+			></nz-autocomplete> -->
 		</div>
 
 		<p class="ml-1" *ngIf="!dataImporterService.targetTable">

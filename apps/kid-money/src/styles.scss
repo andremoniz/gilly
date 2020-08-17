@@ -11,18 +11,15 @@ $info: #d23dff;
 @import '~bootstrap/scss/_utilities';
 @import '~bootstrap/scss/grid';
 
-@import '../../../node_modules/primeflex/primeflex.css';
-@import '../../../node_modules/primeicons/primeicons.css';
-@import '../../../node_modules/primeng/resources/primeng.min.css';
-
-@import './assets/styles/nova-dark/theme.css';
-
-@import '../../../node_modules/ng-zorro-antd/ng-zorro-antd.compact.min.css';
-
 @import '../../../libs/app-shell/src/index.scss';
+
+html {
+	font-size: 14px !important;
+}
 
 body {
 	// font-family: 'Bubblegum Sans';
+	font-family: verdana, arial, sans-serif;
 	background-color: $secondary;
 	// background-color: #dedede;
 }

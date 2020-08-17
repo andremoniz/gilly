@@ -24,12 +24,12 @@ import { getUniqueProps } from '@lib/utilities';
 				<input nz-input type="text" [(ngModel)]="urlToQuery" />
 			</div>
 
-			<nz-collapse [nzBordered]="false" class="w-100">
+			<!-- <nz-collapse [nzBordered]="false" class="w-100">
 				<nz-collapse-panel [nzHeader]="'URL Headers & Options'">
 					<label [title]="'Token for querying this URL'">Authorization Token</label>
 					<input nz-input type="text" [(ngModel)]="headers.authorizationToken" />
 				</nz-collapse-panel>
-			</nz-collapse>
+			</nz-collapse> -->
 		</div>
 
 		<div class="mt-1 d-flex justify-content-end">
@@ -51,14 +51,14 @@ import { getUniqueProps } from '@lib/utilities';
 			</button>
 		</div>
 
-		<nz-progress
+		<!-- <nz-progress
 			[nzPercent]="100"
 			[nzShowInfo]="false"
 			[nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"
 			nzStatus="active"
 			*ngIf="isQuerying"
 			class="w-100"
-		></nz-progress>
+		></nz-progress> -->
 
 		<ui-table [data]="dataInput" [displayOptions]="tableOptions" *ngIf="tableOptions && dataInput"></ui-table>
 	`
