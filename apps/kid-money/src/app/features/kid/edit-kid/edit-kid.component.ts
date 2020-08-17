@@ -13,7 +13,7 @@ import { take } from 'rxjs/operators';
 				<ng-template #main>
 					<p-card
 						[header]="'Edit ' + activeKid.firstName"
-						styleClass="ui-card-shadow bg-white mt-3 mb-3"
+						styleClass="bg-white mt-3 mb-3"
 					>
 						<form
 							*ngIf="kidForm"
@@ -40,7 +40,7 @@ import { take } from 'rxjs/operators';
 							</div>
 
 							<div class="mb-5 col-6">
-								<span class="ui-float-label">
+								<span class="p-float-label">
 									<input
 										pInputText
 										id="firstName"
@@ -52,7 +52,7 @@ import { take } from 'rxjs/operators';
 								</span>
 							</div>
 							<div class="mb-5 col-6">
-								<span class="ui-float-label">
+								<span class="p-float-label">
 									<input
 										pInputText
 										id="lastName"
@@ -65,7 +65,7 @@ import { take } from 'rxjs/operators';
 							</div>
 
 							<div class="mb-5 col-12">
-								<span class="ui-float-label">
+								<span class="p-float-label">
 									<p-calendar
 										formControlName="birthday"
 										[showIcon]="true"
@@ -82,7 +82,7 @@ import { take } from 'rxjs/operators';
 							</div>
 
 							<div class="mb-5 col-12">
-								<span class="ui-float-label w-100">
+								<span class="p-float-label w-100">
 									<p-dropdown
 										[options]="[
 											{ label: '', value: null },
@@ -97,7 +97,7 @@ import { take } from 'rxjs/operators';
 							</div>
 
 							<div class="mb-5 col-12">
-								<span class="ui-float-label">
+								<span class="p-float-label">
 									<textarea
 										pInputTextarea
 										id="notes"
@@ -150,19 +150,19 @@ import { take } from 'rxjs/operators';
 	`,
 	styles: [
 		`
-			body .ui-calendar.ui-calendar-w-btn .ui-inputtext {
+			body .p-calendar.p-calendar-w-btn .p-inputtext {
 				width: 87%;
 			}
 
-			.ui-calendar {
+			.p-calendar {
 				width: 100%;
 			}
 
-			.ui-dropdown {
+			.p-dropdown {
 				width: 100%;
 			}
 
-			.ui-inputnumber {
+			.p-inputnumber {
 				width: 100%;
 			}
 		`

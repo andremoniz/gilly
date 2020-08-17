@@ -28,7 +28,7 @@ import { DataService } from '@lib/data';
 	`,
 	styles: [
 		`
-			body .ui-dropdown {
+			body .p-dropdown {
 				width: 100%;
 			}
 		`

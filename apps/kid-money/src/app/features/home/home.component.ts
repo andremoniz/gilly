@@ -9,7 +9,7 @@ import { DataService } from '@lib/data';
 				<!-- <h2 class="ml-3">Kids</h2> -->
 			</ng-template>
 			<ng-template #main>
-				<div class="d-flex flex-wrap">
+				<div class="d-flex flex-wrap mb-3">
 					<kid-overview-card
 						[kid]="kid"
 						*ngFor="let kid of dataService.selectAll('Kid') | async"

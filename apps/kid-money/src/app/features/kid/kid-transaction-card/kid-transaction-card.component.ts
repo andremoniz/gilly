@@ -5,14 +5,14 @@ import { SelectItem } from 'primeng/api/selectitem';
 @Component({
 	selector: 'kid-transaction-card',
 	template: `
-		<p-card [header]="'Transactions'" styleClass="ui-card-shadow bg-white">
+		<p-card [header]="'Transactions'" styleClass="bg-white">
 			<div class="w-100 border-top">
 				<p-dataView
 					#transactionView
 					[value]="activeKid.transactions"
 					[paginator]="true"
 					[rows]="5"
-					paginatorPosition="both"
+					paginatorPosition="bottom"
 					filterBy="name,type"
 					[sortField]="sortField"
 					[sortOrder]="sortOrder"
@@ -30,8 +30,8 @@ import { SelectItem } from 'primeng/api/selectitem';
 							</div>
 
 							<div class="p-col-12 p-md-12">
-								<div class="ui-inputgroup w-100">
-									<span class="ui-inputgroup-addon">
+								<div class="p-inputgroup">
+									<span class="p-inputgroup-addon">
 										<i class="pi pi-search" style="line-height: 1.25;"> </i>
 									</span>
 									<input
@@ -39,7 +39,6 @@ import { SelectItem } from 'primeng/api/selectitem';
 										pInputText
 										placeholder="Search Transactions"
 										(input)="transactionView.filter($event.target.value)"
-										class="w-100"
 									/>
 								</div>
 							</div>
@@ -47,7 +46,10 @@ import { SelectItem } from 'primeng/api/selectitem';
 					</p-header>
 
 					<ng-template let-transaction pTemplate="listItem">
-						<kid-transaction-info [transaction]="transaction" class="w-100"></kid-transaction-info>
+						<kid-transaction-info
+							[transaction]="transaction"
+							class="w-100"
+						></kid-transaction-info>
 					</ng-template>
 				</p-dataView>
 			</div>
