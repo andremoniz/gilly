@@ -1157,7 +1157,7 @@ __webpack_require__(/*! dotenv */ "dotenv").config();
                 app.use(helmet__WEBPACK_IMPORTED_MODULE_6___default()());
                 app.use(compression__WEBPACK_IMPORTED_MODULE_3___default()());
                 app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.urlencoded({ extended: false }));
-                app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json());
+                app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json({ limit: '20mb' }));
                 app.use(express__WEBPACK_IMPORTED_MODULE_5___default.a.static(__dirname + '/public'));
                 app.use('/', _routes__WEBPACK_IMPORTED_MODULE_8__["default"]);
                 app.get('*', function (req, res) {
@@ -1494,6 +1494,7 @@ var Picture = /** @class */ (function (_super) {
                 if (entity.name) {
                     entity.extension = entity.name.split('.')[1];
                 }
+                console.log(entity.file);
                 return [2 /*return*/];
             });
         });
@@ -1502,7 +1503,7 @@ var Picture = /** @class */ (function (_super) {
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-    ], Picture.prototype, "location", void 0);
+    ], Picture.prototype, "path", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
@@ -1511,10 +1512,6 @@ var Picture = /** @class */ (function (_super) {
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
     ], Picture.prototype, "extension", void 0);
-    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ type: 'bytea' }),
-        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
-    ], Picture.prototype, "data", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
@@ -2273,7 +2270,7 @@ var Kid = /** @class */ (function (_super) {
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], Kid.prototype, "transactions", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"]; }, function (picture) { return picture.kid; }, { cascade: true }),
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"]; }, function (picture) { return picture.kid; }, { eager: true, cascade: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], Kid.prototype, "pictures", void 0);
     Kid = Kid_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
