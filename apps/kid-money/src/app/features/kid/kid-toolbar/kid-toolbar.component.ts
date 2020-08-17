@@ -8,9 +8,9 @@ import { Kid } from '@entities';
 	template: `
 		<p-toolbar class="w-100">
 			<div class="w-100 d-flex align-items-center justify-content-between">
-				<div class="text-white">
+				<div>
 					<span style="font-size:1.5rem;font-weight:bold;">
-						{{ getKidFullName(activeKid) }}
+						{{ kidFullName }}
 					</span>
 				</div>
 
@@ -40,13 +40,19 @@ import { Kid } from '@entities';
 	styles: [``]
 })
 export class KidToolbarComponent implements OnInit {
-	@Input() activeKid: Kid;
+	_kid: Kid;
+	@Input()
+	set activeKid(kid) {
+		this._kid = kid;
+		this.kidFullName = Kid.getKidFullName(kid);
+	}
+	get activeKid() {
+		return this._kid;
+	}
+
+	kidFullName: string;
 
 	constructor(public kidService: KidService) {}
 
 	ngOnInit(): void {}
-
-	getKidFullName(kid: Kid) {
-		return Kid.getKidFullName(kid);
-	}
 }

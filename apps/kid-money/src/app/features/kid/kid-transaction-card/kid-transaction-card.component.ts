@@ -5,7 +5,7 @@ import { SelectItem } from 'primeng/api/selectitem';
 @Component({
 	selector: 'kid-transaction-card',
 	template: `
-		<p-card [header]="'Transactions'" styleClass="bg-white">
+		<p-card [header]="'Transactions'" styleClass="">
 			<div class="w-100 border-top">
 				<p-dataView
 					#transactionView

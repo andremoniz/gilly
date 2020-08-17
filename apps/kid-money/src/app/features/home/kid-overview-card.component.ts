@@ -7,7 +7,7 @@ import { Kid } from '@entities';
 		<p-card
 			[header]="getKidFullName(kid)"
 			[subheader]="kid.birthday | date: 'mediumDate'"
-			styleClass="bg-white mt-3"
+			styleClass="mt-3"
 			*ngIf="kid"
 		>
 			<p-header>
