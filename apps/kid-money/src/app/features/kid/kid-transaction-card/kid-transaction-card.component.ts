@@ -1,59 +1,57 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Kid, KMTransaction } from '@entities';
 import { SelectItem } from 'primeng/api/selectitem';
+
+import { Kid } from '../../../../../../../libs/entities/kid-money/kid';
 
 @Component({
 	selector: 'kid-transaction-card',
 	template: `
-		<p-card [header]="'Transactions'" styleClass="">
-			<div class="w-100 border-top">
-				<p-dataView
-					#transactionView
-					[value]="activeKid.transactions"
-					[paginator]="true"
-					[rows]="5"
-					paginatorPosition="bottom"
-					filterBy="name,type"
-					[sortField]="sortField"
-					[sortOrder]="sortOrder"
-				>
-					<p-header>
-						<div class="p-grid">
-							<div class="p-col-12 p-md-12 d-flex justify-content-center">
-								<p-dropdown
-									[options]="sortOptions"
-									[(ngModel)]="sortKey"
-									placeholder="Sort By"
-									(onChange)="onSortChange($event)"
-									class="w-100"
-								></p-dropdown>
-							</div>
-
-							<div class="p-col-12 p-md-12">
-								<div class="p-inputgroup">
-									<span class="p-inputgroup-addon">
-										<i class="pi pi-search" style="line-height: 1.25;"> </i>
-									</span>
-									<input
-										type="search"
-										pInputText
-										placeholder="Search Transactions"
-										(input)="transactionView.filter($event.target.value)"
-									/>
-								</div>
-							</div>
-						</div>
-					</p-header>
-
-					<ng-template let-transaction pTemplate="listItem">
-						<kid-transaction-info
-							[transaction]="transaction"
+		<p-dataView
+			#transactionView
+			[value]="activeKid.transactions"
+			[paginator]="true"
+			[rows]="5"
+			paginatorPosition="bottom"
+			filterBy="name,type"
+			[sortField]="sortField"
+			[sortOrder]="sortOrder"
+		>
+			<p-header>
+				<h2 class="border-bottom">Transactions</h2>
+				<div class="p-grid">
+					<div class="p-col-6 d-flex justify-content-center">
+						<p-dropdown
+							[options]="sortOptions"
+							[(ngModel)]="sortKey"
+							placeholder="Sort By"
+							(onChange)="onSortChange($event)"
 							class="w-100"
-						></kid-transaction-info>
-					</ng-template>
-				</p-dataView>
-			</div>
-		</p-card>
+						></p-dropdown>
+					</div>
+
+					<div class="p-col-6">
+						<div class="p-inputgroup">
+							<span class="p-inputgroup-addon">
+								<i class="pi pi-search" style="line-height: 1.25;"> </i>
+							</span>
+							<input
+								type="search"
+								pInputText
+								placeholder="Search Transactions"
+								(input)="transactionView.filter($event.target.value)"
+							/>
+						</div>
+					</div>
+				</div>
+			</p-header>
+
+			<ng-template let-transaction pTemplate="listItem">
+				<kid-transaction-info
+					[transaction]="transaction"
+					class="w-100"
+				></kid-transaction-info>
+			</ng-template>
+		</p-dataView>
 	`,
 	styles: [``]
 })

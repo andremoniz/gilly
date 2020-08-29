@@ -35,6 +35,11 @@ import { KidService } from './../kid.service';
 					></button>
 				</div>
 			</div>
+
+			<div class="w-100 border-top d-flex justify-content-between">
+				<h2>Money</h2>
+				<h4>{{ activeKid.money }}</h4>
+			</div>
 		</p-toolbar>
 	`,
 	styles: [``]

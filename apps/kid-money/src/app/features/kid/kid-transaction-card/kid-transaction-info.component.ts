@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 	selector: 'kid-transaction-info',
 	template: `
 		<div
-			class="p-col-12 d-flex align-items-center clickable"
+			class="p-col-12 d-flex align-items-center clickable border-bottom"
 			[routerLink]="['transaction', transaction.id]"
 		>
 			<div #transactionDate class="p-col-2">

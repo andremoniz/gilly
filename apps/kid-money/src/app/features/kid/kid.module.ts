@@ -21,7 +21,6 @@ import { PageContainerModule } from './../../../../../../libs/app-shell/src/lib/
 import { FormConfigService } from './../../../../../../libs/utilities/src/lib/services/form-config.service';
 import { EditKidComponent } from './edit-kid/edit-kid.component';
 import { EditTransactionComponent } from './edit-transaction/edit-transaction.component';
-import { KidMoneyCardComponent } from './kid-money-card/kid-money-card.component';
 import { KidToolbarComponent } from './kid-toolbar/kid-toolbar.component';
 import { KidTransactionCardComponent } from './kid-transaction-card/kid-transaction-card.component';
 import { KidTransactionInfoComponent } from './kid-transaction-card/kid-transaction-info.component';
@@ -31,7 +30,6 @@ import { KidComponent } from './kid.component';
 	declarations: [
 		KidComponent,
 		KidToolbarComponent,
-		KidMoneyCardComponent,
 		KidTransactionCardComponent,
 		KidTransactionInfoComponent,
 		EditKidComponent,
