@@ -38,7 +38,7 @@ export class KidService {
 			kid.transactions.push({ ...transaction, kid: <any>kid.id });
 		} else {
 			const transactionToUpdate = kid.transactions.find((t) => t.id === transaction.id);
-			Object.assign(transaction, transactionToUpdate);
+			Object.assign(transactionToUpdate, transaction);
 		}
 		this.saveKid(kid);
 	}

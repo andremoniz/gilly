@@ -1,14 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { KMTransaction } from './../../../../../../../libs/entities/kid-money/km-transaction';
+import { DatePipe } from '@angular/common';
 
 @Component({
 	selector: 'kid-transaction-info',
 	template: `
-		<div class="p-col-12 d-flex clickable" [routerLink]="['transaction', transaction.id]">
+		<div
+			class="p-col-12 d-flex align-items-center clickable"
+			[routerLink]="['transaction', transaction.id]"
+		>
 			<div #transactionDate class="p-col-2">
 				<small>
-					{{ transaction.createDate | date: 'shortDate' }}
+					{{ getTransactionDate(transaction) }}
 				</small>
 			</div>
 			<div #transactionInfo class="p-col-8">
@@ -29,9 +33,14 @@ import { KMTransaction } from './../../../../../../../libs/entities/kid-money/km
 export class KidTransactionInfoComponent implements OnInit {
 	@Input() transaction: KMTransaction;
 
-	constructor() {}
+	constructor(private datePipe: DatePipe) {}
 
 	ngOnInit(): void {}
+
+	getTransactionDate(transaction: KMTransaction) {
+		const date = transaction.transactionDate || transaction.createDate;
+		return this.datePipe.transform(date, 'shortDate');
+	}
 
 	getTransactionMoney(transaction: KMTransaction) {
 		if (transaction.cost) {

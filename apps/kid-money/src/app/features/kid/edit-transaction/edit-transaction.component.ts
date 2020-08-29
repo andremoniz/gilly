@@ -40,8 +40,11 @@ export class EditTransactionComponent implements OnInit {
 			const kidId = this.route.snapshot.paramMap.get('id');
 			const transactionId = this.route.snapshot.paramMap.get('tid');
 
-			if (kidId && transactionId) {
-				this.activeKid = this.dataService.selectOneValue('Kid', kidId);
+			if (kidId && kids) {
+				this.activeKid = kids.find((k) => k.id === kidId);
+			}
+
+			if (transactionId) {
 				if (this.activeKid && this.activeKid.transactions) {
 					this.transaction = this.activeKid.transactions.find(
 						(t) => t.id === transactionId
@@ -63,12 +66,14 @@ export class EditTransactionComponent implements OnInit {
 	}
 
 	onSubmit() {
-		this.kidService.saveTransaction(this.activeKid, this.transaction);
-    }
-    
+		this.kidService.saveTransaction(this.activeKid, this.transactionForm.value);
+		this.router.navigate(['kid', this.activeKid.id]);
+	}
+
 	onDelete() {
 		if (confirm(`Are you sure you want to delete this transaction?`)) {
 			this.kidService.removeTransaction(this.activeKid, this.transaction);
+			this.router.navigate(['kid', this.activeKid.id]);
 		}
 	}
 }
