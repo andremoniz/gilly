@@ -61,8 +61,8 @@ export class KidTransactionCardComponent implements OnInit {
 	@Input() activeKid: Kid;
 
 	sortOptions: SelectItem[] = [
-		{ label: 'Newest First', value: '!createDate' },
-		{ label: 'Oldest First', value: 'createDate' },
+		{ label: 'Newest First', value: '!transactionDate' },
+		{ label: 'Oldest First', value: 'transactionDate' },
 		{ label: 'Name', value: 'name' },
 		{ label: 'Type', value: 'type' },
 		{ label: 'Cost', value: 'cost' },

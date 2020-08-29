@@ -17,15 +17,15 @@ import { KidService } from './../kid.service';
 				<div>
 					<button
 						pButton
-						icon="pi pi-briefcase"
-						class="mr-1 p-button-rounded p-button-info p-button-text"
-					></button>
-					<button
-						pButton
 						icon="pi pi-pencil"
 						title="Edit a kid's information"
 						class="mr-3 p-button-rounded p-button-secondary p-button-text"
 						[routerLink]="['./edit']"
+					></button>
+					<button
+						pButton
+						icon="pi pi-briefcase"
+						class="mr-1 p-button-rounded p-button-info p-button-text"
 					></button>
 					<button
 						pButton

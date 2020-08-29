@@ -11,6 +11,11 @@ export class KidService {
 	constructor(private dataService: DataService, private messageService: MessageService) {}
 
 	saveKid(kid: Kid) {
+		if (!kid.id || kid.id === '') delete kid.id;
+		(kid.transactions || []).forEach((t) => {
+			if (!t.id || t.id === '') delete t.id;
+		});
+
 		this.dataService
 			.save(Kid, kid)
 			.pipe(take(1))
