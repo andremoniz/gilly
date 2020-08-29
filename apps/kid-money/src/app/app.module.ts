@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import {BreadcrumbModule} from 'primeng/breadcrumb';
 
 import { AppShellModule } from './../../../../libs/app-shell/src/lib/app-shell.module';
 import { AppLayoutModule } from './../../../../libs/app-shell/src/lib/components/app-layout/app-layout.module';
@@ -11,7 +12,6 @@ import { PageContainerModule } from './../../../../libs/app-shell/src/lib/compon
 import { environment } from './../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -23,6 +23,7 @@ import { CoreModule } from './core/core.module';
 		HttpClientModule,
 
 		ToastModule,
+		BreadcrumbModule,
 
 		AppShellModule.forRoot({
 			serverEndpoint: environment.serverUrl,
