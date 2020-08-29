@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { take } from 'rxjs/operators';
 
+import { FormConfigService } from '../../../../../../../libs/utilities/src/lib/services/form-config.service';
+import { KidService } from '../kid.service';
 import { DataService } from './../../../../../../../libs/data/src/lib/services/data/data.service';
 import { Kid } from './../../../../../../../libs/entities/kid-money/kid';
 
@@ -21,7 +22,8 @@ export class EditKidComponent implements OnInit, OnDestroy {
 
 	constructor(
 		public dataService: DataService,
-		private fb: FormBuilder,
+		public kidService: KidService,
+		private formConfigService: FormConfigService,
 		private messageService: MessageService,
 		private router: Router,
 		private route: ActivatedRoute
@@ -34,7 +36,7 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		});
 
 		this.activeKid$ = this.dataService.selectActive(Kid).subscribe((kid: Kid) => {
-			this.createKidForm(kid);
+			this.kidForm = this.formConfigService.createFormFromConfig(Kid.fieldConfig, kid);
 		});
 	}
 
@@ -47,53 +49,16 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	createKidForm(kid?: Kid) {
-		if (!kid) {
-			this.kidForm = this.fb.group({
-				id: '',
-				firstName: '',
-				lastName: '',
-				birthday: null,
-				gender: '',
-				notes: '',
-				money: '',
-				transactions: [],
-				pictures: []
-			});
-			return;
-		}
-		this.kidForm = this.fb.group({
-			id: kid.id,
-			firstName: kid.firstName || '',
-			lastName: kid.lastName || '',
-			birthday: kid.birthday ? new Date(kid.birthday) : null,
-			gender: kid.gender || '',
-			notes: kid.notes || '',
-			money: kid.money || '',
-			transaction: [],
-			pictures: kid.pictures || []
-		});
-
-		this.pictures = kid.pictures;
-	}
-
 	onSubmit() {
 		const updatedKid = { ...this.kidForm.value, pictures: this.pictures };
-		this.dataService
-			.save(Kid, updatedKid)
-			.pipe(take(1))
-			.subscribe((res: Kid) => {
-				this.router.navigate(['../'], { relativeTo: this.route });
-				this.messageService.add({
-					severity: 'success',
-					summary: 'Saved',
-					detail: `Successfully saved ${res.fullName}`
-				});
-			});
+		this.kidService.saveKid(updatedKid);
+		this.router.navigate(['../'], { relativeTo: this.route });
 	}
 
 	onDelete() {
-		console.log('Delete', this.kidForm.value);
+		if (confirm(`Are you sure you want to delete ${this.kidForm.get('firstName').value}?`)) {
+			this.kidService.deleteKid(this.kidForm.value);
+		}
 	}
 
 	async uploadPictures(event) {

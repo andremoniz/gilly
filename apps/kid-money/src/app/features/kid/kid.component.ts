@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Kid } from '@entities';
-import { DataService } from '@lib/data';
+
+import { DataService } from '../../../../../../libs/data/src/lib/services/data/data.service';
+import { Kid } from '../../../../../../libs/entities/kid-money/kid';
 
 @Component({
 	selector: 'kid',

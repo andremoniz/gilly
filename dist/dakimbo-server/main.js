@@ -2233,6 +2233,18 @@ var Kid = /** @class */ (function (_super) {
         { model: _km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"], name: 'transactions' },
         { model: _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"], name: 'pictures' }
     ];
+    Kid.fieldConfig = [
+        { key: 'firstName' },
+        { key: 'lastName' },
+        { key: 'middleName' },
+        { key: 'fullName' },
+        { key: 'birthday', type: 'date' },
+        { key: 'gender' },
+        { key: 'notes' },
+        { key: 'money' },
+        { key: 'transactions', type: 'array' },
+        { key: 'pictures', type: 'array' }
+    ];
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
@@ -2310,7 +2322,19 @@ var KMTransaction = /** @class */ (function (_super) {
     function KMTransaction() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var _a;
+    var _a, _b;
+    KMTransaction.displayName = 'KMTransaction';
+    // OTHER
+    KMTransaction.fieldConfig = [
+        { key: 'name', type: 'input' },
+        { key: 'type', type: 'input' },
+        { key: 'income', type: 'input' },
+        { key: 'cost', type: 'input' },
+        { key: 'previousAmount', type: 'input' },
+        { key: 'newAmount', type: 'input' },
+        { key: 'transactionDate', type: 'date' },
+        { key: 'pictures', type: 'array' }
+    ];
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
@@ -2336,12 +2360,16 @@ var KMTransaction = /** @class */ (function (_super) {
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], KMTransaction.prototype, "newAmount", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+    ], KMTransaction.prototype, "transactionDate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_3__["Picture"]; }, function (picture) { return picture.kmTransaction; }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
     ], KMTransaction.prototype, "pictures", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]; }, function (kid) { return kid.transactions; }),
-        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"] !== "undefined" && _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]) === "function" ? _a : Object)
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"] !== "undefined" && _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]) === "function" ? _b : Object)
     ], KMTransaction.prototype, "kid", void 0);
     KMTransaction = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()

@@ -6,6 +6,8 @@ import { Kid } from './kid';
 
 @Entity()
 export class KMTransaction extends BaseModel {
+	static displayName = 'KMTransaction';
+
 	@Column({ nullable: true })
 	name?: string;
 
@@ -19,14 +21,29 @@ export class KMTransaction extends BaseModel {
 	cost?: number;
 
 	@Column({ nullable: true })
-	previousAmount: number;
+	previousAmount?: number;
 
 	@Column({ nullable: true })
-	newAmount: number;
+	newAmount?: number;
+
+	@Column({ nullable: true })
+	transactionDate?: Date;
 
 	@OneToMany((type) => Picture, (picture) => picture.kmTransaction)
 	pictures?: Picture[];
 
 	@ManyToOne((type) => Kid, (kid) => kid.transactions)
-	kid: Kid;
+	kid?: Kid;
+
+	// OTHER
+	static fieldConfig = [
+		{ key: 'name', type: 'input' },
+		{ key: 'type', type: 'input' },
+		{ key: 'income', type: 'input' },
+		{ key: 'cost', type: 'input' },
+		{ key: 'previousAmount', type: 'input' },
+		{ key: 'newAmount', type: 'input' },
+		{ key: 'transactionDate', type: 'date' },
+		{ key: 'pictures', type: 'array' }
+	];
 }

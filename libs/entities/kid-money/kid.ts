@@ -1,3 +1,4 @@
+import { EntityFieldConfig } from './../base';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 import { Picture } from '../_common/picture';
@@ -65,4 +66,17 @@ export class Kid extends BaseModel {
 			kid.middleName ? ' ' : ''
 		}${kid.lastName || ''}`;
 	}
+
+	static fieldConfig: EntityFieldConfig[] = [
+		{ key: 'firstName' },
+		{ key: 'lastName' },
+		{ key: 'middleName' },
+		{ key: 'fullName' },
+		{ key: 'birthday', type: 'date' },
+		{ key: 'gender' },
+		{ key: 'notes' },
+		{ key: 'money' },
+		{ key: 'transactions', type: 'array' },
+		{ key: 'pictures', type: 'array' }
+	];
 }

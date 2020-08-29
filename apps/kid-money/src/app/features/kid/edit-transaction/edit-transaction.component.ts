@@ -1,27 +1,74 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
+import { Kid } from '../../../../../../../libs/entities/kid-money/kid';
+import { FormConfigService } from '../../../../../../../libs/utilities/src/lib/services/form-config.service';
 import { DataService } from './../../../../../../../libs/data/src/lib/services/data/data.service';
+import { KMTransaction } from './../../../../../../../libs/entities/kid-money/km-transaction';
+import { KidService } from './../kid.service';
 
 @Component({
 	selector: 'edit-transaction',
-	template: `Edit Transaction`,
+	templateUrl: './edit-transaction.component.html',
 	styles: [``]
 })
 export class EditTransactionComponent implements OnInit {
+	transactionForm: FormGroup;
+	transaction: KMTransaction;
+
+	kids$: Subscription;
+	activeKid: Kid;
+
 	constructor(
 		public dataService: DataService,
-		private fb: FormBuilder,
+		public kidService: KidService,
+		private formConfigService: FormConfigService,
 		private router: Router,
 		private route: ActivatedRoute
 	) {}
 
 	ngOnInit(): void {
-		this.route.paramMap.subscribe((params) => {
-			const transactionId = params.get('tid');
-			if (transactionId) {
+		this.transaction = new KMTransaction();
+		this.transactionForm = this.formConfigService.createFormFromConfig(
+			KMTransaction.fieldConfig,
+			this.transaction
+		);
+
+		const kids$ = this.dataService.selectAll('Kid').subscribe((kids: Kid[]) => {
+			const kidId = this.route.snapshot.paramMap.get('id');
+			const transactionId = this.route.snapshot.paramMap.get('tid');
+
+			if (kidId && transactionId) {
+				this.activeKid = this.dataService.selectOneValue('Kid', kidId);
+				if (this.activeKid && this.activeKid.transactions) {
+					this.transaction = this.activeKid.transactions.find(
+						(t) => t.id === transactionId
+					);
+
+					this.transactionForm = this.formConfigService.createFormFromConfig(
+						KMTransaction.fieldConfig,
+						this.transaction
+					);
+				}
 			}
 		});
+	}
+
+	ngOnDestroy() {
+		if (this.kids$) {
+			this.kids$.unsubscribe();
+		}
+	}
+
+	onDelete() {
+		if (confirm(`Are you sure you want to delete this transaction?`)) {
+			this.kidService.removeTransaction(this.activeKid, this.transaction);
+		}
+	}
+
+	onSave() {
+		this.kidService.saveTransaction(this.activeKid, this.transaction);
 	}
 }

@@ -1,0 +1,24 @@
+<lib-page-container>
+	<ng-template #main>
+		<p-card
+			[header]="(transaction.id ? 'Edit' : 'Create') + ' Transaction'"
+			styleClass="bg-white mt-3 mb-3"
+		>
+			<form
+				*ngIf="transactionForm"
+				[formGroup]="transactionForm"
+				(ngSubmit)="onSubmit()"
+				class="d-flex flex-wrap"
+			>
+		
+			</form>
+		</p-card>
+	</ng-template>
+	<ng-template #footer>
+		<edit-toolbar
+			(delete)="onDelete($event)"
+			(save)="onSubmit($event)"
+			[hideDelete]="!transaction.id"
+		></edit-toolbar>
+	</ng-template>
+</lib-page-container>

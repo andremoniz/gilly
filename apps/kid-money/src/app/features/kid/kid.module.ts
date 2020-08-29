@@ -16,7 +16,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
 
+import { CoreModule } from '../../core/core.module';
 import { PageContainerModule } from './../../../../../../libs/app-shell/src/lib/components/page-container/page-container.module';
+import { FormConfigService } from './../../../../../../libs/utilities/src/lib/services/form-config.service';
 import { EditKidComponent } from './edit-kid/edit-kid.component';
 import { EditTransactionComponent } from './edit-transaction/edit-transaction.component';
 import { KidMoneyCardComponent } from './kid-money-card/kid-money-card.component';
@@ -55,6 +57,8 @@ import { KidComponent } from './kid.component';
 
 		PageContainerModule,
 
+		CoreModule,
+
 		RouterModule.forChild([
 			{ path: '', component: KidComponent },
 			{ path: ':id', component: KidComponent },
@@ -72,6 +76,6 @@ import { KidComponent } from './kid.component';
 		])
 	],
 	exports: [],
-	providers: [MessageService]
+	providers: [MessageService, FormConfigService]
 })
 export class KidModule {}

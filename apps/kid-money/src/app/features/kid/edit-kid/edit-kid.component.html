@@ -72,10 +72,10 @@
 						<span class="p-float-label w-100">
 							<p-dropdown
 								[options]="[
-									{ label: '', value: null },
 									{ label: 'Male', value: 'M' },
 									{ label: 'Female', value: 'F' }
 								]"
+								[showClear]="true"
 								formControlName="gender"
 								class="w-100"
 							></p-dropdown>
@@ -115,22 +115,7 @@
 			</p-card>
 		</ng-template>
 		<ng-template #footer>
-			<div class="mt-1 w-100 d-flex">
-				<button
-					pButton
-					icon="pi pi-trash"
-					label="Delete"
-					(click)="onDelete()"
-					class="w-50 bg-danger"
-				></button>
-				<button
-					pButton
-					icon="pi pi-save"
-					label="Save"
-					(click)="onSubmit()"
-					class="w-50 ml-auto"
-				></button>
-			</div>
+			<edit-toolbar (delete)="onDelete($event)" (save)="onSubmit($event)"></edit-toolbar>
 		</ng-template>
 	</lib-page-container>
 </ng-container>
