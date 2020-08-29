@@ -25,7 +25,7 @@ import { KidService } from './../kid.service';
 					<button
 						pButton
 						icon="pi pi-briefcase"
-						class="mr-1 p-button-rounded p-button-info p-button-text"
+						class="mr-3 p-button-rounded p-button-info p-button-text"
 					></button>
 					<button
 						pButton

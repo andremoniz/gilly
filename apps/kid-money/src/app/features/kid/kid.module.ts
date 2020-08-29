@@ -15,6 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
 
 import { CoreModule } from '../../core/core.module';
 import { PageContainerModule } from './../../../../../../libs/app-shell/src/lib/components/page-container/page-container.module';
@@ -52,6 +53,7 @@ import { KidComponent } from './kid.component';
 		InputTextareaModule,
 		InputNumberModule,
 		FileUploadModule,
+		OverlayPanelModule,
 
 		PageContainerModule,
 
