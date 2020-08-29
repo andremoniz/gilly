@@ -1,7 +1,8 @@
-import { getUniqueProps } from '@lib/utilities';
-import { EntityFieldConfig } from './../../../../entities/base';
 import { Injectable } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { getUniqueProps } from '@lib/utilities';
+
+import { EntityFieldConfig } from './../../../../entities/base';
 
 @Injectable()
 export class FormConfigService {
@@ -21,9 +22,9 @@ export class FormConfigService {
 		let control: any;
 
 		if (field.type === 'date') {
-			control = entity ? new Date(entity[field.key]) : '';
+			control = entity && entity[field.key] ? new Date(entity[field.key]) : '';
 		} else if (field.type === 'array') {
-			control = this.createFormArrayItemControls(entity[field.key] || []);
+			control = this.createFormArrayItemControls(entity ? entity[field.key] : []);
 		} else {
 			control = entity ? entity[field.key] : '';
 		}
@@ -36,7 +37,7 @@ export class FormConfigService {
 			return { key: p };
 		});
 		const controls = [];
-		entities.forEach((e) => {
+		(entities || []).forEach((e) => {
 			controls.push(this.createFormFromConfig(props, e));
 		});
 		return this.fb.array(controls);

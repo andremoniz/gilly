@@ -62,13 +62,13 @@ export class EditTransactionComponent implements OnInit {
 		}
 	}
 
+	onSubmit() {
+		this.kidService.saveTransaction(this.activeKid, this.transaction);
+    }
+    
 	onDelete() {
 		if (confirm(`Are you sure you want to delete this transaction?`)) {
 			this.kidService.removeTransaction(this.activeKid, this.transaction);
 		}
-	}
-
-	onSave() {
-		this.kidService.saveTransaction(this.activeKid, this.transaction);
 	}
 }

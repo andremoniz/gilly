@@ -10,7 +10,28 @@
 				(ngSubmit)="onSubmit()"
 				class="d-flex flex-wrap"
 			>
-		
+				<div class="mb-5 col-12">
+					<span class="p-float-label">
+						<input pInputText id="name" type="text" formControlName="name" />
+						<label for="name">Transaction Name</label>
+					</span>
+				</div>
+
+				<div class="mb-5 col-12">
+					<span class="p-float-label">
+						<p-calendar
+							formControlName="transactionDate"
+							[showIcon]="true"
+							[touchUI]="true"
+							[monthNavigator]="true"
+							[yearNavigator]="true"
+							yearRange="1950:2030"
+							[showTime]="true"
+							[showButtonBar]="true"
+						></p-calendar>
+						<label for="lastName">Date of Transaction</label>
+					</span>
+				</div>
 			</form>
 		</p-card>
 	</ng-template>
