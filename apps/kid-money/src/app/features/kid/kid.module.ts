@@ -18,6 +18,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 
 import { PageContainerModule } from './../../../../../../libs/app-shell/src/lib/components/page-container/page-container.module';
 import { EditKidComponent } from './edit-kid/edit-kid.component';
+import { EditTransactionComponent } from './edit-transaction/edit-transaction.component';
 import { KidMoneyCardComponent } from './kid-money-card/kid-money-card.component';
 import { KidToolbarComponent } from './kid-toolbar/kid-toolbar.component';
 import { KidTransactionCardComponent } from './kid-transaction-card/kid-transaction-card.component';
@@ -31,7 +32,8 @@ import { KidComponent } from './kid.component';
 		KidMoneyCardComponent,
 		KidTransactionCardComponent,
 		KidTransactionInfoComponent,
-		EditKidComponent
+		EditKidComponent,
+		EditTransactionComponent
 	],
 	imports: [
 		CommonModule,
@@ -56,7 +58,17 @@ import { KidComponent } from './kid.component';
 		RouterModule.forChild([
 			{ path: '', component: KidComponent },
 			{ path: ':id', component: KidComponent },
-			{ path: ':id/edit', component: EditKidComponent, data: { breadcrumb: 'Edit Kid' } }
+			{ path: ':id/edit', component: EditKidComponent, data: { breadcrumb: 'Edit Kid' } },
+			{
+				path: ':id/transaction',
+				component: EditTransactionComponent,
+				data: { breadcrumb: 'Create Transaction' }
+			},
+			{
+				path: ':id/transaction/:tid',
+				component: EditTransactionComponent,
+				data: { breadcrumb: 'Edit Transaction' }
+			}
 		])
 	],
 	exports: [],

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { KMTransaction } from '@entities';
+
+import { KMTransaction } from './../../../../../../../libs/entities/kid-money/km-transaction';
 
 @Component({
 	selector: 'kid-transaction-info',
 	template: `
-		<div class="p-col-12 d-flex clickable">
+		<div class="p-col-12 d-flex clickable" [routerLink]="['transaction', transaction.id]">
 			<div #transactionDate class="p-col-2">
 				<small>
 					{{ transaction.createDate | date: 'shortDate' }}
