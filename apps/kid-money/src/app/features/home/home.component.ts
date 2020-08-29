@@ -1,5 +1,5 @@
+import { DataService } from './../../../../../../libs/data/src/lib/services/data/data.service';
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '@lib/data';
 
 @Component({
 	selector: 'km-home',

@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { PageContainerModule } from '@lib/app-shell';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -15,9 +14,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PanelModule } from 'primeng/panel';
-import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 
+import { PageContainerModule } from './../../../../../../libs/app-shell/src/lib/components/page-container/page-container.module';
 import { EditKidComponent } from './edit-kid/edit-kid.component';
 import { KidMoneyCardComponent } from './kid-money-card/kid-money-card.component';
 import { KidToolbarComponent } from './kid-toolbar/kid-toolbar.component';

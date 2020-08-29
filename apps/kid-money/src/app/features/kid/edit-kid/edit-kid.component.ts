@@ -1,175 +1,16 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Kid } from '@entities';
-import { DataService } from '@lib/data';
+import { MessageService } from 'primeng/api';
 import { take } from 'rxjs/operators';
 
-import { getBase64 } from './../../../../../../../libs/utilities/src/lib/utilities/getBase64';
+import { DataService } from './../../../../../../../libs/data/src/lib/services/data/data.service';
+import { Kid } from './../../../../../../../libs/entities/kid-money/kid';
 
 @Component({
 	selector: 'edit-kid',
-	template: `
-		<ng-container *ngIf="dataService.selectActive('Kid') | async as activeKid">
-			<lib-page-container>
-				<ng-template #main>
-					<p-card
-						[header]="'Edit ' + activeKid.firstName"
-						styleClass="bg-white mt-3 mb-3"
-					>
-						<form
-							*ngIf="kidForm"
-							[formGroup]="kidForm"
-							(ngSubmit)="onSubmit()"
-							class="d-flex flex-wrap"
-						>
-							<!-- <div *ngFor="let picture of pictures">
-								{{ picture.name }}
-								<img [src]="getPictureSrc(picture)" />
-							</div> -->
-
-							<div class="mb-5 col-12 border-bottom pb-3">
-								<p style="font-weight:bold;font-size:1.25;" for="money">
-									Current Money
-								</p>
-								<p-inputNumber
-									id="money"
-									formControlName="money"
-									class="w-100"
-									mode="decimal"
-									[maxFractionDigits]="2"
-								></p-inputNumber>
-							</div>
-
-							<div class="mb-5 col-6">
-								<span class="p-float-label">
-									<input
-										pInputText
-										id="firstName"
-										type="text"
-										formControlName="firstName"
-										class="w-100"
-									/>
-									<label for="firstName">First Name</label>
-								</span>
-							</div>
-							<div class="mb-5 col-6">
-								<span class="p-float-label">
-									<input
-										pInputText
-										id="lastName"
-										type="text"
-										formControlName="lastName"
-										class="w-100"
-									/>
-									<label for="lastName">Last Name</label>
-								</span>
-							</div>
-
-							<div class="mb-5 col-12">
-								<span class="p-float-label">
-									<p-calendar
-										formControlName="birthday"
-										[showIcon]="true"
-										[touchUI]="true"
-										[monthNavigator]="true"
-										[yearNavigator]="true"
-										yearRange="1950:2030"
-										[showTime]="true"
-										[showButtonBar]="true"
-										class="w-100"
-									></p-calendar>
-									<label for="lastName">Birthday</label>
-								</span>
-							</div>
-
-							<div class="mb-5 col-12">
-								<span class="p-float-label w-100">
-									<p-dropdown
-										[options]="[
-											{ label: '', value: null },
-											{ label: 'Male', value: 'M' },
-											{ label: 'Female', value: 'F' }
-										]"
-										formControlName="gender"
-										class="w-100"
-									></p-dropdown>
-									<label for="gender">Gender</label>
-								</span>
-							</div>
-
-							<div class="mb-5 col-12">
-								<span class="p-float-label">
-									<textarea
-										pInputTextarea
-										id="notes"
-										type="text"
-										formControlName="notes"
-										[autoResize]="true"
-										class="w-100"
-									></textarea>
-									<label for="notes">Notes</label>
-								</span>
-							</div>
-
-							<div class="mb-5 col-12">
-								<h4 class="w-100 border-bottom">Pictures</h4>
-								<p-fileUpload
-									#picauto
-									multiple="multiple"
-									accept="image/*"
-									maxFileSize="10000000"
-									[auto]="true"
-									chooseLabel="Browse Pictures"
-									customUpload="true"
-									(uploadHandler)="uploadPictures($event)"
-								>
-								</p-fileUpload>
-							</div>
-						</form>
-					</p-card>
-				</ng-template>
-				<ng-template #footer>
-					<div class="mt-1 w-100 d-flex">
-						<button
-							pButton
-							icon="pi pi-trash"
-							label="Delete"
-							(click)="onDelete()"
-							class="w-50 bg-danger"
-						></button>
-						<button
-							pButton
-							icon="pi pi-save"
-							label="Save"
-							(click)="onSubmit()"
-							class="w-50 ml-auto"
-						></button>
-					</div>
-				</ng-template>
-			</lib-page-container>
-		</ng-container>
-	`,
-	styles: [
-		`
-			body .p-calendar.p-calendar-w-btn .p-inputtext {
-				width: 87%;
-			}
-
-			.p-calendar {
-				width: 100%;
-			}
-
-			.p-dropdown {
-				width: 100%;
-			}
-
-			.p-inputnumber {
-				width: 100%;
-			}
-		`
-	],
-	encapsulation: ViewEncapsulation.None
+	templateUrl: `./edit-kid.component.html`,
+	styles: []
 })
 export class EditKidComponent implements OnInit, OnDestroy {
 	kidForm: FormGroup;
@@ -181,6 +22,7 @@ export class EditKidComponent implements OnInit, OnDestroy {
 	constructor(
 		public dataService: DataService,
 		private fb: FormBuilder,
+		private messageService: MessageService,
 		private router: Router,
 		private route: ActivatedRoute
 	) {}
@@ -240,8 +82,13 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		this.dataService
 			.save(Kid, updatedKid)
 			.pipe(take(1))
-			.subscribe((res) => {
-				console.log(res);
+			.subscribe((res: Kid) => {
+				this.router.navigate(['../'], { relativeTo: this.route });
+				this.messageService.add({
+					severity: 'success',
+					summary: 'Saved',
+					detail: `Successfully saved ${res.fullName}`
+				});
 			});
 	}
 
@@ -262,10 +109,6 @@ export class EditKidComponent implements OnInit, OnDestroy {
 	}
 
 	getPictureSrc(picture: any) {
-		return `data:image/jpg;base64,${this.toBase64(picture.data.data)}`;
-	}
-
-	toBase64(arr) {
-		return btoa(arr.reduce((data, byte) => data + String.fromCharCode(byte), ''));
+		return ``;
 	}
 }

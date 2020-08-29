@@ -23,3 +23,20 @@ body {
 	background-color: $secondary;
 	// background-color: #dedede;
 }
+
+// OVERRIDES
+body .p-calendar.p-calendar-w-btn .p-inputtext {
+	width: 87%;
+}
+
+.p-calendar {
+	width: 100%;
+}
+
+.p-dropdown {
+	width: 100%;
+}
+
+.p-inputnumber {
+	width: 100%;
+}

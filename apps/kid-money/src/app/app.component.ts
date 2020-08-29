@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Kid } from '@entities';
-import { AuthService } from '@lib/app-shell';
-import { DataService } from '@lib/data';
 import { take } from 'rxjs/operators';
+
+import { AuthService } from './../../../../libs/app-shell/src/lib/services/auth.service';
+import { DataService } from './../../../../libs/data/src/lib/services/data/data.service';
+import { Kid } from './../../../../libs/entities/kid-money/kid';
 
 @Component({
 	selector: 'gilly-root',

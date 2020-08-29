@@ -11,11 +11,11 @@ import { Kid } from '@entities';
 			*ngIf="kid"
 		>
 			<p-header>
-				<img [src]="kidPicture" height="300" />
+				<img [src]="kidPicture" height="300" *ngIf="kidPicture" />
 			</p-header>
 			<div>
-				<h4 class="w-100 border-bottom">Money</h4>
-				<h6>{{ kid.money }}</h6>
+				<h2 class="w-100 border-bottom">Money</h2>
+				<h4>{{ kid.money }}</h4>
 			</div>
 			<p-footer>
 				<div class="w-100 d-flex justify-content-end">
