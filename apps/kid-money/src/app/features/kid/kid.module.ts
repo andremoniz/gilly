@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { PageContainerModule } from '@lib/app-shell';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -15,11 +14,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PanelModule } from 'primeng/panel';
-import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
 
+import { CoreModule } from '../../core/core.module';
+import { PageContainerModule } from './../../../../../../libs/app-shell/src/lib/components/page-container/page-container.module';
+import { FormConfigService } from './../../../../../../libs/utilities/src/lib/services/form-config.service';
 import { EditKidComponent } from './edit-kid/edit-kid.component';
-import { KidMoneyCardComponent } from './kid-money-card/kid-money-card.component';
+import { EditTransactionComponent } from './edit-transaction/edit-transaction.component';
 import { KidToolbarComponent } from './kid-toolbar/kid-toolbar.component';
 import { KidTransactionCardComponent } from './kid-transaction-card/kid-transaction-card.component';
 import { KidTransactionInfoComponent } from './kid-transaction-card/kid-transaction-info.component';
@@ -29,10 +31,10 @@ import { KidComponent } from './kid.component';
 	declarations: [
 		KidComponent,
 		KidToolbarComponent,
-		KidMoneyCardComponent,
 		KidTransactionCardComponent,
 		KidTransactionInfoComponent,
-		EditKidComponent
+		EditKidComponent,
+		EditTransactionComponent
 	],
 	imports: [
 		CommonModule,
@@ -51,16 +53,29 @@ import { KidComponent } from './kid.component';
 		InputTextareaModule,
 		InputNumberModule,
 		FileUploadModule,
+		OverlayPanelModule,
 
 		PageContainerModule,
+
+		CoreModule,
 
 		RouterModule.forChild([
 			{ path: '', component: KidComponent },
 			{ path: ':id', component: KidComponent },
-			{ path: ':id/edit', component: EditKidComponent, data: { breadcrumb: 'Edit Kid' } }
+			{ path: ':id/edit', component: EditKidComponent, data: { breadcrumb: 'Edit Kid' } },
+			{
+				path: ':id/transaction',
+				component: EditTransactionComponent,
+				data: { breadcrumb: 'Create Transaction' }
+			},
+			{
+				path: ':id/transaction/:tid',
+				component: EditTransactionComponent,
+				data: { breadcrumb: 'Edit Transaction' }
+			}
 		])
 	],
 	exports: [],
-	providers: [MessageService]
+	providers: [MessageService, FormConfigService]
 })
 export class KidModule {}

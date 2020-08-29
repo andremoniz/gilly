@@ -5,21 +5,17 @@ import { Kid } from '@entities';
 	selector: 'kid-overview-card',
 	template: `
 		<p-card
-			[header]="getKidFullName(kid)"
+			[header]="kidFullName"
 			[subheader]="kid.birthday | date: 'mediumDate'"
-			styleClass="ui-card-shadow bg-white mt-3"
+			styleClass="mt-3"
 			*ngIf="kid"
 		>
 			<p-header>
-				<!-- <img
-					src="Card"
-					src="assets/images/daiga-ellaby-JZ51o_-UOY8-unsplash.jpg"
-					height="300"
-				/> -->
+				<img [src]="kidPicture" height="300" *ngIf="kidPicture" />
 			</p-header>
 			<div>
-				<h4 class="w-100 border-bottom">Money</h4>
-				<h6>{{ kid.money }}</h6>
+				<h2 class="w-100 border-bottom">Money</h2>
+				<h4>{{ kid.money }}</h4>
 			</div>
 			<p-footer>
 				<div class="w-100 d-flex justify-content-end">
@@ -37,13 +33,24 @@ import { Kid } from '@entities';
 	styles: [``]
 })
 export class KidOverviewCardComponent implements OnInit {
-	@Input() kid: Kid;
+	_kid: Kid;
+	@Input()
+	set kid(k: Kid) {
+		this.kidFullName = Kid.getKidFullName(k);
+		if (k.pictures && k.pictures.length) {
+			this.kidPicture = k.pictures[0].path;
+		}
+		this._kid = k;
+	}
+	get kid(): Kid {
+		return this._kid;
+	}
+
+	kidFullName;
+
+	kidPicture;
 
 	constructor() {}
 
 	ngOnInit(): void {}
-
-	getKidFullName() {
-		return Kid.getKidFullName(this.kid);
-	}
 }

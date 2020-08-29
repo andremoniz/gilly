@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FilterSortService } from 'libs/utilities/src/lib/services/filter-sort.service';
+import { UtilityService } from 'libs/utilities/src/lib/services/utility.service';
 
-import { UtilityService } from '../../../../../utilities/src/lib/services/utility.service';
 import { UIVisualizationBase, UIVisualizationConfig } from '../ui-visualization.base';
 import { UITableColumn } from './ui-table.interface';
 
@@ -11,80 +11,7 @@ import { UITableColumn } from './ui-table.interface';
 	template: `
 		<ui-visualization (dimensionChange)="handleDimensionChange($event)">
 			<ng-template #vis>
-				<nz-table
-					*ngIf="config && viewDimensions"
-					#uiTable
-					nzBordered
-					[nzTitle]="displayOptions.title"
-					[nzSize]="displayOptions.tableSize || 'small'"
-					[nzData]="filteredData"
-					[nzPageSize]="displayOptions.defaultPageSize || 5"
-					[nzPageSizeOptions]="[5, 10, 25, 100]"
-					[nzShowSizeChanger]="true"
-					[nzShowQuickJumper]="false"
-					[nzScroll]="getScrollObject()"
-				>
-					<thead (nzSortChange)="sort($event)">
-						<tr>
-							<th
-								*ngFor="let column of displayOptions.columns"
-								[nzWidth]="column.width"
-								[nzColumnKey]="column.prop || column.name"
-								nzShowSort
-								[nzShowFilter]="!displayOptions.hideFilter"
-								[nzFilters]="filterMap[column.prop]"
-								(nzFilterChange)="filter($event, column.prop)"
-							>
-								{{ column.name || utils.prettyPrint(column.prop) }}
-							</th>
-
-							<th *ngIf="displayOptions.showAdd">
-								<button
-									nz-button
-									class="bg-primary text-white d-flex justify-content-center align-items-center h-100 w-100"
-									(click)="rowAdd.emit(true)"
-									title="Add a row..."
-								>
-									<i
-										nz-icon
-										nzType="file-add"
-										nzTheme="outline"
-										class="w-100"
-									></i>
-								</button>
-							</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<tr *ngFor="let d of uiTable.data">
-							<td
-								*ngFor="let column of displayOptions.columns"
-								(click)="handleCellClick(d, column)"
-								[style.background-color]="
-									column.styleBackground
-										? utils.getColorForPercentage(d[column.prop || column.name])
-										: ''
-								"
-							>
-								<ng-container *ngIf="!column.styleBackground">
-									{{ getCellData(d, column) }}
-								</ng-container>
-							</td>
-
-							<td *ngIf="displayOptions.showDelete">
-								<button
-									nz-button
-									class="bg-danger text-white w-100 d-flex justify-content-center align-items-center"
-									(click)="rowDelete.emit(d)"
-									title="Delete this row..."
-								>
-									<i nz-icon nzType="delete" nzTheme="outline"></i>
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</nz-table>
+				UNDER CONSTRUCTION
 			</ng-template>
 		</ui-visualization>
 	`,

@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <lib-page-container>
 	<ng-template #header>
 		<div class="w-100 bg-primary shadow-lg">
@@ -5,6 +6,7 @@
 		</div>
 	</ng-template>
 	<ng-template #main>
+		<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 		<router-outlet></router-outlet>
 	</ng-template>
 </lib-page-container>

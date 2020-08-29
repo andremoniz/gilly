@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd';
 import { debounceTime } from 'rxjs/operators';
 
 import { FilterSortService } from './../../../../utilities/src/lib/services/filter-sort.service';
@@ -11,9 +10,9 @@ import { UIFilterService } from './ui-filter.service';
 	selector: 'ui-filter',
 	template: `
 		<div class="w-100">
-			<nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+			<!-- <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
 				<input [formControl]="filterControl" type="text" nz-input placeholder="Search..." />
-			</nz-input-group>
+			</nz-input-group> -->
 			<ng-template #suffixIconButton>
 				<button
 					nz-button
@@ -48,7 +47,6 @@ export class UIFilterComponent implements OnInit {
 		public uiFilterService: UIFilterService,
 		private cdRef: ChangeDetectorRef,
 		private fs: FilterSortService,
-		private modal: NzModalService,
 		private viewContainerRef: ViewContainerRef
 	) {}
 
@@ -79,26 +77,26 @@ export class UIFilterComponent implements OnInit {
 	}
 
 	showFilterDialog() {
-		const modal = this.modal.create({
-			nzTitle: 'Filter Menu',
-			nzContent: UIFilterMenuComponent,
-			nzViewContainerRef: this.viewContainerRef,
-			nzComponentParams: {
-				data: this.uiFilterService.originalData
-			},
-			nzWidth: '75%',
-			nzBodyStyle: {
-				height: '75vh',
-				overflowY: 'auto'
-			},
-			nzFooter: [
-				{
-					label: 'Close',
-					onClick: () => modal.destroy()
-				}
-			]
-		});
+		// const modal = this.modal.create({
+		// 	nzTitle: 'Filter Menu',
+		// 	nzContent: UIFilterMenuComponent,
+		// 	nzViewContainerRef: this.viewContainerRef,
+		// 	nzComponentParams: {
+		// 		data: this.uiFilterService.originalData
+		// 	},
+		// 	nzWidth: '75%',
+		// 	nzBodyStyle: {
+		// 		height: '75vh',
+		// 		overflowY: 'auto'
+		// 	},
+		// 	nzFooter: [
+		// 		{
+		// 			label: 'Close',
+		// 			onClick: () => modal.destroy()
+		// 		}
+		// 	]
+		// });
 
-		const instance = modal.getContentComponent();
+		// const instance = modal.getContentComponent();
 	}
 }

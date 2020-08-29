@@ -1,3 +1,4 @@
+import { EntityFieldConfig } from './../base';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 import { Picture } from '../_common/picture';
@@ -35,7 +36,7 @@ export class Kid extends BaseModel {
 	@OneToMany((type) => KMTransaction, (kmTransaction) => kmTransaction.kid, { cascade: true })
 	transactions?: KMTransaction[];
 
-	@OneToMany((type) => Picture, (picture) => picture.kid, { cascade: true })
+	@OneToMany((type) => Picture, (picture) => picture.kid, { eager: true, cascade: true })
 	pictures?: Picture[];
 
 	static relationships = [
@@ -65,4 +66,17 @@ export class Kid extends BaseModel {
 			kid.middleName ? ' ' : ''
 		}${kid.lastName || ''}`;
 	}
+
+	static fieldConfig: EntityFieldConfig[] = [
+		{ key: 'firstName' },
+		{ key: 'lastName' },
+		{ key: 'middleName' },
+		{ key: 'fullName' },
+		{ key: 'birthday', type: 'date' },
+		{ key: 'gender' },
+		{ key: 'notes' },
+		{ key: 'money' },
+		{ key: 'transactions', type: 'array' },
+		{ key: 'pictures', type: 'array' }
+	];
 }

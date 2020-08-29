@@ -1,6 +1,6 @@
 export function getUniqueProps(data: any[]): string[] {
 	let uniqueMap = {};
-	data.forEach((d) => {
+	(data || []).forEach((d) => {
 		Object.keys(d).forEach((k) => {
 			uniqueMap[k] = true;
 		});

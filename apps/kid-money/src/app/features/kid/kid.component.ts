@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Kid } from '@entities';
-import { DataService } from '@lib/data';
+
+import { DataService } from '../../../../../../libs/data/src/lib/services/data/data.service';
+import { Kid } from '../../../../../../libs/entities/kid-money/kid';
 
 @Component({
 	selector: 'kid',
@@ -12,10 +13,6 @@ import { DataService } from '@lib/data';
 					<kid-toolbar [activeKid]="activeKid" class="w-100"></kid-toolbar>
 				</ng-template>
 				<ng-template #main>
-					<div class="mt-3 w-100">
-						<kid-money-card [activeKid]="activeKid"></kid-money-card>
-					</div>
-
 					<div class="mt-3 mb-3 w-100">
 						<kid-transaction-card [activeKid]="activeKid"></kid-transaction-card>
 					</div>
@@ -28,7 +25,7 @@ import { DataService } from '@lib/data';
 	`,
 	styles: [
 		`
-			body .ui-dropdown {
+			body .p-dropdown {
 				width: 100%;
 			}
 		`

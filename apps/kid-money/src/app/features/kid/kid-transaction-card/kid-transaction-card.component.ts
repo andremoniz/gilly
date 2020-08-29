@@ -1,25 +1,41 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Kid, KMTransaction } from '@entities';
 import { SelectItem } from 'primeng/api/selectitem';
+
+import { Kid } from '../../../../../../../libs/entities/kid-money/kid';
 
 @Component({
 	selector: 'kid-transaction-card',
 	template: `
-		<p-card [header]="'Transactions'" styleClass="ui-card-shadow bg-white">
-			<div class="w-100 border-top">
-				<p-dataView
-					#transactionView
-					[value]="activeKid.transactions"
-					[paginator]="true"
-					[rows]="5"
-					paginatorPosition="both"
-					filterBy="name,type"
-					[sortField]="sortField"
-					[sortOrder]="sortOrder"
+		<p-dataView
+			#transactionView
+			[value]="activeKid.transactions"
+			[paginator]="true"
+			[rows]="5"
+			paginatorPosition="bottom"
+			filterBy="name,type"
+			[sortField]="sortField"
+			[sortOrder]="sortOrder"
+		>
+			<p-header>
+				<div
+					#controls
+					class="w-100 d-flex justify-content-between align-items center border-bottom"
 				>
-					<p-header>
+					<h2>Transactions</h2>
+					<button
+						pButton
+						pRipple
+						type="button"
+						icon="pi pi-cog"
+						class="p-button-rounded p-button-secondary p-button-text"
+						(click)="tControls.show($event)"
+					></button>
+				</div>
+
+				<p-overlayPanel #tControls [showCloseIcon]="true" [appendTo]="controls">
+					<ng-template pTemplate>
 						<div class="p-grid">
-							<div class="p-col-12 p-md-12 d-flex justify-content-center">
+							<div class="p-col-12 d-flex justify-content-center">
 								<p-dropdown
 									[options]="sortOptions"
 									[(ngModel)]="sortKey"
@@ -29,29 +45,32 @@ import { SelectItem } from 'primeng/api/selectitem';
 								></p-dropdown>
 							</div>
 
-							<div class="p-col-12 p-md-12">
-								<div class="ui-inputgroup w-100">
-									<span class="ui-inputgroup-addon">
+							<div class="p-col-12">
+								<div class="p-inputgroup">
+									<span class="p-inputgroup-addon">
 										<i class="pi pi-search" style="line-height: 1.25;"> </i>
 									</span>
 									<input
 										type="search"
 										pInputText
-										placeholder="Search Transactions"
+										placeholder="Search"
+										[(ngModel)]="transactionSearchValue"
 										(input)="transactionView.filter($event.target.value)"
-										class="w-100"
 									/>
 								</div>
 							</div>
 						</div>
-					</p-header>
-
-					<ng-template let-transaction pTemplate="listItem">
-						<kid-transaction-info [transaction]="transaction" class="w-100"></kid-transaction-info>
 					</ng-template>
-				</p-dataView>
-			</div>
-		</p-card>
+				</p-overlayPanel>
+			</p-header>
+
+			<ng-template let-transaction pTemplate="listItem">
+				<kid-transaction-info
+					[transaction]="transaction"
+					class="w-100"
+				></kid-transaction-info>
+			</ng-template>
+		</p-dataView>
 	`,
 	styles: [``]
 })
@@ -59,8 +78,8 @@ export class KidTransactionCardComponent implements OnInit {
 	@Input() activeKid: Kid;
 
 	sortOptions: SelectItem[] = [
-		{ label: 'Newest First', value: '!createDate' },
-		{ label: 'Oldest First', value: 'createDate' },
+		{ label: 'Newest First', value: '!transactionDate' },
+		{ label: 'Oldest First', value: 'transactionDate' },
 		{ label: 'Name', value: 'name' },
 		{ label: 'Type', value: 'type' },
 		{ label: 'Cost', value: 'cost' },
@@ -69,6 +88,8 @@ export class KidTransactionCardComponent implements OnInit {
 	sortField: string;
 	sortOrder: number;
 	sortKey: string;
+
+	transactionSearchValue: string;
 
 	constructor() {}
 

@@ -20,7 +20,7 @@ import { TimePeriods, UITimelineDisplayOptions } from './ui-timeline.interface';
 					</div>
 
 					<div id="rightItems" class="d-flex">
-						<nz-slider
+						<!-- <nz-slider
 							[nzMin]="14"
 							[nzMax]="28"
 							class="mr-3"
@@ -45,7 +45,7 @@ import { TimePeriods, UITimelineDisplayOptions } from './ui-timeline.interface';
 								<nz-option nzValue="month" nzLabel="Month"></nz-option>
 								<nz-option nzValue="year" nzLabel="Year"></nz-option>
 							</nz-select>
-						</div>
+						</div> -->
 
 						<!-- <button
 						nz-button

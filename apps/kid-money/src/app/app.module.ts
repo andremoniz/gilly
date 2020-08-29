@@ -2,10 +2,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppLayoutModule, AppShellModule, PageContainerModule } from '@lib/app-shell';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import {BreadcrumbModule} from 'primeng/breadcrumb';
 
+import { AppShellModule } from './../../../../libs/app-shell/src/lib/app-shell.module';
+import { AppLayoutModule } from './../../../../libs/app-shell/src/lib/components/app-layout/app-layout.module';
+import { PageContainerModule } from './../../../../libs/app-shell/src/lib/components/page-container/page-container.module';
 import { environment } from './../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +22,9 @@ import { AppComponent } from './app.component';
 		AppRoutingModule,
 		HttpClientModule,
 
+		ToastModule,
+		BreadcrumbModule,
+
 		AppShellModule.forRoot({
 			serverEndpoint: environment.serverUrl,
 			dataEndpoint: environment.dataUrl,
@@ -29,7 +35,7 @@ import { AppComponent } from './app.component';
 		AppLayoutModule,
 		PageContainerModule
 	],
-	providers: [],
+	providers: [MessageService],
 	bootstrap: [AppComponent]
 })
 export class AppModule {}

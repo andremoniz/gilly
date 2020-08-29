@@ -1,14 +1,56 @@
 import { Injectable } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { take } from 'rxjs/operators';
+
+import { Kid } from '../../../../../../libs/entities/kid-money/kid';
+import { KMTransaction } from '../../../../../../libs/entities/kid-money/km-transaction';
+import { DataService } from './../../../../../../libs/data/src/lib/services/data/data.service';
 
 @Injectable({ providedIn: 'root' })
 export class KidService {
-	constructor() {}
+	constructor(private dataService: DataService, private messageService: MessageService) {}
 
-	createTransaction() {
-		console.log('Create Transaction!');
+	saveKid(kid: Kid) {
+		if (!kid.id || kid.id === '') delete kid.id;
+		(kid.transactions || []).forEach((t) => {
+			if (!t.id || t.id === '') delete t.id;
+		});
+
+		this.dataService
+			.save(Kid, kid)
+			.pipe(take(1))
+			.subscribe((res: Kid) => {
+				this.messageService.add({
+					severity: 'success',
+					summary: 'Saved',
+					detail: `Successfully saved ${res.fullName}`
+				});
+				console.log('SAVE:', res);
+			});
 	}
 
-	showChores() {
-		console.log('Show Chores');
+	deleteKid(kid: Kid) {
+		this.dataService
+			.delete(Kid, kid)
+			.pipe(take(1))
+			.subscribe((res) => {
+				console.log('DELETE:', res);
+			});
+	}
+
+	saveTransaction(kid: Kid, transaction: KMTransaction) {
+		if (!transaction.id) {
+			kid.transactions.push({ ...transaction, kid: <any>kid.id });
+		} else {
+			const transactionToUpdate = kid.transactions.find((t) => t.id === transaction.id);
+			Object.assign(transactionToUpdate, transaction);
+		}
+		this.saveKid(kid);
+	}
+
+	removeTransaction(kid: Kid, transaction: KMTransaction) {
+		if (!kid.transactions) return;
+		kid.transactions = kid.transactions.filter((t) => t.id !== transaction.id);
+		this.saveKid(kid);
 	}
 }

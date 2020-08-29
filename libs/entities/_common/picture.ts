@@ -7,16 +7,13 @@ import { KMTransaction } from '../kid-money/km-transaction';
 @Entity()
 export class Picture extends BaseModel {
 	@Column({ nullable: true })
-	location?: string;
+	path?: string;
 
 	@Column({ nullable: true })
 	name: string;
 
 	@Column({ nullable: true })
 	extension?: string;
-
-	@Column({ type: 'bytea' })
-	data?: string;
 
 	@Column({ nullable: true })
 	lastModifiedDate?: Date;
@@ -31,19 +28,12 @@ export class Picture extends BaseModel {
 	@ManyToOne((type) => KMTransaction, (kmTransaction) => kmTransaction.pictures)
 	kmTransaction: KMTransaction;
 
+	file?: any;
+
 	static async preProcess?(entity, dbConnection) {
 		if (entity.name) {
 			entity.extension = entity.name.split('.')[1];
 		}
+		console.log(entity.file);
 	}
-
-	// @Column('bytea', { nullable: false, name: 'Content' })
-	// contentHex?: string;
-
-	// private _Content: Buffer | undefined;
-
-	// get Content(): Buffer {
-	// 	if (!this._Content) this._Content = new Buffer(this.contentHex, 'hex');
-	// 	return this._Content;
-	// }
 }

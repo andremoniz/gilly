@@ -86,7 +86,7 @@ export class UtilityService {
 	getPropertyTypesForArray(arr: any[] = [], ignoreProps: string[] = []) {
 		const propTypeMap = {};
 
-		arr.forEach((d) => {
+		(arr || []).forEach((d) => {
 			const oTypeMap = this.getPropertyTypes(d, ignoreProps);
 			Object.assign(propTypeMap, oTypeMap);
 		});

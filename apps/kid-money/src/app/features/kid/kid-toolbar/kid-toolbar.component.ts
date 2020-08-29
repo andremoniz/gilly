@@ -1,52 +1,63 @@
-import { KidService } from './../kid.service';
-import { DataService } from '@lib/data';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Kid } from '@entities';
+
+import { KidService } from './../kid.service';
 
 @Component({
 	selector: 'kid-toolbar',
 	template: `
 		<p-toolbar class="w-100">
 			<div class="w-100 d-flex align-items-center justify-content-between">
-				<div class="text-white">
+				<div>
 					<span style="font-size:1.5rem;font-weight:bold;">
-						{{ getKidFullName(activeKid) }}
+						{{ kidFullName }}
 					</span>
 				</div>
 
 				<div>
 					<button
 						pButton
-						icon="pi pi-briefcase"
-						class="mr-1"
-						(click)="kidService.showChores()"
-					></button>
-					<button
-						pButton
 						icon="pi pi-pencil"
 						title="Edit a kid's information"
-						class="mr-3"
+						class="mr-3 p-button-rounded p-button-secondary p-button-text"
 						[routerLink]="['./edit']"
 					></button>
 					<button
 						pButton
+						icon="pi pi-briefcase"
+						class="mr-3 p-button-rounded p-button-info p-button-text"
+					></button>
+					<button
+						pButton
 						icon="pi pi-plus"
-						(click)="kidService.createTransaction()"
+						class="p-button-rounded p-button-text"
+						[routerLink]="['./transaction']"
 					></button>
 				</div>
+			</div>
+
+			<div class="w-100 border-top d-flex justify-content-between">
+				<h2>Money</h2>
+				<h4>{{ activeKid.money }}</h4>
 			</div>
 		</p-toolbar>
 	`,
 	styles: [``]
 })
 export class KidToolbarComponent implements OnInit {
-	@Input() activeKid: Kid;
+	_kid: Kid;
+	@Input()
+	set activeKid(kid) {
+		this._kid = kid;
+		this.kidFullName = Kid.getKidFullName(kid);
+	}
+	get activeKid() {
+		return this._kid;
+	}
+
+	kidFullName: string;
 
 	constructor(public kidService: KidService) {}
 
 	ngOnInit(): void {}
-
-	getKidFullName(kid: Kid) {
-		return Kid.getKidFullName(kid);
-	}
 }

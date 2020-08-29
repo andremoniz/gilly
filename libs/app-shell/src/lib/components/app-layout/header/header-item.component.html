@@ -10,8 +10,8 @@
 	</ng-container>
 
 	<ng-container *ngSwitchCase="'menu'">
-		<ul nz-menu nzMode="horizontal" nzTheme="primary" class="bg-primary text-white">
-			<li nz-submenu [nzTitle]="item.name">
+		<ul nzMode="horizontal" nzTheme="primary" class="bg-primary text-white">
+			<li  [nzTitle]="item.name">
 				<ul>
 					<li
 						nz-menu-item
@@ -27,7 +27,7 @@
 	</ng-container>
 
 	<ng-container *ngSwitchCase="'divider'">
-		<li nz-menu-divider></li>
+		<li #divider></li>
 	</ng-container>
 
 	<ng-container *ngSwitchDefault>{{ item.name }}</ng-container>

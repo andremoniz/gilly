@@ -3,7 +3,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataServiceModule } from '@lib/data';
-import { NzMessageService } from 'ng-zorro-antd';
 
 import { UtilitiesModule } from './../../../utilities/src/lib/utilities.module';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
@@ -98,9 +97,7 @@ export class AppShellModule {
 				IconService,
 				LocationNameService,
 				NgNotificationService,
-				MetricsService,
-
-				NzMessageService
+				MetricsService
 			]
 		};
 	}
