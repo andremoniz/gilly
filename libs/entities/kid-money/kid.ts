@@ -35,7 +35,7 @@ export class Kid extends BaseModel {
 	@OneToMany((type) => KMTransaction, (kmTransaction) => kmTransaction.kid, { cascade: true })
 	transactions?: KMTransaction[];
 
-	@OneToMany((type) => Picture, (picture) => picture.kid, { cascade: true })
+	@OneToMany((type) => Picture, (picture) => picture.kid, { eager: true, cascade: true })
 	pictures?: Picture[];
 
 	static relationships = [

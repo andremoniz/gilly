@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Kid, Picture } from '@entities';
+import { Kid } from '@entities';
 import { DataService } from '@lib/data';
 import { take } from 'rxjs/operators';
+
+import { getBase64 } from './../../../../../../../libs/utilities/src/lib/utilities/getBase64';
 
 @Component({
 	selector: 'edit-kid',
@@ -249,17 +251,12 @@ export class EditKidComponent implements OnInit, OnDestroy {
 
 	async uploadPictures(event) {
 		for (let file of event.files) {
-			console.log(file);
-			let blob = await fetch(file.objectURL.changingThisBreaksApplicationSecurity).then((r) =>
-				r.blob()
-			);
-			// .then((blobFile) => new File([blobFile], file.name, { type: 'image/png' }));
 			this.pictures.push({
 				name: file.name,
 				size: file.size,
 				lastModified: file.lastModified,
 				type: file.type,
-				data: blob
+				file: file
 			});
 		}
 	}
