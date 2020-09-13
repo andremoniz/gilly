@@ -147,11 +147,11 @@ var pathToMigrations = isProd ? './database/migrations/**/*.js' : './database/mi
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../libs/entities/auth/user */ "./libs/entities/auth/user.ts");
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config */ "./apps/dakimbo-server/src/config.ts");
 /* harmony import */ var _userController__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./userController */ "./apps/dakimbo-server/src/controllers/userController.ts");
 
@@ -175,7 +175,7 @@ var AuthController = /** @class */ (function () {
                         console.log("LOGIN: Username or Password not found; failed to log in!");
                         return [2 /*return*/];
                     }
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_3__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -212,7 +212,7 @@ var AuthController = /** @class */ (function () {
                     console.log("LOGIN: User " + user.username + " wrong password; failed to log in!");
                     return [2 /*return*/];
                 case 8:
-                    token = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["sign"]({
+                    token = jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__["sign"]({
                         userId: user.id,
                         username: user.username,
                         roles: user.roles.map(function (r) {
@@ -246,7 +246,7 @@ var AuthController = /** @class */ (function () {
                     if (!(oldPassword && newPassword)) {
                         res.status(400).send();
                     }
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_3__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -802,13 +802,13 @@ var MetricsController = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bcryptjs */ "bcryptjs");
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bcryptjs */ "bcryptjs");
+/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../libs/entities/auth/user */ "./libs/entities/auth/user.ts");
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config */ "./apps/dakimbo-server/src/config.ts");
 
 
@@ -820,17 +820,17 @@ var UserController = /** @class */ (function () {
     function UserController() {
     }
     UserController.hashPassword = function (userEntity) {
-        userEntity.password = bcryptjs__WEBPACK_IMPORTED_MODULE_2__["hashSync"](userEntity.password, 8);
+        userEntity.password = bcryptjs__WEBPACK_IMPORTED_MODULE_1__["hashSync"](userEntity.password, 8);
     };
     UserController.checkIfUnencryptedPasswordIsValid = function (unencryptedPassword, userEntity) {
-        return bcryptjs__WEBPACK_IMPORTED_MODULE_2__["compareSync"](unencryptedPassword, userEntity.password);
+        return bcryptjs__WEBPACK_IMPORTED_MODULE_1__["compareSync"](unencryptedPassword, userEntity.password);
     };
     UserController.listAll = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
         var userRepository, users;
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     return [4 /*yield*/, userRepository.find()];
                 case 1:
                     users = _a.sent();
@@ -849,7 +849,7 @@ var UserController = /** @class */ (function () {
             switch (_a.label) {
                 case 0:
                     id = req.params.id;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -873,7 +873,7 @@ var UserController = /** @class */ (function () {
             switch (_b.label) {
                 case 0:
                     _a = req.body, username = _a.username, password = _a.password, email = _a.email, roles = _a.roles;
-                    user = new _entities__WEBPACK_IMPORTED_MODULE_1__["User"]();
+                    user = new _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]();
                     user.username = username;
                     user.password = password;
                     user.email = email;
@@ -881,7 +881,7 @@ var UserController = /** @class */ (function () {
                     // const { adminUser } = <any>jwt.verify(<string>res.getHeader('token'), config.jwtSecret);
                     //Hash the password, to securely store on DB
                     UserController.hashPassword(user);
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -909,8 +909,8 @@ var UserController = /** @class */ (function () {
                 case 0:
                     id = req.params.id;
                     _a = req.body, username = _a.username, password = _a.password, roles = _a.roles, email = _a.email, isLocked = _a.isLocked, numFailedLogin = _a.numFailedLogin;
-                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -959,8 +959,8 @@ var UserController = /** @class */ (function () {
             switch (_a.label) {
                 case 0:
                     id = req.params.id;
-                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -994,7 +994,7 @@ var UserController = /** @class */ (function () {
                     token = authHeader.split('Bearer')[1].trim();
                     // Try to validate the token and get data
                     try {
-                        jwtPayload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["verify"](token, _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret);
+                        jwtPayload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](token, _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret);
                         res.locals.jwtPayload = jwtPayload;
                     }
                     catch (error) {
@@ -1003,7 +1003,7 @@ var UserController = /** @class */ (function () {
                         return [2 /*return*/];
                     }
                     userId = jwtPayload.userId, username = jwtPayload.username;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -1235,9 +1235,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkRole", function() { return checkRole; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../../../libs/entities/auth/user */ "./libs/entities/auth/user.ts");
 /* harmony import */ var _libs_utilities_src_lib_auth_checkUserRole__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../../../libs/utilities/src/lib/auth/checkUserRole */ "./libs/utilities/src/lib/auth/checkUserRole.ts");
 
 
@@ -1250,7 +1250,7 @@ var checkRole = function (roles) {
             switch (_a.label) {
                 case 0:
                     id = res.locals.jwtPayload.userId;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_2__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -1542,7 +1542,7 @@ var Picture = /** @class */ (function (_super) {
 /*!**************************************!*\
   !*** ./libs/entities/_entity-map.ts ***!
   \**************************************/
-/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission, MetricPageView, MetricPageVisit, Picture, Kid, KMTransaction */
+/*! exports provided: entityMap */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1558,26 +1558,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
 /* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./kid-money/kid */ "./libs/entities/kid-money/kid.ts");
 /* harmony import */ var _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./kid-money/km-transaction */ "./libs/entities/kid-money/km-transaction.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_7__["User"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_6__["AuthRolePermission"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageView", function() { return _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_1__["MetricPageView"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageVisit", function() { return _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_2__["MetricPageVisit"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Picture", function() { return _common_picture__WEBPACK_IMPORTED_MODULE_0__["Picture"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Kid", function() { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__["Kid"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "KMTransaction", function() { return _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__["KMTransaction"]; });
-
 
 
 
@@ -1604,16 +1584,6 @@ var entityMap = {
     Kid: _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__["Kid"],
     KMTransaction: _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__["KMTransaction"]
 };
-
-
-
-
-
-
-
-
-
-
 
 
 /***/ }),

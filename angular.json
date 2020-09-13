@@ -284,7 +284,7 @@
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
 						"showCircularDependencies": false,
-						"outputPath": "dist/apps/kid-money",
+						"outputPath": "dist/dakimbo-server/public/kid-money",
 						"index": "apps/kid-money/src/index.html",
 						"main": "apps/kid-money/src/main.ts",
 						"polyfills": "apps/kid-money/src/polyfills.ts",

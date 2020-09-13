@@ -28,14 +28,3 @@ export const entityMap = {
 	Kid,
 	KMTransaction
 };
-
-export { User } from './auth/user';
-export { AuthAction } from './auth/auth-action';
-export { AuthEntity } from './auth/auth-entity';
-export { AuthRole } from './auth/auth-role';
-export { AuthRolePermission } from './auth/auth-role-permission';
-export { MetricPageView } from './_metrics/metric-page-view';
-export { MetricPageVisit } from './_metrics/metric-page-visit';
-export { Picture } from './_common/picture';
-export { Kid } from './kid-money/kid';
-export { KMTransaction } from './kid-money/km-transaction';

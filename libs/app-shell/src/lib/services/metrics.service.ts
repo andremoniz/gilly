@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { MetricPageVisit } from '@entities';
 import { Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 
+import { MetricPageVisit } from '../../../../entities/_metrics/metric-page-visit';
 import { AppShellModuleConfig } from '../app-shell.module';
 import { AuthService } from './auth.service';
 

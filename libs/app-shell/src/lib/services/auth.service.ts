@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '@entities';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import { User } from '../../../../entities/auth/user';
 import { AppShellModuleConfig } from '../app-shell.module';
 import { checkUserRole } from './../../../../utilities/src/lib/auth/checkUserRole';
 

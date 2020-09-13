@@ -1,12 +1,12 @@
-import { User } from '@entities';
 import { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
+import { User } from './../../../../libs/entities/auth/user';
 import { checkUserRole } from './../../../../libs/utilities/src/lib/auth/checkUserRole';
 
 export const checkRole = (roles: Array<string>) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
-		// Get the user ID from previous midleware
+		// Get the user ID from previous middleware
 		const id = res.locals.jwtPayload.userId;
 
 		// Get user role from the database
