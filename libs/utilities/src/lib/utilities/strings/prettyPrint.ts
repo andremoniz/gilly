@@ -1,4 +1,4 @@
-import { capitilizeFirstLetter } from './capitilizeFirstLetter';
+import { capitalizeFirstLetter } from './capitalizeFirstLetter';
 
 export const prettyPrint = (str) => {
 	if (!str) return '';
@@ -6,5 +6,5 @@ export const prettyPrint = (str) => {
 		.match(/([A-Z]?[^A-Z]*)/g)
 		.slice(0, -1)
 		.join(' ');
-	return capitilizeFirstLetter(prettyStr);
+	return capitalizeFirstLetter(prettyStr);
 };

@@ -29,7 +29,6 @@
 		"analyzer": "webpack-bundle-analyzer dist/dakimbo-server/public/kid-money/stats.json",
 		"dev-admin": "nx serve admin --port=4210",
 		"build-all": "concurrently --kill-others \"npm run build-dakimbo-server\" \"npm run build-admin\"",
-		"build-admin": "nx build admin --prod --aot --build-optimizer --deleteOutputPath=false --base-href=/admin/",
 		"dev-dakimbo-server": "nx serve dakimbo-server",
 		"build-dakimbo-server": "nx build dakimbo-server --configuration=production",
 		"dev-km": "nx serve kid-money --port=4205",
