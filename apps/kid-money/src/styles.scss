@@ -15,6 +15,7 @@ $info: #d23dff;
 
 html {
 	font-size: 14px !important;
+	box-sizing: border;
 }
 
 body {
@@ -43,4 +44,12 @@ body .p-calendar.p-calendar-w-btn .p-inputtext {
 
 .p-inputnumber {
 	width: 100%;
+}
+
+.p-breadcrumb {
+	background: transparent !important;
+	border: none !important;
+	position: absolute;
+	top: 0;
+	left: 20%;
 }

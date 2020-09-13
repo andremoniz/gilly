@@ -9,12 +9,7 @@
 					[routerLink]="['.']"
 				/>
 			</div>
-			<div class="px-3">
-				<p-breadcrumb
-					[model]="appService.breadcrumbs"
-					[home]="appService.home"
-				></p-breadcrumb>
-			</div>
+			<p-breadcrumb [model]="appService.breadcrumbs" [home]="appService.home"></p-breadcrumb>
 		</div>
 	</ng-template>
 	<ng-template #main>
