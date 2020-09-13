@@ -26,6 +26,7 @@
 		"workspace-schematic": "nx workspace-schematic",
 		"dep-graph": "nx dep-graph",
 		"help": "nx help",
+		"analyzer": "webpack-bundle-analyzer dist/dakimbo-server/public/kid-money/stats.json",
 		"dev-admin": "nx serve admin --port=4210",
 		"build-all": "concurrently --kill-others \"npm run build-dakimbo-server\" \"npm run build-admin\"",
 		"build-admin": "nx build admin --prod --aot --build-optimizer --deleteOutputPath=false --base-href=/admin/",
