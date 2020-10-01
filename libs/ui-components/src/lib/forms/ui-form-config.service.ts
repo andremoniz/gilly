@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { getUniqueProps } from '@lib/utilities';
 
-import { EntityFieldConfig } from './../../../../entities/base';
+import { EntityFieldConfig } from '../../../../entities/base';
+import { getUniqueProps } from '../../../../utilities/src/lib/utilities/getUniqueProps';
 
 @Injectable()
-export class FormConfigService {
+export class UIFormConfigService {
 	constructor(private fb: FormBuilder) {}
 
 	createFormFromConfig(fieldConfig: EntityFieldConfig[], entity?: any) {
@@ -13,7 +13,7 @@ export class FormConfigService {
 			id: entity ? entity.id : null
 		};
 		fieldConfig.forEach((field) => {
-			controls[field.key] = this.getEntityControl(field, entity);
+			controls[field.key || field.label] = this.getEntityControl(field, entity);
 		});
 		return this.fb.group(controls);
 	}

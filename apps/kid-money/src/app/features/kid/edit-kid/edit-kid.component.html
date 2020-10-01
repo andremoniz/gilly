@@ -2,116 +2,30 @@
 	<lib-page-container>
 		<ng-template #main>
 			<p-card [header]="'Edit ' + activeKid.firstName" styleClass="bg-white mt-3 mb-3">
-				<form
-					*ngIf="kidForm"
-					[formGroup]="kidForm"
-					(ngSubmit)="onSubmit()"
-					class="d-flex flex-wrap"
-				>
-					<!-- <div *ngFor="let picture of pictures">
+				<!-- <div *ngFor="let picture of pictures">
                         {{ picture.name }}
                         <img [src]="getPictureSrc(picture)" />
-                    </div> -->
+					</div> -->
 
-					<div class="mb-3 col-12 border-bottom pb-3">
-						<p style="font-weight: bold; font-size: 1.25;" for="money">
-							Current Money
-						</p>
-						<p-inputNumber
-							id="money"
-							formControlName="money"
-							class="w-100"
-							mode="decimal"
-							[maxFractionDigits]="2"
-						></p-inputNumber>
-					</div>
+				<ui-form
+					[config]="{ fieldConfig: kidFieldConfig, entity: activeKid }"
+					(formChanged)="handleFormChanged($event)"
+				></ui-form>
 
-					<div class="mb-3 col-6">
-						<span class="p-float-label">
-							<input
-								pInputText
-								id="firstName"
-								type="text"
-								formControlName="firstName"
-								class="w-100"
-							/>
-							<label for="firstName">First Name</label>
-						</span>
-					</div>
-					<div class="mb-3 col-6">
-						<span class="p-float-label">
-							<input
-								pInputText
-								id="lastName"
-								type="text"
-								formControlName="lastName"
-								class="w-100"
-							/>
-							<label for="lastName">Last Name</label>
-						</span>
-					</div>
-
-					<div class="mb-3 col-12">
-						<span class="p-float-label">
-							<p-calendar
-								formControlName="birthday"
-								[showIcon]="true"
-								[touchUI]="true"
-								[monthNavigator]="true"
-								[yearNavigator]="true"
-								yearRange="1950:2030"
-								[showTime]="true"
-								[showButtonBar]="true"
-								class="w-100"
-							></p-calendar>
-							<label for="lastName">Birthday</label>
-						</span>
-					</div>
-
-					<div class="mb-3 col-12">
-						<span class="p-float-label w-100">
-							<p-dropdown
-								[options]="[
-									{ label: 'Male', value: 'M' },
-									{ label: 'Female', value: 'F' }
-								]"
-								[showClear]="true"
-								formControlName="gender"
-								class="w-100"
-							></p-dropdown>
-							<label for="gender">Gender</label>
-						</span>
-					</div>
-
-					<div class="col-12">
-						<span class="p-float-label">
-							<textarea
-								pInputTextarea
-								id="notes"
-								type="text"
-								formControlName="notes"
-								[autoResize]="true"
-								class="w-100"
-							></textarea>
-							<label for="notes">Notes</label>
-						</span>
-					</div>
-
-					<div class="mb-3 col-12">
-						<h4 class="w-100 border-bottom">Pictures</h4>
-						<p-fileUpload
-							#picauto
-							multiple="multiple"
-							accept="image/*"
-							maxFileSize="10000000"
-							[auto]="true"
-							chooseLabel="Browse Pictures"
-							customUpload="true"
-							(uploadHandler)="uploadPictures($event)"
-						>
-						</p-fileUpload>
-					</div>
-				</form>
+				<div class="mb-3 col-12">
+					<h4 class="w-100 border-bottom">Pictures</h4>
+					<p-fileUpload
+						#picauto
+						multiple="multiple"
+						accept="image/*"
+						maxFileSize="10000000"
+						[auto]="true"
+						chooseLabel="Browse Pictures"
+						customUpload="true"
+						(uploadHandler)="uploadPictures($event)"
+					>
+					</p-fileUpload>
+				</div>
 			</p-card>
 		</ng-template>
 		<ng-template #footer>

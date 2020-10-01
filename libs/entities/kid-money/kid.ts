@@ -69,14 +69,12 @@ export class Kid extends BaseModel {
 
 	static fieldConfig: EntityFieldConfig[] = [
 		{ key: 'firstName' },
-		{ key: 'lastName' },
 		{ key: 'middleName' },
-		{ key: 'fullName' },
+		{ key: 'lastName' },
 		{ key: 'birthday', type: 'date' },
 		{ key: 'gender' },
-		{ key: 'notes' },
+		{ key: 'notes', label: 'Notes', type: 'textarea' },
 		{ key: 'money' },
-		{ key: 'transactions', type: 'array' },
-		{ key: 'pictures', type: 'array' }
+		// { key: 'transactions', type: 'array' },
 	];
 }

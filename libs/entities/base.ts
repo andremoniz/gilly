@@ -20,7 +20,14 @@ export interface EntityFieldConfig {
 	label?: string;
 	type?: string;
 	className?: string;
+	placeholder?: string;
+	tooltip?: string;
+	required?: string;
+	defaultValue?: any;
+	visible?: boolean;
 	order?: number;
+	options?: any[];
+	optionLabel?: string;
 }
 
 export abstract class BaseModel implements EntityTransaction {

@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseModel } from '../base';
 import { Picture } from './../_common/picture';
+import { EntityFieldConfig } from './../base';
 import { Kid } from './kid';
 
 @Entity()
@@ -36,14 +37,12 @@ export class KMTransaction extends BaseModel {
 	kid?: Kid;
 
 	// OTHER
-	static fieldConfig = [
-		{ key: 'name', type: 'input' },
-		{ key: 'type', type: 'input' },
-		{ key: 'income', type: 'input' },
-		{ key: 'cost', type: 'input' },
-		{ key: 'previousAmount', type: 'input' },
-		{ key: 'newAmount', type: 'input' },
-		{ key: 'transactionDate', type: 'date' },
-		{ key: 'pictures', type: 'array' }
+	static fieldConfig: EntityFieldConfig[] = [
+		{ key: 'name', label: 'Transaction Name', type: 'input' },
+		{ key: 'transactionDate', label: 'Date of Transaction', type: 'date' },
+		{ key: 'cost', label: 'Cost', type: 'input' },
+		{ key: 'income', label: 'Income', type: 'input' },
+		{ key: 'type', label: 'Type', type: 'input' }
+		// { key: 'pictures', type: 'array' }
 	];
 }

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Kid } from '../../../../../../../libs/entities/kid-money/kid';
-import { FormConfigService } from '../../../../../../../libs/utilities/src/lib/services/form-config.service';
 import { DataService } from './../../../../../../../libs/data/src/lib/services/data/data.service';
 import { KMTransaction } from './../../../../../../../libs/entities/kid-money/km-transaction';
 import { KidService } from './../kid.service';
@@ -15,8 +13,8 @@ import { KidService } from './../kid.service';
 	styles: [``]
 })
 export class EditTransactionComponent implements OnInit {
-	transactionForm: FormGroup;
 	transaction: KMTransaction;
+	transactionFieldConfig = KMTransaction.fieldConfig;
 
 	kids$: Subscription;
 	activeKid: Kid;
@@ -24,17 +22,12 @@ export class EditTransactionComponent implements OnInit {
 	constructor(
 		public dataService: DataService,
 		public kidService: KidService,
-		private formConfigService: FormConfigService,
 		private router: Router,
 		private route: ActivatedRoute
 	) {}
 
 	ngOnInit(): void {
 		this.transaction = new KMTransaction();
-		this.transactionForm = this.formConfigService.createFormFromConfig(
-			KMTransaction.fieldConfig,
-			this.transaction
-		);
 
 		const kids$ = this.dataService.selectAll('Kid').subscribe((kids: Kid[]) => {
 			const kidId = this.route.snapshot.paramMap.get('id');
@@ -49,11 +42,6 @@ export class EditTransactionComponent implements OnInit {
 					this.transaction = this.activeKid.transactions.find(
 						(t) => t.id === transactionId
 					);
-
-					this.transactionForm = this.formConfigService.createFormFromConfig(
-						KMTransaction.fieldConfig,
-						this.transaction
-					);
 				}
 			}
 		});
@@ -65,8 +53,12 @@ export class EditTransactionComponent implements OnInit {
 		}
 	}
 
+	handleFormChange(event) {
+		console.log(event);
+	}
+
 	onSubmit() {
-		this.kidService.saveTransaction(this.activeKid, this.transactionForm.value);
+		this.kidService.saveTransaction(this.activeKid, this.transaction);
 		this.router.navigate(['kid', this.activeKid.id]);
 	}
 
@@ -75,5 +67,9 @@ export class EditTransactionComponent implements OnInit {
 			this.kidService.removeTransaction(this.activeKid, this.transaction);
 			this.router.navigate(['kid', this.activeKid.id]);
 		}
+	}
+
+	uploadPictures(event) {
+		console.log(event);
 	}
 }
