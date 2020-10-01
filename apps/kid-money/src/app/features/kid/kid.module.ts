@@ -13,13 +13,13 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
-import {OverlayPanelModule} from 'primeng/overlaypanel';
 
 import { CoreModule } from '../../core/core.module';
 import { PageContainerModule } from './../../../../../../libs/app-shell/src/lib/components/page-container/page-container.module';
-import { FormConfigService } from './../../../../../../libs/utilities/src/lib/services/form-config.service';
+import { UIFormModule } from './../../../../../../libs/ui-components/src/lib/forms/ui-form.module';
 import { EditKidComponent } from './edit-kid/edit-kid.component';
 import { EditTransactionComponent } from './edit-transaction/edit-transaction.component';
 import { KidToolbarComponent } from './kid-toolbar/kid-toolbar.component';
@@ -56,6 +56,7 @@ import { KidComponent } from './kid.component';
 		OverlayPanelModule,
 
 		PageContainerModule,
+		UIFormModule,
 
 		CoreModule,
 
@@ -76,6 +77,6 @@ import { KidComponent } from './kid.component';
 		])
 	],
 	exports: [],
-	providers: [MessageService, FormConfigService]
+	providers: [MessageService]
 })
 export class KidModule {}

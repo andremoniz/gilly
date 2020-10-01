@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Kid } from '@entities';
 
+import { Kid } from '../../../../../../../libs/entities/kid-money/kid';
 import { KidService } from './../kid.service';
 
 @Component({

@@ -26,13 +26,13 @@
 		"workspace-schematic": "nx workspace-schematic",
 		"dep-graph": "nx dep-graph",
 		"help": "nx help",
+		"analyzer": "webpack-bundle-analyzer dist/dakimbo-server/public/kid-money/stats.json",
 		"dev-admin": "nx serve admin --port=4210",
 		"build-all": "concurrently --kill-others \"npm run build-dakimbo-server\" \"npm run build-admin\"",
-		"build-admin": "nx build admin --prod --aot --build-optimizer --deleteOutputPath=false --base-href=/admin/",
 		"dev-dakimbo-server": "nx serve dakimbo-server",
 		"build-dakimbo-server": "nx build dakimbo-server --configuration=production",
-		"dev-kid-money": "nx serve kid-money --port=4205",
-		"build-kid-money": "nx build kid-money --prod --aot --stats-json --build-optimizer --base-href=/kid-money/",
+		"dev-km": "nx serve kid-money --port=4205",
+		"build-km": "nx build kid-money --prod --aot --stats-json --build-optimizer --base-href=/kid-money/",
 		"dev-guessinator": "nx serve guessinator --port=4215",
 		"build-guessinator": "nx build guessinator --prod --aot --build-optimizer --base-href=/guessinator/"
 	},
@@ -162,6 +162,6 @@
 		"tslint": "~6.0.0",
 		"typescript": "3.9.7",
 		"uglify-js": "^3.9.3",
-		"webpack-bundle-analyzer": "^3.6.1"
+		"webpack-bundle-analyzer": "^3.8.0"
 	}
 }

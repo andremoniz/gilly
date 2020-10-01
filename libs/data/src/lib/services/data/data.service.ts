@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { entityMap } from '@entities';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -50,7 +49,7 @@ export class DataService {
 
 	private setupDataService(config: any) {
 		this.apiEndpoint = config.apiEndpoint || config.dataEndpoint;
-		this.tables = { ...config.tables, ...entityMap };
+		this.tables = { ...config.tables };
 		this.setupLocalProps();
 	}
 
@@ -77,18 +76,27 @@ export class DataService {
 	 * PUBLIC API
 	 */
 	public getModelName<T>(model: T | any) {
+		let modelName;
+
 		if (model && (model.name || model.displayName || model.tableName)) {
 			if (model.displayName) {
-				return model.displayName;
+				modelName = model.displayName;
 			}
 			if (model.tableName) {
-				return model.tableName;
+				modelName = model.tableName;
 			} else {
-				return model.name;
+				modelName = model.name;
 			}
 		} else {
-			return model;
+			modelName = model;
 		}
+
+		// TODO: Figure out a better way to auto setup undetected models...
+		if (!this.cache[modelName]) {
+			this.addTableToLocalProps(modelName);
+		}
+
+		return modelName;
 	}
 
 	public setData<T>(model: T, entities: any[] = []) {

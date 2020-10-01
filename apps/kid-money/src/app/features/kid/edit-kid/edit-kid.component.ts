@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
-import { FormConfigService } from '../../../../../../../libs/utilities/src/lib/services/form-config.service';
 import { KidService } from '../kid.service';
 import { DataService } from './../../../../../../../libs/data/src/lib/services/data/data.service';
 import { Kid } from './../../../../../../../libs/entities/kid-money/kid';
@@ -14,7 +12,8 @@ import { Kid } from './../../../../../../../libs/entities/kid-money/kid';
 	styles: []
 })
 export class EditKidComponent implements OnInit, OnDestroy {
-	kidForm: FormGroup;
+	kidFieldConfig = Kid.fieldConfig;
+	kid: Kid;
 
 	kids$;
 	activeKid$;
@@ -23,7 +22,6 @@ export class EditKidComponent implements OnInit, OnDestroy {
 	constructor(
 		public dataService: DataService,
 		public kidService: KidService,
-		private formConfigService: FormConfigService,
 		private messageService: MessageService,
 		private router: Router,
 		private route: ActivatedRoute
@@ -36,7 +34,7 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		});
 
 		this.activeKid$ = this.dataService.selectActive(Kid).subscribe((kid: Kid) => {
-			this.kidForm = this.formConfigService.createFormFromConfig(Kid.fieldConfig, kid);
+			this.kid = kid;
 		});
 	}
 
@@ -49,15 +47,18 @@ export class EditKidComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	handleFormChanged(event) {
+		Object.assign(this.kid, event);
+	}
+
 	onSubmit() {
-		const updatedKid = { ...this.kidForm.value, pictures: this.pictures };
-		this.kidService.saveKid(updatedKid);
+		this.kidService.saveKid({ ...this.kid, pictures: this.pictures });
 		this.router.navigate(['../'], { relativeTo: this.route });
 	}
 
 	onDelete() {
-		if (confirm(`Are you sure you want to delete ${this.kidForm.get('firstName').value}?`)) {
-			this.kidService.deleteKid(this.kidForm.value);
+		if (confirm(`Are you sure you want to delete ${this.kid.firstName}?`)) {
+			this.kidService.deleteKid(this.kid);
 		}
 	}
 

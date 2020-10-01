@@ -1,6 +1,7 @@
-import { AuthRole, User } from '@entities';
 import { getRepository } from 'typeorm';
 
+import { AuthRole } from '../../../../../libs/entities/auth/auth-role';
+import { User } from '../../../../../libs/entities/auth/user';
 import UserController from '../../controllers/userController';
 
 export async function createAdminUser() {

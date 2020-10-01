@@ -1,8 +1,8 @@
-import { User } from '@entities';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 
+import { User } from '../../../../libs/entities/auth/user';
 import config from '../config';
 import UserController from './userController';
 

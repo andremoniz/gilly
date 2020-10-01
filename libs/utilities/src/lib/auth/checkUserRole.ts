@@ -1,4 +1,4 @@
-import { User } from '@entities';
+import { User } from './../../../../entities/auth/user';
 
 export const checkUserRole = (user?: User, expectedRoles?: string[]): boolean => {
 	if (!user || !expectedRoles) return true;
