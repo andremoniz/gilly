@@ -9,3 +9,4 @@ export * from './lib/utilities/convertByteToHuman';
 export * from './lib/utilities/deepClone';
 export * from './lib/utilities/transformValToTypescript';
 export * from './lib/utilities/getUniqueProps';
+export * from './lib/utilities/getBase64';

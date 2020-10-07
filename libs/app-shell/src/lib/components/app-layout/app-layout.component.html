@@ -1,6 +1,6 @@
-<nz-layout class="container-wrapper">
+<main class="container-wrapper">
 
-    <nz-header class="container-header bg-primary" *ngIf="!hideHeader">
+    <header class="container-header bg-primary" *ngIf="!hideHeader">
         <img class="mr-1" [src]="appLogo" height="64" width="64" *ngIf="appLogo" />
         <a href="#" class="text-white">{{ appTitle }}</a>
 
@@ -17,10 +17,10 @@
                 <lib-header-item [item]="item" *ngFor="let item of authItems" [style.display]="auth.isActionAuthorized(item.name, item.expectedRoles) ? 'block' : 'none'"></lib-header-item>
             </ng-container>
         </div>
-    </nz-header>
+    </header>
 
-    <nz-content class="container-main">
+    <div class="container-main">
         <router-outlet></router-outlet>
-    </nz-content>
+    </div>
 
-</nz-layout>
+</main>

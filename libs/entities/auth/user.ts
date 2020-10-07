@@ -54,5 +54,5 @@ export class User extends BaseModel {
 	jwt?: string;
 	expiry?: Date;
 
-	static relationships = [{ model: AuthRole }];
+	static relationships = [{ model: AuthRole, name: 'roles' }];
 }

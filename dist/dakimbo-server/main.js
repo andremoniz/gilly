@@ -147,11 +147,11 @@ var pathToMigrations = isProd ? './database/migrations/**/*.js' : './database/mi
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../libs/entities/auth/user */ "./libs/entities/auth/user.ts");
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config */ "./apps/dakimbo-server/src/config.ts");
 /* harmony import */ var _userController__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./userController */ "./apps/dakimbo-server/src/controllers/userController.ts");
 
@@ -175,7 +175,7 @@ var AuthController = /** @class */ (function () {
                         console.log("LOGIN: Username or Password not found; failed to log in!");
                         return [2 /*return*/];
                     }
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_3__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -212,7 +212,7 @@ var AuthController = /** @class */ (function () {
                     console.log("LOGIN: User " + user.username + " wrong password; failed to log in!");
                     return [2 /*return*/];
                 case 8:
-                    token = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["sign"]({
+                    token = jsonwebtoken__WEBPACK_IMPORTED_MODULE_1__["sign"]({
                         userId: user.id,
                         username: user.username,
                         roles: user.roles.map(function (r) {
@@ -246,7 +246,7 @@ var AuthController = /** @class */ (function () {
                     if (!(oldPassword && newPassword)) {
                         res.status(400).send();
                     }
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_3__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -802,13 +802,13 @@ var MetricsController = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bcryptjs */ "bcryptjs");
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bcryptjs */ "bcryptjs");
+/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../libs/entities/auth/user */ "./libs/entities/auth/user.ts");
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config */ "./apps/dakimbo-server/src/config.ts");
 
 
@@ -820,17 +820,17 @@ var UserController = /** @class */ (function () {
     function UserController() {
     }
     UserController.hashPassword = function (userEntity) {
-        userEntity.password = bcryptjs__WEBPACK_IMPORTED_MODULE_2__["hashSync"](userEntity.password, 8);
+        userEntity.password = bcryptjs__WEBPACK_IMPORTED_MODULE_1__["hashSync"](userEntity.password, 8);
     };
     UserController.checkIfUnencryptedPasswordIsValid = function (unencryptedPassword, userEntity) {
-        return bcryptjs__WEBPACK_IMPORTED_MODULE_2__["compareSync"](unencryptedPassword, userEntity.password);
+        return bcryptjs__WEBPACK_IMPORTED_MODULE_1__["compareSync"](unencryptedPassword, userEntity.password);
     };
     UserController.listAll = function (req, res) { return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(void 0, void 0, void 0, function () {
         var userRepository, users;
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     return [4 /*yield*/, userRepository.find()];
                 case 1:
                     users = _a.sent();
@@ -849,7 +849,7 @@ var UserController = /** @class */ (function () {
             switch (_a.label) {
                 case 0:
                     id = req.params.id;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -873,7 +873,7 @@ var UserController = /** @class */ (function () {
             switch (_b.label) {
                 case 0:
                     _a = req.body, username = _a.username, password = _a.password, email = _a.email, roles = _a.roles;
-                    user = new _entities__WEBPACK_IMPORTED_MODULE_1__["User"]();
+                    user = new _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]();
                     user.username = username;
                     user.password = password;
                     user.email = email;
@@ -881,7 +881,7 @@ var UserController = /** @class */ (function () {
                     // const { adminUser } = <any>jwt.verify(<string>res.getHeader('token'), config.jwtSecret);
                     //Hash the password, to securely store on DB
                     UserController.hashPassword(user);
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -909,8 +909,8 @@ var UserController = /** @class */ (function () {
                 case 0:
                     id = req.params.id;
                     _a = req.body, username = _a.username, password = _a.password, roles = _a.roles, email = _a.email, isLocked = _a.isLocked, numFailedLogin = _a.numFailedLogin;
-                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -959,8 +959,8 @@ var UserController = /** @class */ (function () {
             switch (_a.label) {
                 case 0:
                     id = req.params.id;
-                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    adminUser = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](res.getHeader('token'), _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret).adminUser;
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -994,7 +994,7 @@ var UserController = /** @class */ (function () {
                     token = authHeader.split('Bearer')[1].trim();
                     // Try to validate the token and get data
                     try {
-                        jwtPayload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__["verify"](token, _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret);
+                        jwtPayload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_2__["verify"](token, _config__WEBPACK_IMPORTED_MODULE_5__["default"].jwtSecret);
                         res.locals.jwtPayload = jwtPayload;
                     }
                     catch (error) {
@@ -1003,7 +1003,7 @@ var UserController = /** @class */ (function () {
                         return [2 /*return*/];
                     }
                     userId = jwtPayload.userId, username = jwtPayload.username;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_4__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_3__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_4__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -1157,7 +1157,7 @@ __webpack_require__(/*! dotenv */ "dotenv").config();
                 app.use(helmet__WEBPACK_IMPORTED_MODULE_6___default()());
                 app.use(compression__WEBPACK_IMPORTED_MODULE_3___default()());
                 app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.urlencoded({ extended: false }));
-                app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json());
+                app.use(body_parser__WEBPACK_IMPORTED_MODULE_2___default.a.json({ limit: '20mb' }));
                 app.use(express__WEBPACK_IMPORTED_MODULE_5___default.a.static(__dirname + '/public'));
                 app.use('/', _routes__WEBPACK_IMPORTED_MODULE_8__["default"]);
                 app.get('*', function (req, res) {
@@ -1235,9 +1235,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkRole", function() { return checkRole; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @entities */ "./libs/entities/_entity-map.ts");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typeorm */ "typeorm");
-/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../../../libs/entities/auth/user */ "./libs/entities/auth/user.ts");
 /* harmony import */ var _libs_utilities_src_lib_auth_checkUserRole__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../../../libs/utilities/src/lib/auth/checkUserRole */ "./libs/utilities/src/lib/auth/checkUserRole.ts");
 
 
@@ -1250,7 +1250,7 @@ var checkRole = function (roles) {
             switch (_a.label) {
                 case 0:
                     id = res.locals.jwtPayload.userId;
-                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_2__["getRepository"])(_entities__WEBPACK_IMPORTED_MODULE_1__["User"]);
+                    userRepository = Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["getRepository"])(_libs_entities_auth_user__WEBPACK_IMPORTED_MODULE_2__["User"]);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -1461,39 +1461,104 @@ var dateFormat = function () {
 
 /***/ }),
 
+/***/ "./libs/entities/_common/picture.ts":
+/*!******************************************!*\
+  !*** ./libs/entities/_common/picture.ts ***!
+  \******************************************/
+/*! exports provided: Picture */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Picture", function() { return Picture; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../kid-money/kid */ "./libs/entities/kid-money/kid.ts");
+/* harmony import */ var _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../kid-money/km-transaction */ "./libs/entities/kid-money/km-transaction.ts");
+
+
+
+
+
+var Picture = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Picture, _super);
+    function Picture() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Picture.preProcess = function (entity, dbConnection) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                if (entity.name) {
+                    entity.extension = entity.name.split('.')[1];
+                }
+                console.log(entity.file);
+                return [2 /*return*/];
+            });
+        });
+    };
+    var _a, _b, _c;
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Picture.prototype, "path", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Picture.prototype, "name", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Picture.prototype, "extension", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+    ], Picture.prototype, "lastModifiedDate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], Picture.prototype, "size", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"]; }, function (kid) { return kid.pictures; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"] !== "undefined" && _kid_money_kid__WEBPACK_IMPORTED_MODULE_3__["Kid"]) === "function" ? _b : Object)
+    ], Picture.prototype, "kid", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]; }, function (kmTransaction) { return kmTransaction.pictures; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_c = typeof _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"] !== "undefined" && _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]) === "function" ? _c : Object)
+    ], Picture.prototype, "kmTransaction", void 0);
+    Picture = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
+    ], Picture);
+    return Picture;
+}(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
+
+
+
+/***/ }),
+
 /***/ "./libs/entities/_entity-map.ts":
 /*!**************************************!*\
   !*** ./libs/entities/_entity-map.ts ***!
   \**************************************/
-/*! exports provided: entityMap, User, AuthAction, AuthEntity, AuthRole, AuthRolePermission, MetricPageView, MetricPageVisit, Kid */
+/*! exports provided: entityMap */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entityMap", function() { return entityMap; });
-/* harmony import */ var _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_metrics/metric-page-view */ "./libs/entities/_metrics/metric-page-view.ts");
-/* harmony import */ var _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_metrics/metric-page-visit */ "./libs/entities/_metrics/metric-page-visit.ts");
-/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth/auth-action */ "./libs/entities/auth/auth-action.ts");
-/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-entity */ "./libs/entities/auth/auth-entity.ts");
-/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
-/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
-/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
-/* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./kid-money/kid */ "./libs/entities/kid-money/kid.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "User", function() { return _auth_user__WEBPACK_IMPORTED_MODULE_6__["User"]; });
+/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_common/picture */ "./libs/entities/_common/picture.ts");
+/* harmony import */ var _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_metrics/metric-page-view */ "./libs/entities/_metrics/metric-page-view.ts");
+/* harmony import */ var _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_metrics/metric-page-visit */ "./libs/entities/_metrics/metric-page-visit.ts");
+/* harmony import */ var _auth_auth_action__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth/auth-action */ "./libs/entities/auth/auth-action.ts");
+/* harmony import */ var _auth_auth_entity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth/auth-entity */ "./libs/entities/auth/auth-entity.ts");
+/* harmony import */ var _auth_auth_role__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth/auth-role */ "./libs/entities/auth/auth-role.ts");
+/* harmony import */ var _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auth/auth-role-permission */ "./libs/entities/auth/auth-role-permission.ts");
+/* harmony import */ var _auth_user__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./auth/user */ "./libs/entities/auth/user.ts");
+/* harmony import */ var _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./kid-money/kid */ "./libs/entities/kid-money/kid.ts");
+/* harmony import */ var _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./kid-money/km-transaction */ "./libs/entities/kid-money/km-transaction.ts");
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthAction", function() { return _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__["AuthAction"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthEntity", function() { return _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__["AuthEntity"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRole", function() { return _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthRolePermission", function() { return _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__["AuthRolePermission"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageView", function() { return _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MetricPageVisit", function() { return _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Kid", function() { return _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__["Kid"]; });
 
 
 
@@ -1505,25 +1570,20 @@ __webpack_require__.r(__webpack_exports__);
 
 var entityMap = {
     // AUTH
-    User: _auth_user__WEBPACK_IMPORTED_MODULE_6__["User"],
-    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_4__["AuthRole"],
-    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_2__["AuthAction"],
-    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_3__["AuthEntity"],
-    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_5__["AuthRolePermission"],
+    User: _auth_user__WEBPACK_IMPORTED_MODULE_7__["User"],
+    AuthRole: _auth_auth_role__WEBPACK_IMPORTED_MODULE_5__["AuthRole"],
+    AuthAction: _auth_auth_action__WEBPACK_IMPORTED_MODULE_3__["AuthAction"],
+    AuthEntity: _auth_auth_entity__WEBPACK_IMPORTED_MODULE_4__["AuthEntity"],
+    AuthRolePermission: _auth_auth_role_permission__WEBPACK_IMPORTED_MODULE_6__["AuthRolePermission"],
     // METRICS
-    MetricPageView: _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_0__["MetricPageView"],
-    MetricPageVisit: _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_1__["MetricPageVisit"],
+    MetricPageView: _metrics_metric_page_view__WEBPACK_IMPORTED_MODULE_1__["MetricPageView"],
+    MetricPageVisit: _metrics_metric_page_visit__WEBPACK_IMPORTED_MODULE_2__["MetricPageVisit"],
+    // COMMON
+    Picture: _common_picture__WEBPACK_IMPORTED_MODULE_0__["Picture"],
     // KID MONEY
-    Kid: _kid_money_kid__WEBPACK_IMPORTED_MODULE_7__["Kid"]
+    Kid: _kid_money_kid__WEBPACK_IMPORTED_MODULE_8__["Kid"],
+    KMTransaction: _kid_money_km_transaction__WEBPACK_IMPORTED_MODULE_9__["KMTransaction"]
 };
-
-
-
-
-
-
-
-
 
 
 /***/ }),
@@ -2096,7 +2156,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
 /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_common/picture */ "./libs/entities/_common/picture.ts");
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _km_transaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./km-transaction */ "./libs/entities/kid-money/km-transaction.ts");
+
+
 
 
 
@@ -2105,7 +2169,49 @@ var Kid = /** @class */ (function (_super) {
     function Kid() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var _a;
+    Kid_1 = Kid;
+    Kid.preProcess = function (entity, dbConnection) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+            var nameSplit, i;
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                if (entity.firstName || entity.middleName || entity.lastName) {
+                    entity.fullName = Kid_1.getKidFullName(entity);
+                }
+                else if (entity.fullName) {
+                    nameSplit = entity.name.split(' ');
+                    entity.firstName = nameSplit[0];
+                    if (nameSplit.length > 2) {
+                        entity.middleName = nameSplit[1];
+                        for (i = 2; i < nameSplit.length; i++) {
+                            entity.lastName += nameSplit[i];
+                        }
+                    }
+                    else {
+                        entity.lastName = nameSplit[1];
+                    }
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    Kid.getKidFullName = function (kid) {
+        return "" + (kid.firstName || '') + (kid.firstName ? ' ' : '') + (kid.middleName || '') + (kid.middleName ? ' ' : '') + (kid.lastName || '');
+    };
+    var Kid_1, _a;
+    Kid.displayName = 'Kid';
+    Kid.relationships = [
+        { model: _km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"], name: 'transactions' },
+        { model: _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"], name: 'pictures' }
+    ];
+    Kid.fieldConfig = [
+        { key: 'firstName' },
+        { key: 'middleName' },
+        { key: 'lastName' },
+        { key: 'birthday', type: 'date' },
+        { key: 'gender' },
+        { key: 'notes', label: 'Notes', type: 'textarea' },
+        { key: 'money' },
+    ];
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
@@ -2132,12 +2238,108 @@ var Kid = /** @class */ (function (_super) {
     ], Kid.prototype, "gender", void 0);
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], Kid.prototype, "notes", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true, type: 'float4' }),
         Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
     ], Kid.prototype, "money", void 0);
-    Kid = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _km_transaction__WEBPACK_IMPORTED_MODULE_4__["KMTransaction"]; }, function (kmTransaction) { return kmTransaction.kid; }, { cascade: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], Kid.prototype, "transactions", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_2__["Picture"]; }, function (picture) { return picture.kid; }, { eager: true, cascade: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], Kid.prototype, "pictures", void 0);
+    Kid = Kid_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
     ], Kid);
     return Kid;
+}(_base__WEBPACK_IMPORTED_MODULE_3__["BaseModel"]));
+
+
+
+/***/ }),
+
+/***/ "./libs/entities/kid-money/km-transaction.ts":
+/*!***************************************************!*\
+  !*** ./libs/entities/kid-money/km-transaction.ts ***!
+  \***************************************************/
+/*! exports provided: KMTransaction */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KMTransaction", function() { return KMTransaction; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typeorm */ "typeorm");
+/* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typeorm__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../base */ "./libs/entities/base.ts");
+/* harmony import */ var _common_picture__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../_common/picture */ "./libs/entities/_common/picture.ts");
+/* harmony import */ var _kid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./kid */ "./libs/entities/kid-money/kid.ts");
+
+
+
+
+
+var KMTransaction = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(KMTransaction, _super);
+    function KMTransaction() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a, _b;
+    KMTransaction.displayName = 'KMTransaction';
+    // OTHER
+    KMTransaction.fieldConfig = [
+        { key: 'name', label: 'Transaction Name', type: 'input' },
+        { key: 'transactionDate', label: 'Date of Transaction', type: 'date' },
+        { key: 'cost', label: 'Cost', type: 'input' },
+        { key: 'income', label: 'Income', type: 'input' },
+        { key: 'type', label: 'Type', type: 'input' }
+        // { key: 'pictures', type: 'array' }
+    ];
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], KMTransaction.prototype, "name", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+    ], KMTransaction.prototype, "type", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "income", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "cost", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "previousAmount", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)
+    ], KMTransaction.prototype, "newAmount", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Column"])({ nullable: true }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+    ], KMTransaction.prototype, "transactionDate", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["OneToMany"])(function (type) { return _common_picture__WEBPACK_IMPORTED_MODULE_3__["Picture"]; }, function (picture) { return picture.kmTransaction; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
+    ], KMTransaction.prototype, "pictures", void 0);
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["ManyToOne"])(function (type) { return _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]; }, function (kid) { return kid.transactions; }),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", typeof (_b = typeof _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"] !== "undefined" && _kid__WEBPACK_IMPORTED_MODULE_4__["Kid"]) === "function" ? _b : Object)
+    ], KMTransaction.prototype, "kid", void 0);
+    KMTransaction = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+        Object(typeorm__WEBPACK_IMPORTED_MODULE_1__["Entity"])()
+    ], KMTransaction);
+    return KMTransaction;
 }(_base__WEBPACK_IMPORTED_MODULE_2__["BaseModel"]));
 
 

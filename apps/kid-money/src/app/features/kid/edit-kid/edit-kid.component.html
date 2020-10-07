@@ -1,0 +1,35 @@
+<ng-container *ngIf="dataService.selectActive('Kid') | async as activeKid">
+	<lib-page-container>
+		<ng-template #main>
+			<p-card [header]="'Edit ' + activeKid.firstName" styleClass="bg-white mt-3 mb-3">
+				<!-- <div *ngFor="let picture of pictures">
+                        {{ picture.name }}
+                        <img [src]="getPictureSrc(picture)" />
+					</div> -->
+
+				<ui-form
+					[config]="{ fieldConfig: kidFieldConfig, entity: activeKid }"
+					(formChanged)="handleFormChanged($event)"
+				></ui-form>
+
+				<div class="mb-3 col-12">
+					<h4 class="w-100 border-bottom">Pictures</h4>
+					<p-fileUpload
+						#picauto
+						multiple="multiple"
+						accept="image/*"
+						maxFileSize="10000000"
+						[auto]="true"
+						chooseLabel="Browse Pictures"
+						customUpload="true"
+						(uploadHandler)="uploadPictures($event)"
+					>
+					</p-fileUpload>
+				</div>
+			</p-card>
+		</ng-template>
+		<ng-template #footer>
+			<edit-toolbar (delete)="onDelete($event)" (save)="onSubmit($event)"></edit-toolbar>
+		</ng-template>
+	</lib-page-container>
+</ng-container>

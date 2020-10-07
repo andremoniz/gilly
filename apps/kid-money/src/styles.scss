@@ -9,17 +9,47 @@ $info: #d23dff;
 @import '~bootstrap/scss/_variables';
 @import '~bootstrap/scss/_mixins';
 @import '~bootstrap/scss/_utilities';
-
-@import '../../../node_modules/primeflex/primeflex.css';
-@import '../../../node_modules/primeicons/primeicons.css';
-@import '../../../node_modules/primeng/resources/primeng.min.css';
-
-@import './assets/styles/nova-dark/theme.css';
+@import '~bootstrap/scss/grid';
 
 @import '../../../libs/app-shell/src/index.scss';
 
+html {
+	font-size: 14px !important;
+	box-sizing: border;
+}
+
 body {
 	// font-family: 'Bubblegum Sans';
+	font-family: verdana, arial, sans-serif;
 	background-color: $secondary;
 	// background-color: #dedede;
+}
+
+// OVERRIDES
+body .p-calendar.p-calendar-w-btn .p-inputtext {
+	width: 87%;
+}
+
+.p-calendar {
+	width: 100%;
+}
+
+.p-dropdown {
+	width: 100%;
+}
+
+.p-inputtext {
+	width: 100%;
+}
+
+.p-inputnumber {
+	width: 100%;
+}
+
+.p-breadcrumb {
+	background: transparent !important;
+	border: none !important;
+	position: absolute;
+	top: 0;
+	left: 20%;
 }

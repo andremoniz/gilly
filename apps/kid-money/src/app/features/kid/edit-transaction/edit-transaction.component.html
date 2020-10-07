@@ -1,0 +1,35 @@
+<lib-page-container>
+	<ng-template #main>
+		<p-card
+			[header]="(transaction.id ? 'Edit' : 'Create') + ' Transaction'"
+			styleClass="bg-white mt-3 mb-3"
+		>
+			<ui-form
+				[config]="{ fieldConfig: transactionFieldConfig, entity: transaction }"
+				(formChanged)="handleFormChange($event)"
+			></ui-form>
+
+			<div class="mb-3 col-12">
+				<h4 class="w-100 border-bottom">Pictures</h4>
+				<p-fileUpload
+					#picauto
+					multiple="multiple"
+					accept="image/*"
+					maxFileSize="10000000"
+					[auto]="true"
+					chooseLabel="Browse Pictures"
+					customUpload="true"
+					(uploadHandler)="uploadPictures($event)"
+				>
+				</p-fileUpload>
+			</div>
+		</p-card>
+	</ng-template>
+	<ng-template #footer>
+		<edit-toolbar
+			(delete)="onDelete($event)"
+			(save)="onSubmit($event)"
+			[hideDelete]="!transaction.id"
+		></edit-toolbar>
+	</ng-template>
+</lib-page-container>

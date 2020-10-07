@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { entityMap } from '@entities';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -50,7 +49,7 @@ export class DataService {
 
 	private setupDataService(config: any) {
 		this.apiEndpoint = config.apiEndpoint || config.dataEndpoint;
-		this.tables = { ...config.tables, ...entityMap };
+		this.tables = { ...config.tables };
 		this.setupLocalProps();
 	}
 
@@ -70,25 +69,34 @@ export class DataService {
 		this.loadingMap[table] = new BehaviorSubject<boolean>(false);
 		this.cache[table] = [];
 		this.subjectMap[table] = new BehaviorSubject<any>(null);
-		this.activeMap[table] = null;
+		this.activeMap[table] = new BehaviorSubject<any>(null);
 	}
 
 	/**
 	 * PUBLIC API
 	 */
 	public getModelName<T>(model: T | any) {
+		let modelName;
+
 		if (model && (model.name || model.displayName || model.tableName)) {
 			if (model.displayName) {
-				return model.displayName;
+				modelName = model.displayName;
 			}
 			if (model.tableName) {
-				return model.tableName;
+				modelName = model.tableName;
 			} else {
-				return model.name;
+				modelName = model.name;
 			}
 		} else {
-			return model;
+			modelName = model;
 		}
+
+		// TODO: Figure out a better way to auto setup undetected models...
+		if (!this.cache[modelName]) {
+			this.addTableToLocalProps(modelName);
+		}
+
+		return modelName;
 	}
 
 	public setData<T>(model: T, entities: any[] = []) {
@@ -148,17 +156,20 @@ export class DataService {
 
 	setActive<T>(model: T | any, entity?: any | string) {
 		if (!entity) {
-			this.activeMap[this.getModelName(model)] = null;
+			this.activeMap[this.getModelName(model)].next(null);
 		} else {
-			this.activeMap[this.getModelName(model)] = this.selectOneValue(
-				model,
-				entity.id ? entity.id : entity
+			this.activeMap[this.getModelName(model)].next(
+				this.selectOneValue(model, entity.id ? entity.id : entity)
 			);
 		}
 	}
 
-	selectActive<T>(model: T | any): T {
+	selectActive(model: any): Observable<any> {
 		return this.activeMap[this.getModelName(model)];
+	}
+
+	getActive<T>(model: T | any): any {
+		return this.activeMap[this.getModelName(model)].getValue();
 	}
 
 	saveActive<T>(model: T | any): Observable<T | T[]> {
@@ -190,7 +201,7 @@ interface SubjectMap {
  * A mapping of a currently selected entity for each table
  */
 interface ActiveMap {
-	[tableName: string]: any;
+	[tableName: string]: BehaviorSubject<any>;
 }
 
 /**

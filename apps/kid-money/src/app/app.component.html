@@ -1,7 +1,15 @@
+<p-toast></p-toast>
 <lib-page-container>
 	<ng-template #header>
-		<div class="w-100 bg-primary">
-			<img src="assets/icons/icon-36x36.png" class="ml-3" />
+		<div class="w-100">
+			<div class="w-100 bg-primary shadow-lg">
+				<img
+					src="assets/icons/icon-36x36.png"
+					class="ml-3 clickable"
+					[routerLink]="['.']"
+				/>
+			</div>
+			<p-breadcrumb [model]="appService.breadcrumbs" [home]="appService.home"></p-breadcrumb>
 		</div>
 	</ng-template>
 	<ng-template #main>

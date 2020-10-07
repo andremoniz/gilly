@@ -284,18 +284,20 @@
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
 						"showCircularDependencies": false,
-						"outputPath": "dist/apps/kid-money",
+						"outputPath": "dist/dakimbo-server/public/kid-money",
 						"index": "apps/kid-money/src/index.html",
 						"main": "apps/kid-money/src/main.ts",
 						"polyfills": "apps/kid-money/src/polyfills.ts",
 						"tsConfig": "apps/kid-money/tsconfig.app.json",
 						"aot": true,
-						"assets": [
-							"apps/kid-money/src/favicon.ico",
-							"apps/kid-money/src/assets",
-							"apps/kid-money/src/assets/primeicons.css"
+						"assets": ["apps/kid-money/src/favicon.ico", "apps/kid-money/src/assets"],
+						"styles": [
+							"apps/kid-money/src/styles.scss",
+							"node_modules/primeicons/primeicons.css",
+							"node_modules/primeflex/primeflex.css",
+							"node_modules/primeng/resources/themes/mdc-light-indigo/theme.css",
+							"node_modules/primeng/resources/primeng.min.css"
 						],
-						"styles": ["apps/kid-money/src/styles.scss"],
 						"scripts": []
 					},
 					"configurations": {
@@ -312,7 +314,7 @@
 							"extractCss": true,
 							"namedChunks": false,
 							"extractLicenses": true,
-							"vendorChunk": false,
+							"vendorChunk": true,
 							"buildOptimizer": true,
 							"budgets": [
 								{

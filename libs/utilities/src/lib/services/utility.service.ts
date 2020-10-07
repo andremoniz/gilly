@@ -46,7 +46,7 @@ export class UtilityService {
 		return dateString;
 	}
 
-	capitilizeFirstLetter(str): string {
+	capitalizeFirstLetter(str): string {
 		if (!str) return '';
 		const transformedStr = str.slice();
 		return transformedStr[0].toUpperCase() + transformedStr.slice(1);
@@ -58,7 +58,7 @@ export class UtilityService {
 			.match(/([A-Z]?[^A-Z]*)/g)
 			.slice(0, -1)
 			.join(' ');
-		return this.capitilizeFirstLetter(prettyStr);
+		return this.capitalizeFirstLetter(prettyStr);
 	}
 
 	handleUrlParameters(opts: {
@@ -86,7 +86,7 @@ export class UtilityService {
 	getPropertyTypesForArray(arr: any[] = [], ignoreProps: string[] = []) {
 		const propTypeMap = {};
 
-		arr.forEach((d) => {
+		(arr || []).forEach((d) => {
 			const oTypeMap = this.getPropertyTypes(d, ignoreProps);
 			Object.assign(propTypeMap, oTypeMap);
 		});

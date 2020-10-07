@@ -15,6 +15,21 @@ export interface EntityTransaction {
 	postProcess?: (entity: any, dbConnection: Connection) => void;
 }
 
+export interface EntityFieldConfig {
+	key: string;
+	label?: string;
+	type?: string;
+	className?: string;
+	placeholder?: string;
+	tooltip?: string;
+	required?: string;
+	defaultValue?: any;
+	visible?: boolean;
+	order?: number;
+	options?: any[];
+	optionLabel?: string;
+}
+
 export abstract class BaseModel implements EntityTransaction {
 	constructor(props?: any) {
 		if (!props) return;
@@ -52,6 +67,8 @@ export abstract class BaseModel implements EntityTransaction {
 	// Properties
 	static displayName?: string;
 	static repoType?: string;
+
+	static fieldConfig?: EntityFieldConfig[];
 
 	static allowedRoles?: string[];
 
