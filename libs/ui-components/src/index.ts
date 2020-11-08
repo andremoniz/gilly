@@ -9,10 +9,6 @@ export * from './lib/visualization/map/ui-map.interface';
 export * from './lib/visualization/map/ui-map.component';
 export * from './lib/visualization/map/ui-map.module';
 
-export * from './lib/visualization/timeline/ui-timeline.interface';
-export * from './lib/visualization/timeline/ui-timeline.component';
-export * from './lib/visualization/timeline/ui-timeline.module';
-
 export * from './lib/visualization/chart/bar/ui-bar-chart.module';
 export * from './lib/visualization/chart/bar/ui-bar-chart.component';
 export * from './lib/visualization/chart/bar/ui-bar-chart.interface';
