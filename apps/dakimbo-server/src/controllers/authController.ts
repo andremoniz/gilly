@@ -1,15 +1,28 @@
 import { Request, Response } from 'express';
+import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
+import chalk from 'chalk';
 
-import { User } from '../../../../libs/entities/auth/user';
+import { AuthRole } from '../../../../libs/entities/auth/auth-role';
 import config from '../config';
-import UserController from './userController';
+import { User } from './../../../../libs/entities/auth/user';
+import { UserController } from './userController';
 
 const loginAttempts = 3;
 
-class AuthController {
-	static login = async (req: Request, res: Response) => {
+export class AuthController {
+	private userRepository;
+
+	private getUserRepository() {
+		if (!this.userRepository) {
+			this.userRepository = getRepository(User);
+		}
+	}
+
+	async login(req: Request, res: Response) {
+		this.getUserRepository();
+
 		//Check if username and password are set
 		let { username, email, password } = req.body;
 		if (!((username || email) && password)) {
@@ -19,34 +32,34 @@ class AuthController {
 		}
 
 		//Get user from database
-		const userRepository = getRepository(User);
 		let user: User;
 		try {
-			user = await userRepository.findOneOrFail({ where: [{ username }, { email }] });
+			user = await this.userRepository.findOneOrFail({ where: [{ username }, { email }] });
 		} catch (error) {
 			res.status(401).send(
 				'Account was not found, please check your username / e-mail and try again.'
 			);
-			console.log(`LOGIN: User ${username} not found; failed to log in!`);
+			console.log(`LOGIN: User ${chalk.magenta(username)} not found; failed to log in!`);
 			return;
 		}
 
 		if (user.numFailedLogin >= loginAttempts || user.isLocked) {
 			const attemptsRemaining = loginAttempts - user.numFailedLogin;
 			user.isLocked = user.isLocked || attemptsRemaining <= 0;
-			await userRepository.save(user); // increment num failed login counter
+			await this.userRepository.save(user); // increment num failed login counter
 
 			res.status(401).send('Account is locked; please contact an administrator!');
-			console.log(`LOGIN: User ${username} has a locked account.`);
+			console.log(`LOGIN: User ${chalk.magenta(username)} has a locked account.`);
 			return;
 		}
 
 		//Check if encrypted password match
-		if (!UserController.checkIfUnencryptedPasswordIsValid(password, user)) {
+		const isValidPassword = await this.checkIfUnencryptedPasswordIsValid(password, user);
+		if (!isValidPassword) {
 			user.numFailedLogin++;
 			const attemptsRemaining = loginAttempts - user.numFailedLogin;
 			user.isLocked = user.isLocked || attemptsRemaining <= 0;
-			await userRepository.save(user); // increment num failed login counter
+			await this.userRepository.save(user); // increment num failed login counter
 
 			res.status(401).send(
 				`You entered a wrong username, e-mail or password. ${
@@ -55,40 +68,66 @@ class AuthController {
 						: 'Account is now LOCKED!'
 				} `
 			);
-			console.log(`LOGIN: User ${user.username} wrong password; failed to log in!`);
+			console.log(
+				`LOGIN: User ${chalk.magenta(user.username)} wrong password; failed to log in!`
+			);
 
 			return;
 		}
 
-		//Sign JWT, valid for 1 hour
-		const token = jwt.sign(
-			{
-				userId: user.id,
-				username: user.username,
-				roles: user.roles.map((r) => {
-					return { role: r.role };
-				})
-			},
-			config.jwtSecret,
-			{
-				expiresIn: '1h'
-			}
-		);
+		await this.handleUserLogin(res, user);
+	}
 
-		// Delete user pass
-		delete user.password;
+	async loginCertificate(req: Request | any, res: Response) {
+		this.getUserRepository();
 
-		console.log(`LOGIN: User ${user.username} successfully logged in!`);
-		user.numSuccessfulLogin++;
-		user.numFailedLogin = 0;
-		user.lastLoggedInDate = new Date();
-		await userRepository.save(user); // increment num successful login counter
+		if (!req.connection.getPeerCertificate) {
+			res.status(500).send(
+				`Token login not implemented on the server, please use username / password...`
+			);
+			return; // SSL not enabled, don't try to do anything else
+		}
 
-		//Send the jwt in the response
-		res.send(Object.assign({ jwt: token }, user));
-	};
+		if (!req.client.authorized) {
+			res.status(401).send(`Unauthorized: Client certificate not authorized!`);
+			return;
+		}
 
-	static changePassword = async (req: Request, res: Response) => {
+		// Get certificate details
+		const cert = req.connection.getPeerCertificate(true);
+		if (!cert || !Object.keys(cert).length) {
+			res.status(401).send(
+				`Client certificate was authenticated, but certificate information could not be retrieved...`
+			);
+			return;
+		}
+
+		const [lastName, firstName] = [...cert.subject.CN.toLowerCase().split('.')];
+		const certUsername = `${firstName}.${lastName}`;
+
+		let user: User;
+		try {
+			user = await this.userRepository.findOneOrFail({ where: [{ username: certUsername }] });
+		} catch (error) {
+			user = await this.createUser(certUsername);
+			console.info(
+				`Didn't find an existing user for presented Certificate, created a new user: ${chalk.magenta(
+					certUsername
+				)}!`
+			);
+		}
+
+		await this.handleUserLogin(res, user);
+	}
+
+	async checkIfUnencryptedPasswordIsValid(unencryptedPassword: string, userEntity: User) {
+		const isValid = bcrypt.compareSync(unencryptedPassword, userEntity.password);
+		return isValid;
+	}
+
+	async changePassword(req: Request, res: Response) {
+		this.getUserRepository();
+
 		//Get ID from JWT
 		const id = res.locals.jwtPayload.userId;
 
@@ -99,32 +138,92 @@ class AuthController {
 		}
 
 		//Get user from the database
-		const userRepository = getRepository(User);
 		let user: User;
 		try {
-			user = await userRepository.findOneOrFail(id);
+			user = await this.userRepository.findOneOrFail(id);
 		} catch (id) {
 			res.status(401).send();
 		}
 
 		//Check if old password matches
-		if (!UserController.checkIfUnencryptedPasswordIsValid(oldPassword, user)) {
-			res.status(401).send();
+		const isOldPasswordValid = await this.checkIfUnencryptedPasswordIsValid(oldPassword, user);
+		if (!isOldPasswordValid) {
+			res.status(401).send(`New password must be different than the previous...`);
 			return;
 		}
 
-		//Validate the model (password length)
-		try {
-			user.password = newPassword;
-			//Hash the new password and save
-			UserController.hashPassword(user);
-			userRepository.save(user);
+		// TODO: Validate the model (password length)
+		user.password = newPassword;
 
-			res.status(204).send();
-		} catch (e) {
-			res.status(400).send(e);
-			return;
+		//Hash the new password and save
+		new UserController().hashPassword(user);
+		this.userRepository.save(user);
+
+		res.status(204).send();
+	}
+
+	private async handleUserLogin(res: Response, user: User) {
+		//Sign JWT, valid for 10 hours
+		const token = jwt.sign(
+			{
+				userId: user.id,
+				username: user.username,
+				roles: user.roles.map((r) => {
+					return { role: r.role };
+				})
+			},
+			config.jwtSecret,
+			{
+				expiresIn: '10h'
+			}
+		);
+
+		// Delete user pass
+		delete user.password;
+
+		console.log(`LOGIN: User ${chalk.magenta(user.username)} successfully logged in!`);
+		user.numSuccessfulLogin++;
+		user.numFailedLogin = 0;
+		user.lastLoggedInDate = new Date();
+		await this.userRepository.save(user); // increment num successful login counter
+
+		//Send the jwt in the response
+		res.send(Object.assign({ jwt: token }, user));
+	}
+
+	private async createUser(username, roles?) {
+		const randomPassword = require('generate-password').generate({
+			length: 14,
+			numbers: true,
+			symbols: true
+		});
+
+		if (!roles) {
+			const authRoleRepository = getRepository(AuthRole);
+			let guestRole = await authRoleRepository.findOne({ where: { role: 'guest' } });
+			if (!guestRole) {
+				let guest = new AuthRole();
+				guest.role = 'guest';
+				guestRole = await authRoleRepository.save(guest);
+			}
+
+			roles = [guestRole];
 		}
-	};
+
+		let user: User;
+		user = new User({
+			username: username,
+			password: randomPassword,
+			roles: roles,
+			lastLoggedInDate: new Date(),
+			numSuccessfulLogin: 0,
+			numFailedLogin: 0,
+			isLocked: false
+		});
+
+		new UserController().hashPassword(user);
+		const createdUser = await this.userRepository.save(user);
+
+		return createdUser;
+	}
 }
-export default AuthController;

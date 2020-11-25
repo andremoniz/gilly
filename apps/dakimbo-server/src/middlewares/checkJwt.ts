@@ -1,10 +1,21 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
+
 import config from '../config';
+import { entityMap } from './../../../../libs/entities/_entity-map';
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
-	// Get the jwt token from the head
+	// Check if the requested entity doesn't need authorization
+	const entityName = req.params.entity;
+	const model = entityMap[entityName];
 	const authHeader = <string>req.headers['authorization'];
+
+	if (model && model.ignoreAuthorization) {
+		next();
+		return;
+	}
+
+	// Get the jwt token from the head
 	if (!authHeader || !authHeader.includes('Bearer')) {
 		res.status(408).send('No Authorization Header or Bearer token presented!');
 		return;
@@ -27,7 +38,7 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
 	// We want to send a new token on every request
 	const { userId, username, roles } = jwtPayload;
 	const newToken = jwt.sign({ userId, username, roles }, config.jwtSecret, {
-		expiresIn: '1h'
+		expiresIn: '10h'
 	});
 	res.setHeader('token', newToken);
 

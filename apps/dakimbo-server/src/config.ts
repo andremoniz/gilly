@@ -1,41 +1,89 @@
-import { entityMap } from '@entities';
+import { ConnectionOptions } from 'typeorm';
+
+import { entityMap } from './../../../libs/entities/_entity-map';
+
+require('dotenv').config();
+
+export interface ServerConfig {
+	isProd?: boolean;
+
+	port?: number;
+	portSSL?: number;
+
+	dbOptions?: ConnectionOptions;
+
+	jwtSecret?: string;
+
+	pathToMedia?: string;
+
+	httpsOpts?: {
+		key: string;
+		cert: string;
+		ca: string;
+		requestCert: boolean;
+		rejectUnauthorized: boolean;
+	};
+}
+
+const fs = require('fs');
 
 const isProd = process.env.IS_PROD === 'true';
+
+const httpPort = isProd ? +process.env.SERVER_PORT_HTTP : +process.env.SERVER_PORT_HTTP_DEV || 1337;
+const httpsPort = isProd
+	? +process.env.SERVER_PORT_HTTPS
+	: +process.env.SERVER_PORT_HTTPS_DEV || 2337;
+
+const certKey = process.env.CERT_KEY_PATH;
+const cert = process.env.CERT_PATH;
+
 const pathToEntities = isProd ? './database/entities/**/*.js' : './database/entities/**/*.ts';
 const pathToMigrations = isProd ? './database/migrations/**/*.js' : './database/migrations/**/*.ts';
+const dbType = isProd ? process.env.DB_TYPE : process.env.DB_TYPE_DEV;
+const dbHost = isProd ? process.env.DB_HOST : process.env.DB_HOST_DEV;
+const dbPort = isProd ? process.env.DB_PORT : process.env.DB_PORT_DEV;
+const dbUsername = isProd ? process.env.DB_USER : process.env.DB_USER_DEV;
+const dbPassword = isProd ? process.env.DB_PASSWORD : process.env.DB_PASSWORD_DEV;
+const dbDatabase = isProd ? process.env.DB_DATABASE : process.env.DB_DATABASE_DEV || 'sof-server';
 
-export default {
+// const createCertificate = util.promisify(pem.createCertificate);
+// const keys = await createCertificate({ days: 1, selfSigned: true });
+
+const config: ServerConfig = {
 	isProd: isProd,
 
-	httpsOpts: {
-		// Server SSL private key and certificate
-		// key: fs.readFileSync(__dirname + '/security/dev-cert.key'),
-		// cert: fs.readFileSync(__dirname + '/security/dev-cert.pem'),
-		// issuer/CA certificate against which the client certificate will be
-		// validated. A certificate that is not signed by a provided CA will be
-		// rejected at the protocol layer.
-		// ca: fs.readFileSync(__dirname + '/config/certs/ca-cert.pem'),
-		// request a certificate, but don't necessarily reject connections from
-		// clients providing an untrusted or no certificate. This lets us protect only
-		// certain routes, or send a helpful error message to unauthenticated clients.
-		// requestCert: true,
-		// rejectUnauthorized: true,
-	},
+	port: httpPort,
+	portSSL: httpsPort,
+
+	jwtSecret: process.env.JWT_SECRET || 'CHANGE_ME',
 
 	dbOptions: {
-		type: process.env.DB_TYPE,
-		host: process.env.DB_HOST,
-		port: process.env.DB_PORT,
-		username: process.env.DB_USER,
-		password: process.env.DB_PASSWORD,
-		database: process.env.DB_DATABASE || 'dakimbo-server',
+		type: <any>dbType,
+		host: dbHost,
+		port: +dbPort,
+		username: dbUsername,
+		password: dbPassword,
+		database: dbDatabase,
 		synchronize: true,
 		logging: isProd ? false : false,
 		entities: Object.values(entityMap)
+		// cache: true,
 		// entities: [path.join(__dirname, pathToEntities)],
 		// migrations: [path.join(__dirname, pathToMigrations)],
 		// migrationsDir: 'migration'
 	},
 
-	jwtSecret: process.env.JWT_SECRET || 'CHANGE_ME'
+	pathToMedia: '/public/_media'
 };
+
+if (certKey && cert) {
+	config['httpsOpts'] = {
+		key: fs.readFileSync(__dirname + certKey),
+		cert: fs.readFileSync(__dirname + cert),
+		ca: fs.readFileSync(__dirname + cert),
+		requestCert: true,
+		rejectUnauthorized: false
+	};
+}
+
+export default config;

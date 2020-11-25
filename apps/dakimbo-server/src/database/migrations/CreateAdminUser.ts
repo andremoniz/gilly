@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 
 import { AuthRole } from '../../../../../libs/entities/auth/auth-role';
 import { User } from '../../../../../libs/entities/auth/user';
-import UserController from '../../controllers/userController';
+import { UserController } from '../../controllers/userController';
 
 export async function createAdminUser() {
 	const adminUser: User = await getRepository(User)
@@ -12,12 +12,11 @@ export async function createAdminUser() {
 
 	let superadminRole: AuthRole = await getRepository(AuthRole)
 		.createQueryBuilder('role')
-		.where('role.role = :role', { role: 'Super Admin' })
+		.where('role.role = :role', { role: 'superadmin' })
 		.getOne();
-
 	if (!superadminRole) {
 		let superadmin = new AuthRole();
-		superadmin.role = 'SuperAdmin';
+		superadmin.role = 'superadmin';
 		const roleRepository = getRepository(AuthRole);
 		superadminRole = await roleRepository.save(superadmin);
 	}
@@ -28,7 +27,7 @@ export async function createAdminUser() {
 		let user = new User();
 		user.username = 'superadmin';
 		user.password = 'superadmin';
-		UserController.hashPassword(user);
+		new UserController().hashPassword(user);
 		user.email = 'aDm!n@admin.com';
 		user.roles = [superadminRole];
 		const adminUser = await getRepository(User).save(user);
@@ -40,5 +39,28 @@ export async function createAdminUser() {
 
 			console.log(`Updated Super Admin User!`);
 		}
+	}
+
+	// Setup other roles needed by the system too
+	let userRole: AuthRole = await getRepository(AuthRole)
+		.createQueryBuilder('role')
+		.where('role.role = :role', { role: 'user' })
+		.getOne();
+	if (!userRole) {
+		let user = new AuthRole();
+		user.role = 'user';
+		const roleRepository = getRepository(AuthRole);
+		userRole = await roleRepository.save(user);
+	}
+
+	let guestRole: AuthRole = await getRepository(AuthRole)
+		.createQueryBuilder('role')
+		.where('role.role = :role', { role: 'guest' })
+		.getOne();
+	if (!guestRole) {
+		let guest = new AuthRole();
+		guest.role = 'guest';
+		const roleRepository = getRepository(AuthRole);
+		guestRole = await roleRepository.save(guest);
 	}
 }

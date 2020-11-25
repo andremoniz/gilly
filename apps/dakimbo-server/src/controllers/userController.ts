@@ -2,12 +2,13 @@ import * as bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
+import chalk from 'chalk';
 
 import { User } from '../../../../libs/entities/auth/user';
 import config from '../config';
 
-class UserController {
-	static listAll = async (req: Request, res: Response) => {
+export class UserController {
+	async listAll(req: Request, res: Response) {
 		//Get users from database
 		const userRepository = getRepository(User);
 		const users = await userRepository.find();
@@ -18,9 +19,9 @@ class UserController {
 
 		//Send the users object
 		res.send(users);
-	};
+	}
 
-	static getOneById = async (req: Request, res: Response) => {
+	async getOneById(req: Request, res: Response) {
 		//Get the ID from the url
 		const id: string = req.params.id;
 
@@ -35,9 +36,9 @@ class UserController {
 		} catch (error) {
 			res.status(404).send('User not found');
 		}
-	};
+	}
 
-	static newUser = async (req: Request, res: Response) => {
+	async newUser(req: Request, res: Response) {
 		//Get parameters from the body
 		let { username, password, email, roles } = req.body;
 		let user = new User();
@@ -48,8 +49,10 @@ class UserController {
 
 		// const { adminUser } = <any>jwt.verify(<string>res.getHeader('token'), config.jwtSecret);
 
+		// TODO: Validade if the parameters are ok
+
 		//Hash the password, to securely store on DB
-		UserController.hashPassword(user);
+		this.hashPassword(user);
 
 		//Try to save. If fails, the username is already in use
 		const userRepository = getRepository(User);
@@ -63,11 +66,11 @@ class UserController {
 		delete user.password;
 
 		//If all ok, send 201 response
-		console.log(`CREATE USER: ${user.username}`);
+		console.log(`CREATE USER: ${chalk.magenta(user.username)}`);
 		res.status(201).send(user);
-	};
+	}
 
-	static editUser = async (req: Request, res: Response) => {
+	async editUser(req: Request, res: Response) {
 		//Get the ID from the url
 		const id = req.params.id;
 
@@ -91,28 +94,32 @@ class UserController {
 		user.username = username;
 		user.roles = roles;
 		user.email = email;
-		user.isLocked = isLocked;
-		user.numFailedLogin = numFailedLogin;
+		user.isLocked = isLocked || false;
+		user.numFailedLogin = numFailedLogin || 0;
 
 		if (password) {
 			user.password = password;
-			UserController.hashPassword(user);
+			this.hashPassword(user);
 		}
 
 		//Try to save, if fails, that means username already in use
 		try {
 			await userRepository.save(user);
 		} catch (e) {
+			console.error(e);
 			res.status(409).send('username already in use');
 			return;
 		}
-
 		//After all send a 204 (no content, but accepted) response
-		console.log(`EDIT USER: ${user.username} | BY ADMIN: ${adminUser}`);
+		console.log(
+			`EDIT USER: ${chalk.magenta(user.username)} | BY ADMIN: ${chalk.red(
+				adminUser?.username
+			)}`
+		);
 		res.status(204).send();
-	};
+	}
 
-	static deleteUser = async (req: Request, res: Response) => {
+	async deleteUser(req: Request, res: Response) {
 		//Get the ID from the url
 		const id = req.params.id;
 
@@ -129,11 +136,15 @@ class UserController {
 		userRepository.delete(id);
 
 		//After all send a 204 (no content, but accepted) response
-		console.log(`DELETE USER: ${user.username} | BY ADMIN: ${adminUser}`);
+		console.log(
+			`DELETE USER: ${chalk.magenta(user.username)} | BY ADMIN: ${chalk.red(
+				adminUser?.username
+			)}`
+		);
 		res.status(204).send();
-	};
+	}
 
-	static getCurrentUser = async (req: Request, res: Response) => {
+	async getCurrentUser(req: Request, res: Response) {
 		// Get the jwt token from the head
 		const authHeader = <string>req.headers['authorization'];
 		if (!authHeader || !authHeader.includes('Bearer')) {
@@ -170,15 +181,9 @@ class UserController {
 		delete user.password;
 
 		res.status(201).send(user);
-	};
+	}
 
-	static hashPassword(userEntity: User) {
+	async hashPassword(userEntity: User) {
 		userEntity.password = bcrypt.hashSync(userEntity.password, 8);
 	}
-
-	static checkIfUnencryptedPasswordIsValid(unencryptedPassword: string, userEntity: User) {
-		return bcrypt.compareSync(unencryptedPassword, userEntity.password);
-	}
 }
-
-export default UserController;
