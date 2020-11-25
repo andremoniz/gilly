@@ -5,7 +5,7 @@
 			styleClass="bg-white mt-3 mb-3"
 		>
 			<ui-form
-				[config]="{ fieldConfig: transactionFieldConfig, value: transaction }"
+				[config]="{ fieldConfig: transactionFieldConfig, value: transaction, hideControls: true }"
 				(formChanged)="handleFormChange($event)"
 			></ui-form>
 
