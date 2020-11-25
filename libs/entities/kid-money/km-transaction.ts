@@ -40,8 +40,10 @@ export class KMTransaction extends BaseModel {
 	static fieldConfig: EntityFieldConfig[] = [
 		{ key: 'name', label: 'Transaction Name', type: 'input' },
 		{ key: 'transactionDate', label: 'Date of Transaction', type: 'date' },
-		{ key: 'cost', label: 'Cost', type: 'input' },
-		{ key: 'income', label: 'Income', type: 'input' },
+		
+		{ key: 'cost', label: 'Cost', type: 'input', className: 'col-6' },
+		{ key: 'income', label: 'Income', type: 'input', className: 'col-6' },
+		
 		{ key: 'type', label: 'Type', type: 'input' }
 		// { key: 'pictures', type: 'array' }
 	];
