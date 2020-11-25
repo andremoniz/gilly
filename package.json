@@ -107,7 +107,6 @@
 		"leaflet-tooltip-layout": "^0.1.2",
 		"leaflet.markercluster": "^1.4.1",
 		"lodash": "^4.17.15",
-		"mgrs": "^1.0.0",
 		"mkdirp": "^1.0.4",
 		"mongodb": "^3.5.7",
 		"morgan": "^1.10.0",
