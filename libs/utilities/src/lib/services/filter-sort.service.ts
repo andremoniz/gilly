@@ -1,7 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { areIntervalsOverlapping } from 'date-fns';
 
-@Injectable()
+import { isDate } from '../utilities/dates/isDate';
+
+@Injectable({providedIn: 'root'})
 export class FilterSortService {
 	constructor(private datePipe: DatePipe) {}
 
@@ -25,6 +28,37 @@ export class FilterSortService {
 
 	filter(array: any[], searchProp: string, query: string) {
 		return array.filter((item) => item[searchProp] === query);
+	}
+
+	filterDateRange(array: any[], searchProp: string, dateRange: Date[]) {
+		return array.filter((item) => {
+			let searchDate = item[searchProp];
+			if (!isDate(searchDate)) return false;
+			if (searchDate >= dateRange[0] && searchDate <= dateRange[1]) return true;
+			return false;
+		});
+	}
+
+	filterDatesInRange(array: any[], startProp: string, endProp: string, dateRange: Date[]) {
+		return array.filter((item) => {
+			let startDate = item[startProp],
+				endDate = item[endProp];
+			if (!(isDate(startDate) || isDate(endDate))) return false;
+			(startDate = new Date(startDate)), (endDate = new Date(endDate));
+
+			try {
+				// return (
+				// 	(dateRange[0] <= startDate && startDate <= dateRange[1]) ||
+				// 	(dateRange[0] <= endDate && endDate <= dateRange[1])
+				// );
+				return areIntervalsOverlapping(
+					{ start: startDate, end: endDate },
+					{ start: dateRange[0], end: dateRange[1] }
+				);
+			} catch (e) {
+				return false;
+			}
+		});
 	}
 
 	search(
@@ -228,26 +262,6 @@ export class FilterSortService {
 				} else {
 					matched = o1 === o2;
 				}
-			} else if (o1.optLabel || o2.optLabel) {
-				if (o1.optLabel && o2.optLabel) {
-					matched = o1.optLabel === o2.optLabel;
-				} else if (o1.label) {
-					matched = o1.optLabel === o2;
-				} else if (o2.label) {
-					matched = o2.optLabel === o1;
-				} else {
-					matched = o1 === o2;
-				}
-			} else if (o1.optValue || o2.optValue) {
-				if (o1.optValue && o2.optValue) {
-					matched = o1.optValue === o2.optValue;
-				} else if (o1.label) {
-					matched = o1.optValue === o2;
-				} else if (o2.label) {
-					matched = o2.optValue === o1;
-				} else {
-					matched = o1 === o2;
-				}
 			} else if (o1.label || o2.label) {
 				if (o1.label && o2.label) {
 					matched = o1.label === o2.label;
@@ -255,6 +269,16 @@ export class FilterSortService {
 					matched = o1.label === o2;
 				} else if (o2.label) {
 					matched = o2.label === o1;
+				} else {
+					matched = o1 === o2;
+				}
+			} else if (o1.value || o2.value) {
+				if (o1.value && o2.value) {
+					matched = o1.value === o2.value;
+				} else if (o1.label) {
+					matched = o1.value === o2;
+				} else if (o2.label) {
+					matched = o2.value === o1;
 				} else {
 					matched = o1 === o2;
 				}

@@ -1,15 +1,12 @@
-import { DatePipe } from '@angular/common';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { parseISO } from 'date-fns';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UtilityService {
 	isSmallScreen: boolean = false;
 
 	constructor(
-		private datePipe: DatePipe,
 		private breakpointObserver: BreakpointObserver,
 		private route: ActivatedRoute,
 		private router: Router
@@ -21,44 +18,6 @@ export class UtilityService {
 				this.isSmallScreen = false;
 			}
 		});
-	}
-
-	createFromModelType<T>(model: { new (...args: any[]): T }): T {
-		return new model({});
-	}
-
-	isLoaded(loading: boolean): boolean {
-		return loading === false;
-	}
-
-	formatDate(date): string {
-		const dateString = this.datePipe.transform(date, 'longDate');
-		return dateString;
-	}
-
-	formatDateMedium(date): string {
-		const dateString = this.datePipe.transform(date, 'mediumDate');
-		return dateString;
-	}
-
-	formatDateShort(date): string {
-		const dateString = this.datePipe.transform(date, 'shortDate');
-		return dateString;
-	}
-
-	capitalizeFirstLetter(str): string {
-		if (!str) return '';
-		const transformedStr = str.slice();
-		return transformedStr[0].toUpperCase() + transformedStr.slice(1);
-	}
-
-	prettyPrint(str): string {
-		if (!str) return '';
-		const prettyStr = str
-			.match(/([A-Z]?[^A-Z]*)/g)
-			.slice(0, -1)
-			.join(' ');
-		return this.capitalizeFirstLetter(prettyStr);
 	}
 
 	handleUrlParameters(opts: {
@@ -81,55 +40,6 @@ export class UtilityService {
 		}
 
 		this.router.navigate([], { relativeTo: this.route, queryParams: urlParameters });
-	}
-
-	getPropertyTypesForArray(arr: any[] = [], ignoreProps: string[] = []) {
-		const propTypeMap = {};
-
-		(arr || []).forEach((d) => {
-			const oTypeMap = this.getPropertyTypes(d, ignoreProps);
-			Object.assign(propTypeMap, oTypeMap);
-		});
-
-		return propTypeMap;
-	}
-
-	getPropertyTypes(obj: any, ignoreProps: string[] = []) {
-		const propTypeMap = {};
-		Object.keys(obj).forEach((key) => {
-			if (ignoreProps.find((p) => p === key)) return;
-			propTypeMap[key] = this.getValueType(obj[key]);
-		});
-		return propTypeMap;
-	}
-
-	getValueType(value) {
-		if (!value) return null;
-
-		let type = 'string';
-		switch (typeof value) {
-			case 'number':
-				type = 'number';
-				break;
-			case 'string':
-				if (this.isDate(value)) type = 'date';
-				else type = 'string';
-				break;
-			case 'object':
-				if (this.isDate(value)) type = 'date';
-				else if (value instanceof Array) type = 'array';
-				else type = 'object';
-				break;
-			default:
-				type = 'string';
-				break;
-		}
-		return type;
-	}
-
-	isDate(value: any) {
-		const parsed = <any>parseISO(value);
-		return parsed.toString() !== 'Invalid Date';
 	}
 
 	getColorForPercentage(pct) {

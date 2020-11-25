@@ -1,10 +1,10 @@
-import { capitalizeFirstLetter } from './capitalizeFirstLetter';
+import { capitilizeFirstLetter } from './capitilizeFirstLetter';
 
 export const prettyPrint = (str) => {
-	if (!str) return '';
+	if (!str || Array.isArray(str)) return '';
 	const prettyStr = str
 		.match(/([A-Z]?[^A-Z]*)/g)
 		.slice(0, -1)
 		.join(' ');
-	return capitalizeFirstLetter(prettyStr);
+	return capitilizeFirstLetter(prettyStr);
 };
