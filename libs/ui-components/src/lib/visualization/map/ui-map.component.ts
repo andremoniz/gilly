@@ -8,10 +8,10 @@ import {
 	OnInit,
 	Output
 } from '@angular/core';
-import { UIMapDisplayOptions } from '@sof/ui-components';
 import { uuidv4 } from 'libs/utilities/src/lib/utilities/uuidv4';
 
 import { UIVisualizationBase, UIVisualizationConfig } from '../ui-visualization.base';
+import { UIMapDisplayOptions } from './ui-map.interface';
 import { UIMapService } from './ui-map.service';
 
 @Component({

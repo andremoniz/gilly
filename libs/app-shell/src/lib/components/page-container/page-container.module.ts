@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 
 import { PageContainerComponent } from './page-container.component';
+import { PageHeaderComponent } from './page-header.component';
 
 @NgModule({
-    declarations: [PageContainerComponent],
-    imports: [CommonModule],
-    exports: [PageContainerComponent]
+	declarations: [PageContainerComponent, PageHeaderComponent],
+	imports: [CommonModule],
+	exports: [PageContainerComponent, PageHeaderComponent]
 })
 export class PageContainerModule {}

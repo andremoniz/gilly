@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { isBefore } from 'date-fns';
+import { addHours } from 'date-fns/esm';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
-import { User } from '../../../../entities/auth/user';
 import { AppShellModuleConfig } from '../app-shell.module';
+import { User } from './../../../../entities/auth/user';
 import { checkUserRole } from './../../../../utilities/src/lib/auth/checkUserRole';
 
 @Injectable()
@@ -14,67 +16,88 @@ export class AuthService {
 
 	private user: User;
 
-	userLoggedIn$ = new BehaviorSubject<User>(null);
+	private loginStorageKey = 'sof_login';
+
+	userLoggedIn$: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
 	userExpiredCheck;
-	updateUserExpired;
+
+	loading: boolean = false;
 
 	constructor(
 		private http: HttpClient,
 		private router: Router,
-		@Inject('config') config: AppShellModuleConfig
+		@Optional() @Inject('config') config: AppShellModuleConfig
 	) {
+		this.setConfig(config);
+
+		this.setUser(this.getUser()); // initially setup the user
+
+		// Check for unauthorized and handle appropriately
+		this.userExpiredCheck = setInterval(() => {
+			if (this.isUserExpired(this.user)) this.logout();
+		}, 60 * 1000);
+	}
+
+	setConfig(config: AppShellModuleConfig) {
 		this.config = config;
-
-		if (this.getUser()) {
-			this.userLoggedIn$.next(this.getUser());
-		}
-		// this.userExpiredCheck = setInterval(() => { // Check every minute if user is still valid, if not then boot 'em
-		//   if (!this.user || this.isUserExpired) {
-		//     this.logout();
-		//   }
-		// }, 60 * 1000);
 	}
 
-	handleLogin(login: { username: string; password: string }) {
+	handleLogin(login: { username: string; password: string }, isCertLogin?: boolean) {
+		this.loading = true;
+
 		return this.http
-			.post(this.config.securityEndpoint, login)
-			.pipe(tap((user: User) => this.setUserFromServer(user)));
+			.post(
+				`${
+					isCertLogin
+						? this.config.securityTokenEndpoint || this.config.securityEndpoint
+						: this.config.securityEndpoint
+				}${isCertLogin ? '-cert' : ''}`,
+				login
+			)
+			.pipe(
+				tap((user: User) => {
+					this.setUserFromServer(user);
+					this.loading = false;
+				}),
+				catchError((error) => {
+					console.error('LOGIN ERROR: An error occurred:', error);
+					this.loading = false;
+					return throwError(error);
+				})
+			);
 	}
 
-	isUserExpired() {
-		return new Date(this.user.expiry).getTime() < new Date().getTime();
+	isUserExpired(user: User) {
+		if (!user) return true;
+		const userExpired = isBefore(new Date(user.expiry), new Date());
+		return userExpired;
 	}
 
 	setUser(user) {
 		if (!user) return;
 
 		this.user = user;
-		localStorage.setItem('dakimbo_login', JSON.stringify(this.user));
+		localStorage.setItem(this.loginStorageKey, JSON.stringify(this.user));
 		if (user) {
-			// if we have a user, then setup the expiry to auto update every minute
-			this.updateUserExpired = setInterval(() => {
-				this.user.expiry = new Date(new Date().getTime() + 60 * 60 * 1 * 1000);
-				localStorage.setItem('dakimbo_login', JSON.stringify(this.user));
-			}, 60 * 1000);
-
 			this.userLoggedIn$.next(user);
 		}
 	}
 
 	getUser(): User {
-		const storedUser: User = JSON.parse(localStorage.getItem('dakimbo_login'));
-
+		let storedUser: User = JSON.parse(localStorage.getItem(this.loginStorageKey));
 		if (!storedUser) {
 			return null;
 		}
 
-		if (new Date(storedUser.expiry) < new Date()) {
+		storedUser = new User(storedUser);
+
+		if (this.isUserExpired(storedUser)) {
 			this.logout();
 			return null;
 		}
 
-		this.user = new User(storedUser);
+		this.user = storedUser;
 		return this.user;
 	}
 
@@ -89,21 +112,29 @@ export class AuthService {
 	setUserFromServer(res: User) {
 		const newUser = res;
 		newUser.jwt = res.jwt;
-		newUser.expiry = new Date(new Date().getTime() + 60 * 60 * 1 * 1000); // set expiration to one hour later;
+		newUser.expiry = addHours(new Date(), 10);
 		this.setUser(newUser);
-
 		this.router.navigate(['/']);
 	}
 
 	logout() {
 		this.user = null;
-		clearInterval(this.updateUserExpired);
-		localStorage.removeItem('dakimbo_login');
+		localStorage.removeItem(this.loginStorageKey);
 		this.router.navigate(['/']);
 	}
 
 	isAuthenticated() {
 		return this.getUser() !== null;
+	}
+
+	isUserAuthorized(expectedRoles?: string[]) {
+		if (!expectedRoles || !expectedRoles.length) return true;
+		return checkUserRole(this.getUser(), expectedRoles);
+	}
+
+	isUserUnauthorized(unauthorizedRoles?: string[]) {
+		if (!unauthorizedRoles || !unauthorizedRoles.length) return false;
+		return !!checkUserRole(this.getUser(), unauthorizedRoles);
 	}
 
 	isActionAuthorized(action: string, expectedRoles?: string[]) {
@@ -113,8 +144,7 @@ export class AuthService {
 
 	handleUnauthorized() {
 		this.user = null;
-		clearInterval(this.updateUserExpired);
-		localStorage.removeItem('dakimbo_login');
+		localStorage.removeItem(this.loginStorageKey);
 		this.router.navigate(['not-authorized']);
 	}
 

@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 		return this.loginForm.get('password');
 	}
 
-	constructor(private auth: AuthService, private fb: FormBuilder) {}
+	constructor(public auth: AuthService, private fb: FormBuilder) {}
 
 	ngOnInit() {
 		this.loginForm = this.fb.group({
@@ -32,21 +32,16 @@ export class LoginComponent implements OnInit {
 		});
 	}
 
-	onSubmit() {
-		this.loading = true;
+	onSubmit(isCertLogin?: boolean) {
+		if (!isCertLogin) {
+			this.login.username = this.loginForm.value.identifier.split('@')[0];
+			this.login.password = this.loginForm.value.password;
+		}
 
-		this.login.username = this.loginForm.value.identifier.split('@')[0];
-		this.login.password = this.loginForm.value.password;
-
-		this.auth.handleLogin(this.login).subscribe(
-			(user) => {
-				this.loading = false;
-			},
+		this.auth.handleLogin(this.login, isCertLogin).subscribe(
+			(user) => {},
 			(error) => {
-				console.log(error);
 				this.errorMsg = error.error;
-				// this.errorMsg = 'You entered a wrong username, e-mail or password...';
-				this.loading = false;
 			}
 		);
 	}

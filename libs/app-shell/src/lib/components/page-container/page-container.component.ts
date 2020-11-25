@@ -11,8 +11,6 @@ import {
 	Type
 } from '@angular/core';
 
-import { UtilityService } from '../../../../../utilities/src/lib/services/utility.service';
-
 export type Content<T> = string | TemplateRef<T> | Type<T>;
 
 @Component({
@@ -28,7 +26,6 @@ export class PageContainerComponent implements OnInit {
 	@Input() fluidMain: boolean = true;
 
 	constructor(
-		public utilities: UtilityService,
 		private resolver: ComponentFactoryResolver,
 		private injector: Injector,
 		@Inject(DOCUMENT) private document: Document

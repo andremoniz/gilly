@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
-import { deepClone } from '@sof/utilities';
 import { takeUntil } from 'rxjs/operators';
+import { deepClone } from '../../../../../../utilities/src/lib/utilities/deepClone';
 
 import { UIFieldBase } from '../ui-field.base';
 import { EntityFieldConfig } from './../../../../../../entities/entity-field-config';

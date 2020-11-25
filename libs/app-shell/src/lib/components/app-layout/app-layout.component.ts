@@ -1,6 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { MenuItem } from 'primeng/api/menuitem';
 
+import {
+	CompletionMessage,
+	DataService
+} from '../../../../../data/src/lib/services/data/data.service';
 import { AuthService } from '../../services/auth.service';
 import { MetricsService } from '../../services/metrics.service';
 
@@ -15,9 +21,9 @@ export enum HeaderItemType {
 export interface HeaderItemConfig {
 	name: string;
 	type: HeaderItemType;
-	expectedRoles?: string[];
+	roles?: string[];
 	linkLocation?: string;
-	menuItems?: HeaderItemConfig[];
+	menuItems?: Partial<MenuItem | { roles?: string[] }>[];
 	buttonHandler?: () => void;
 }
 
@@ -29,8 +35,24 @@ export interface HeaderItemConfig {
 export class AppLayoutComponent implements OnInit {
 	@Input() appTitle: string;
 	@Input() appLogo: string;
+
 	@Input() headerItems: HeaderItemConfig[];
+
 	@Input() hideHeader: boolean;
+	@Input() fluidMain: boolean = true;
+
+	_helpContacts: any[];
+	@Input()
+	set helpContacts(contacts: { name: string; email: string; phone: string }[]) {
+		if (!contacts) return;
+
+		this._helpContacts = contacts.map((c) => {
+			return { label: `${c.name} <a>Test</a>` };
+		});
+	}
+	get helpContacts() {
+		return this._helpContacts;
+	}
 
 	nonAuthItems: HeaderItemConfig[] = [
 		{ type: HeaderItemType.Link, linkLocation: '/login', name: 'Login' }
@@ -41,20 +63,19 @@ export class AppLayoutComponent implements OnInit {
 			name: this.auth.getUser() ? this.auth.getUser().username : '',
 			menuItems: [
 				{
-					type: HeaderItemType.Text,
-					name: 'Admin',
-					expectedRoles: ['admin', 'superadmin'],
-					linkLocation: `${location.origin}/admin`
+					label: 'Admin',
+					url: `${location.origin}/admin`,
+					roles: ['superadmin', 'admin']
 				},
 				{
-					type: HeaderItemType.Text,
-					name: 'Profile',
-					linkLocation: '/user/profile'
+					label: 'Profile',
+					url: '/user/profile'
 				},
 				{
-					type: HeaderItemType.Button,
-					name: 'Logout',
-					buttonHandler: this.auth.logout.bind(this)
+					label: 'Logout',
+					command: () => {
+						this.auth.logout();
+					}
 				}
 			]
 		}
@@ -64,15 +85,32 @@ export class AppLayoutComponent implements OnInit {
 
 	constructor(
 		public auth: AuthService,
+		public router: Router,
+		private messageService: MessageService,
 		private metricsService: MetricsService,
-		public router: Router
+		private dataService: DataService,
+		private primengConfig: PrimeNGConfig
 	) {
 		this.auth.userLoggedIn$.subscribe((user) => {
-			this.authItems[0].name = user.username;
-			this.router.navigate(['']);
+			if (user) {
+				this.authItems[0].name = user.username;
+			}
 		});
 
 		this.metricsService.enableMetrics();
+
+		this.dataService.completionMessage$.subscribe((message: CompletionMessage) => {
+			if (!message) return;
+
+			this.messageService.add({
+				key: 'appToast',
+				severity: message.severity,
+				summary: message.summary,
+				detail: message.detail
+			});
+		});
+
+		this.primengConfig.ripple = true;
 	}
 
 	ngOnInit(): void {}

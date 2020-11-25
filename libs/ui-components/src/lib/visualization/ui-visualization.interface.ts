@@ -1,5 +1,3 @@
-import { FCDisplayPropertyDataDrivenColor } from '../../../../entities/form-creator/display-properties/fc-display-property.data-driven-color';
-
 export interface UIVisualization {
 	component?: any;
 	type?: string;
@@ -16,7 +14,7 @@ export interface UIVisualization {
 	displayOptions?: any;
 	requiredDisplayProps?: string[];
 
-	dataDrivenColors?: FCDisplayPropertyDataDrivenColor[];
+	dataDrivenColors?: { color?: string; textColor?: string; fieldValue?: any }[];
 	dataDrivenColorMap?: {
 		[prop: string]: { [value: string]: { color: string; textColor?: string } };
 	};

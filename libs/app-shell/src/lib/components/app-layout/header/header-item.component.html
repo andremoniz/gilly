@@ -1,33 +1,32 @@
-<ng-container [ngSwitch]="item.type">
+<ng-container [ngSwitch]="item.type" *ngIf="item">
 	<ng-container *ngSwitchCase="'a'">
-		<a class="header-item text-white" routerLinkActive="active" (click)="handleLinkClick(item)">
+		<a
+			class="header-item text-white clickable"
+			routerLinkActive="active"
+			(click)="handleLinkClick(item)"
+		>
 			{{ item.name }}
 		</a>
 	</ng-container>
 
 	<ng-container *ngSwitchCase="'button'">
-		<button nz-button (click)="item.buttonHandler()">{{ item.name }}</button>
+		<button
+			pButton
+			pRipple
+			type="button"
+			[label]="item.name"
+			class="p-button-text"
+			(click)="item.buttonHandler()"
+		></button>
 	</ng-container>
 
 	<ng-container *ngSwitchCase="'menu'">
-		<ul nzMode="horizontal" nzTheme="primary" class="bg-primary text-white">
-			<li  [nzTitle]="item.name">
-				<ul>
-					<li
-						nz-menu-item
-						*ngFor="let menuItem of item.menuItems"
-						routerLinkActive="active"
-						(click)="handleLinkClick(menuItem)"
-					>
-						<lib-header-item [item]="menuItem"></lib-header-item>
-					</li>
-				</ul>
-			</li>
-		</ul>
+		<button type="button" pButton [label]="item.name" (click)="menu.toggle($event)"></button>
+		<p-menu #menu [popup]="true" [model]="item.menuItems"></p-menu>
 	</ng-container>
 
 	<ng-container *ngSwitchCase="'divider'">
-		<li #divider></li>
+		<div class="border-bottom"></div>
 	</ng-container>
 
 	<ng-container *ngSwitchDefault>{{ item.name }}</ng-container>

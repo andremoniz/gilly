@@ -4,20 +4,28 @@ import {
 	NgEntityServiceNotifier,
 	ofType
 } from '@datorama/akita-ng-entity-service';
-
-import { AlertsService } from './alerts.service';
+import { MessageService } from 'primeng/api';
 
 @Injectable({ providedIn: 'root' })
 export class NgNotificationService {
-	constructor(private alerts: AlertsService, private notifier: NgEntityServiceNotifier) {}
+	constructor(
+		private messageService: MessageService,
+		private notifier: NgEntityServiceNotifier
+	) {}
 
 	listenSuccess() {
 		this.notifier.action$.pipe(ofType('success')).subscribe((action: EntityServiceAction) => {
 			if (action.method === 'GET') return;
 
-			this.alerts.openAlert(
-				`${action.storeName} successfully ${this.getHumanMethodName(action.method)}!`
-			);
+			this.messageService.add({
+				key: 'appToast',
+				life: 1500,
+				severity: 'success',
+				summary: 'Success',
+				detail: `${action.storeName} successfully ${this.getHumanMethodName(
+					action.method
+				)}!`,
+			});
 		});
 	}
 

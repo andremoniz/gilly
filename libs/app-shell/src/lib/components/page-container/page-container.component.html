@@ -6,7 +6,6 @@
 	<div
 		class="container-main"
 		[ngClass]="{ 'container-fluid': fluidMain }"
-		[style.margin-top]="!utilities.isSmallScreen ? '1.75rem' : ''"
 		*ngIf="mainTemplate"
 	>
 		<ng-container [ngTemplateOutlet]="mainTemplate"></ng-container>

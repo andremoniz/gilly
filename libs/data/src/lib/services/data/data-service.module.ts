@@ -29,7 +29,7 @@ export class DataServiceModule {
 		}
 	}
 
-	static forRoot(dsConfig: DataServiceConfig): ModuleWithProviders {
+	static forRoot(dsConfig: DataServiceConfig): ModuleWithProviders<any> {
 		return {
 			ngModule: DataServiceModule,
 			providers: [

@@ -1,26 +1,59 @@
-<main class="container-wrapper">
+<lib-page-container [fluidMain]="fluidMain">
+	<ng-template #header>
+		<header class="w-100" *ngIf="!hideHeader">
+			<nav class="d-flex w-100 px-3 py-1 bg-dark justify-content-between align-items-center">
+				<div #leftItems class="d-flex align-items-center">
+					<div class="clickable">
+						<img class="mr-1" [src]="appLogo" height="48" width="48" *ngIf="appLogo" />
+						<a href="#" class="text-white">{{ appTitle }}</a>
+					</div>
 
-    <header class="container-header bg-primary" *ngIf="!hideHeader">
-        <img class="mr-1" [src]="appLogo" height="64" width="64" *ngIf="appLogo" />
-        <a href="#" class="text-white">{{ appTitle }}</a>
+					<div class="ml-5">
+						<lib-header-item
+							class="mr-3"
+							[item]="item"
+							*ngFor="let item of headerItems"
+						></lib-header-item>
+					</div>
+				</div>
 
-        <div #leftItems class="mr-auto ml-5">
-            <lib-header-item class="mr-3" [item]="item" *ngFor="let item of headerItems"></lib-header-item>
-        </div>
+				<div #rightItems class="ml-auto">
+					<ng-container *ngIf="helpContacts">
+						<button
+							pButton
+							pRipple
+							label="Help"
+							icon="pi pi-question-circle"
+							class="p-button-rounded p-button-text"
+							(click)="helpMenu.toggle($event)"
+						></button>
+						<p-menu #helpMenu [model]="helpContacts" [popup]="true"></p-menu>
+					</ng-container>
 
-        <div #rightItems class="ml-auto">
-            <ng-container *ngIf="!auth.isAuthenticated()">
-                <lib-header-item [item]="item" *ngFor="let item of nonAuthItems"></lib-header-item>
-            </ng-container>
+					<ng-container *ngIf="!auth.isAuthenticated()">
+						<lib-header-item
+							[item]="item"
+							*ngFor="let item of nonAuthItems"
+						></lib-header-item>
+					</ng-container>
 
-            <ng-container *ngIf="auth.isAuthenticated()">
-                <lib-header-item [item]="item" *ngFor="let item of authItems" [style.display]="auth.isActionAuthorized(item.name, item.expectedRoles) ? 'block' : 'none'"></lib-header-item>
-            </ng-container>
-        </div>
-    </header>
+					<ng-container *ngIf="auth.isAuthenticated()">
+						<lib-header-item
+							[item]="item"
+							*ngFor="let item of authItems"
+							[style.display]="
+								auth.isActionAuthorized(item.name, item.roles) ? 'block' : 'none'
+							"
+						></lib-header-item>
+					</ng-container>
+				</div>
+			</nav>
+		</header>
+	</ng-template>
 
-    <div class="container-main">
-        <router-outlet></router-outlet>
-    </div>
+	<ng-template #main>
+		<router-outlet></router-outlet>
+	</ng-template>
+</lib-page-container>
 
-</main>
+<p-toast key="appToast" position="bottom-center"></p-toast>

@@ -1,3 +1,11 @@
+@import './scss/vendor';
+@import './scss/reset';
+
+@import './themes/primeng/bootstrap4-light-blue/theme';
+
+@import './scss/app-loading';
+@import './scss/active-link';
+
 * {
 	box-sizing: border-box;
 }
@@ -5,9 +13,9 @@
 body,
 html {
 	box-sizing: border-box;
-	// font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-	// 	'Open Sans', 'Helvetica Neue', sans-serif;
-	font-size: 14px;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+		'Open Sans', 'Helvetica Neue', sans-serif;
+	font-size: 12px;
 	line-height: 1.5;
 	height: 100%;
 	margin: 0;
@@ -30,6 +38,8 @@ html {
 .container-header {
 	// flex: 0 1 auto;
 	display: flex;
+	flex-wrap: wrap;
+	width: 100% !important;
 }
 
 .container-main {
@@ -43,4 +53,106 @@ html {
 	justify-content: space-between;
 }
 
-// OVERRIDES
+.center-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/**
+** OVERRIDES
+*/
+$pInputHeightFix: 2.65rem;
+
+.p-overlaypanel {
+	max-width: 500px;
+	text-align: justify;
+}
+
+.p-inputtext {
+	width: 100%;
+}
+
+.p-field {
+	margin-bottom: 0.5rem !important;
+}
+
+.p-autocomplete {
+	width: 100%;
+	max-height: $pInputHeightFix;
+}
+
+.p-calendar {
+	max-height: $pInputHeightFix;
+}
+
+.p-location-input {
+	max-height: $pInputHeightFix;
+}
+
+p-dropdown {
+	width: 100%;
+}
+
+.p-dropdown {
+	width: 100%;
+}
+
+.p-multiselect {
+	width: 100% !important;
+}
+
+p-multiselect {
+	width: 100% !important;
+}
+
+.p-dropdown-items-wrapper {
+	max-height: 300px !important;
+}
+
+.p-paginator-bottom > p-dropdown {
+	width: 10% !important;
+}
+
+p-panel {
+	width: 100%;
+	padding-left: 3rem;
+	padding-right: 3rem;
+}
+
+.p-panel .p-panel-content {
+	padding: 0rem !important;
+}
+
+textarea {
+	width: 100%;
+}
+
+.p-toast {
+	z-index: 300000 !important;
+}
+
+p-inputnumber {
+	width: 100% !important;
+}
+
+.p-inputnumber {
+	width: 100% !important;
+}
+
+.p-orderlist {
+	height: 100%;
+}
+
+.p-dialog-content {
+	height: 100%;
+}
+
+.p-orderlist-list {
+	// max-height: none !important;
+	// height: 1000px !important;
+}
+
+.p-datatable-scrollable-header-box {
+	// padding-right: 0rem !important;
+}

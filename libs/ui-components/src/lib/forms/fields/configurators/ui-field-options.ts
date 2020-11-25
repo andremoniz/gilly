@@ -3,12 +3,10 @@ import { isObservable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { EntityFieldConfig } from '../../../../../../entities/entity-field-config';
-import { FCField } from '../../../../../../entities/form-creator/fc-field';
 import { prettyPrint } from '../../../../../../utilities/src';
 
 export const setupFieldOptions = (field: EntityFieldConfig) => {
-	const options =
-		field.options || ((<FCField>field).dropdown && (<FCField>field).dropdown.options);
+	const options = field.options;
 
 	if (isObservable(options)) {
 		return options.pipe(

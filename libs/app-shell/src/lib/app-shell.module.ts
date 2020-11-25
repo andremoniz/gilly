@@ -2,9 +2,9 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DataServiceModule } from '@lib/data';
 
-import { UtilitiesModule } from './../../../utilities/src/lib/utilities.module';
+import { DataServiceModule } from './../../../data/src/lib/services/data/data-service.module';
+import { AppLayoutModule } from './components/app-layout/app-layout.module';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { ErrorPageModule } from './components/error-page/error-page.module';
 import { LoginComponent } from './components/login/login.component';
@@ -13,6 +13,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { AppShellPipesModule } from './pipes/app-shell-pipes.module';
 import { AlertsService } from './services/alerts.service';
 import { AuthService } from './services/auth.service';
 import { IconService } from './services/icon.service';
@@ -24,6 +25,8 @@ export interface AppShellModuleConfig {
 	serverEndpoint: string;
 	dataEndpoint: string;
 	securityEndpoint: string;
+	securityTokenEndpoint?: string;
+	mediaEndpoint?: string;
 
 	appName: string;
 
@@ -64,10 +67,12 @@ export const appLibRoutes = [
 
 		DataServiceModule.forRoot({}),
 
+		AppLayoutModule,
+
 		LoginModule,
 		ErrorPageModule,
 
-		UtilitiesModule
+		AppShellPipesModule
 	],
 	providers: []
 })
@@ -78,7 +83,7 @@ export class AppShellModule {
 		}
 	}
 
-	static forRoot(config: AppShellModuleConfig): ModuleWithProviders<AppShellModule> {
+	static forRoot(config: AppShellModuleConfig): ModuleWithProviders<any> {
 		return {
 			ngModule: AppShellModule,
 			providers: [
