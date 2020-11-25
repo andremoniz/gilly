@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { DataService } from './data.service';
 import { GenericModelHttpParams } from './interceptors/GenericModelHttpParams';
@@ -22,13 +22,15 @@ export class DataRead {
 	 * @param query A limiting query to apply to the get. Expects an object of type URLSearchParams to append to the read, or a simple string
 	 */
 	read<T>(model: T | any, query?: HttpParams | string | any): Observable<T[]> {
+		const modelName = this.DS.getModelName(model);
+
 		return this.http
 			.get<T[]>(
-				`${this.DS.apiEndpoint}/${this.DS.getModelName(model)}${
+				`${this.DS.apiEndpoint}/${modelName}${
 					query ? '?' + this.createSearchParams(query) : ''
 				}`,
 				{
-					params: new GenericModelHttpParams(model)
+					params: new GenericModelHttpParams(modelName)
 				}
 			)
 			.pipe(
@@ -79,18 +81,23 @@ export class DataRead {
 	}
 
 	private cacheAndNotifyRead<T>(model: T | any, res: T[]) {
+		const modelName = this.DS.getModelName(model);
+
 		// Reset the cache entry since we are getting new results
-		this.DS.cache[this.DS.getModelName(model)] = [];
+		this.DS.cache[modelName] = [];
 
 		if (res instanceof Array) {
 			res.forEach((el: T) => {
-				this.DS.cache[this.DS.getModelName(model)].push(Object.assign({}, el));
+				if (typeof el === 'string') {
+					this.DS.cache[modelName].push(el);
+				} else {
+					this.DS.cache[modelName].push(Object.assign({}, el));
+				}
 			});
 		}
 
 		// Update Frontend
-		this.DS.subjectMap[this.DS.getModelName(model)].next(
-			this.DS.cache[this.DS.getModelName(model)]
-		);
+		this.DS.subjectMap[modelName].next(this.DS.cache[modelName]);
+		this.DS.activeMap[modelName].next(null);
 	}
 }

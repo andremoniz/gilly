@@ -1,7 +1,7 @@
-import { HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 
 import { DataDelete } from './_delete';
 import { DataRead } from './_read';
@@ -26,13 +26,20 @@ export class DataService {
 	activeMap: ActiveMap = {};
 	// A map of TableName => Boolean to components to use for displaying a loading icon when that table's data is being loaded or modified
 	loadingMap: LoadingMap = {};
+	loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+	loading: boolean = false;
+	// A map of TableName => any to components to use for displaying a message when the table's data is finished loading or modified
+	messageMap: MessageMap = {};
+	completionMessage$: BehaviorSubject<CompletionMessage> = new BehaviorSubject<CompletionMessage>(
+		null
+	); // Notify any global listeners
 
 	constructor(
 		private DSV: DataSave,
 		private DR: DataRead,
 		private DD: DataDelete,
 		@Inject('dsConfig') config: DataServiceConfig,
-		@Inject('config') appConfig: any
+		@Optional() @Inject('config') appConfig: any
 	) {
 		this.DSV.setDataService(this);
 		this.DR.setDataService(this);
@@ -70,6 +77,7 @@ export class DataService {
 		this.cache[table] = [];
 		this.subjectMap[table] = new BehaviorSubject<any>(null);
 		this.activeMap[table] = new BehaviorSubject<any>(null);
+		this.messageMap[table] = new BehaviorSubject<any>(null);
 	}
 
 	/**
@@ -78,11 +86,10 @@ export class DataService {
 	public getModelName<T>(model: T | any) {
 		let modelName;
 
-		if (model && (model.name || model.displayName || model.tableName)) {
+		if (model && (model.displayName || model.name || model.tableName)) {
 			if (model.displayName) {
 				modelName = model.displayName;
-			}
-			if (model.tableName) {
+			} else if (model.tableName) {
 				modelName = model.tableName;
 			} else {
 				modelName = model.name;
@@ -91,8 +98,8 @@ export class DataService {
 			modelName = model;
 		}
 
-		// TODO: Figure out a better way to auto setup undetected models...
 		if (!this.cache[modelName]) {
+			// TODO: Make this better (auto setup undetected tables)
 			this.addTableToLocalProps(modelName);
 		}
 
@@ -102,6 +109,46 @@ export class DataService {
 	public setData<T>(model: T, entities: any[] = []) {
 		this.cache[this.getModelName(model)] = [...entities];
 		this.subjectMap[this.getModelName(model)].next(this.cache[this.getModelName(model)]);
+	}
+
+	public generateCompletionMessage<T>(
+		model: T | any,
+		method: HttpMethods,
+		status: 'SUCCESS' | 'ERROR',
+		extraMessage?: any
+	): CompletionMessage {
+		const modelName = this.getModelName(model);
+
+		const methodVerb = status === 'SUCCESS' ? 'was successful' : 'failed';
+
+		const getHumanMethodName = (method: string) => {
+			switch (method) {
+				case 'GET':
+					return `loading`;
+				case 'POST':
+					return `creating`;
+				case 'PATCH':
+					return `saving`;
+				case 'PUT':
+					return `saving`;
+				case 'DELETE':
+					return `deleting`;
+				default:
+					return `do something...`;
+			}
+		};
+
+		const message = `${modelName} ${methodVerb} in ${getHumanMethodName(method)}!${
+			extraMessage ? '\n\n' + extraMessage : ''
+		}`;
+		const messageObj: CompletionMessage = {
+			severity: status.toLowerCase(),
+			summary: status,
+			detail: message
+		};
+		this.completionMessage$.next(messageObj);
+
+		return messageObj;
 	}
 
 	// SAVE
@@ -116,9 +163,30 @@ export class DataService {
 	}
 
 	// READ
-	read<T>(model: T | any, query?: HttpParams | string | any): Observable<T[]> {
+	read<T>(
+		model: T | any,
+		query?: HttpParams | string | any,
+		options?: { favorCache?: boolean }
+	): Observable<T[]> {
 		if (!model) return of();
+		else if (options?.favorCache && this.cache[this.getModelName(model)]?.length)
+			return of(this.cache[this.getModelName(model)]);
 		else return this.DR.read(model, query);
+	}
+
+	readMulti<T>(models: T[] | any[]): Observable<any> {
+		const obs = {};
+		models.forEach((model) => {
+			const modelName = this.getModelName(model);
+			obs[modelName] = this.read(modelName);
+		});
+
+		this.loading = true;
+		return forkJoin(obs).pipe(
+			tap((res: any) => {
+				this.loading = false;
+			})
+		);
 	}
 
 	readExternal(url, headers?): Observable<any> {
@@ -140,9 +208,9 @@ export class DataService {
 		return this.cache[this.getModelName(model)];
 	}
 
-	selectAllFilter<T>(model: T | any, filterProp: string, filterValue: string): T[] {
-		return this.selectAllValues<T>(model).filter(
-			(entity) => entity[filterProp] === filterValue
+	selectFilter<T>(model: T | any, filterProp: string, filterValue: string): Observable<T | T[]> {
+		return this.subjectMap[this.getModelName(model)].pipe(
+			filter((o: any) => o[filterProp] === filterValue)
 		);
 	}
 
@@ -154,32 +222,45 @@ export class DataService {
 		return this.cache[this.getModelName(model)].find((entity) => entity.id === id);
 	}
 
+	// Active
 	setActive<T>(model: T | any, entity?: any | string) {
-		if (!entity) {
-			this.activeMap[this.getModelName(model)].next(null);
-		} else {
-			this.activeMap[this.getModelName(model)].next(
-				this.selectOneValue(model, entity.id ? entity.id : entity)
-			);
-		}
+		const activeValue = !entity
+			? null
+			: this.selectOneValue(model, entity.id ? entity.id : entity);
+
+		this.activeMap[this.getModelName(model)].next(activeValue);
 	}
 
-	selectActive(model: any): Observable<any> {
+	selectActive<T>(model: T | any): Observable<T> {
 		return this.activeMap[this.getModelName(model)];
 	}
 
-	getActive<T>(model: T | any): any {
+	getActive<T>(model: T | any): T | any {
 		return this.activeMap[this.getModelName(model)].getValue();
 	}
 
 	saveActive<T>(model: T | any): Observable<T | T[]> {
-		return this.save(model, this.selectActive(model));
+		return this.save(model, this.getActive(model));
 	}
 
 	deleteActive<T>(model: T | any) {
-		return this.delete(model, this.selectActive(model)).pipe(
+		return this.delete(model, this.getActive(model)).pipe(
 			tap((entity) => this.setActive(model, null))
 		);
+	}
+
+	// Loading
+	selectLoading<T>(model: T | any): Observable<boolean> {
+		return this.loadingMap[this.getModelName(model)];
+	}
+
+	isLoading<T>(model: T | any): boolean {
+		return this.loadingMap[this.getModelName(model)].value;
+	}
+
+	// Messages
+	selectMessage<T>(model: T | any): Observable<CompletionMessage> {
+		return this.messageMap[this.getModelName(model)];
 	}
 }
 
@@ -210,6 +291,21 @@ interface ActiveMap {
 interface LoadingMap {
 	[tableName: string]: BehaviorSubject<boolean>;
 }
+
+/**
+ * A mapping of every DB table to a message so that external components can show a message on transaction completion
+ */
+interface MessageMap {
+	[tableName: string]: BehaviorSubject<CompletionMessage>;
+}
+
+export interface CompletionMessage {
+	severity?: string;
+	summary?: string;
+	detail: string;
+}
+
+export type HttpMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 /**
  * A simple cache which is an object whose properties is a table name with an array of that table's data loaded into the front end

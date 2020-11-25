@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule, Optional, SkipSelf, InjectionToken } from '@angular/core';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { InjectionToken, ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 
 import { DataDelete } from './_delete';
 import { DataRead } from './_read';
-import { DataService } from './data.service';
 import { DataSave } from './_save';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { DataService } from './data.service';
+import { DataServiceInterceptor } from './interceptors/data-service.interceptor';
 import { DataServiceHeaderInterceptor } from './interceptors/header.interceptor';
 
 const configToken = new InjectionToken<DataServiceConfig>('dataServiceConfig');
@@ -18,7 +18,7 @@ export interface DataServiceConfig {
 
 @NgModule({
 	declarations: [],
-	imports: [CommonModule]
+	imports: [CommonModule, HttpClientModule]
 })
 export class DataServiceModule {
 	constructor(@Optional() @SkipSelf() parentModule: DataServiceModule) {
@@ -29,11 +29,11 @@ export class DataServiceModule {
 		}
 	}
 
-	static forRoot(dsConfig: DataServiceConfig): ModuleWithProviders<DataServiceModule> {
+	static forRoot(dsConfig: DataServiceConfig): ModuleWithProviders {
 		return {
 			ngModule: DataServiceModule,
 			providers: [
-				{ provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+				{ provide: HTTP_INTERCEPTORS, useClass: DataServiceInterceptor, multi: true },
 				{ provide: HTTP_INTERCEPTORS, useClass: DataServiceHeaderInterceptor, multi: true },
 				{ provide: 'dsConfig', useValue: dsConfig },
 				DataService,

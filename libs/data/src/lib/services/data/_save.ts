@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { DataService } from './data.service';
+import { GenericModelHttpParams } from './interceptors/GenericModelHttpParams';
 
 enum Action {
 	CREATE = 'Create',
@@ -37,9 +38,9 @@ export class DataSave {
 		originalEntities?: T[] | any[] | any,
 		handleDeletes?: boolean
 	): Observable<T | any> {
-		const url = `${this.DS.apiEndpoint}/${this.DS.getModelName(model)}${
-			objToSave.id ? '/' + objToSave.id : ''
-		}`;
+		const modelName = this.DS.getModelName(model);
+
+		const url = `${this.DS.apiEndpoint}/${modelName}${objToSave.id ? '/' + objToSave.id : ''}`;
 
 		if (Array.isArray(objToSave)) {
 			// BULK SAVE
@@ -61,13 +62,32 @@ export class DataSave {
 
 			const httpObs = [];
 			if (toCreate.length) {
-				httpObs.push(this.http.post(url, toCreate).pipe());
+				httpObs.push(
+					this.http
+						.post(url, toCreate, {
+							params: new GenericModelHttpParams(modelName)
+						})
+						.pipe()
+				);
 			}
 			if (toUpdate.length) {
-				httpObs.push(this.http.put(url, toUpdate).pipe());
+				httpObs.push(
+					this.http
+						.put(url, toUpdate, {
+							params: new GenericModelHttpParams(modelName)
+						})
+						.pipe()
+				);
 			}
 			if (toDelete.length) {
-				httpObs.push(this.http.request('delete', url, { body: toDelete }).pipe());
+				httpObs.push(
+					this.http
+						.request('delete', url, {
+							body: toDelete,
+							params: new GenericModelHttpParams(modelName)
+						})
+						.pipe()
+				);
 			}
 
 			return forkJoin(httpObs).pipe(
@@ -97,36 +117,44 @@ export class DataSave {
 			);
 		} else {
 			if (objToSave && objToSave.id) {
-				return this.http.put(url, objToSave).pipe(
-					tap((res: T | any) => {
-						Object.assign(objToSave, res);
-						this.cacheAndNotifySaved(model, objToSave, Action.UPDATE);
-						return res;
+				return this.http
+					.put(url, objToSave, {
+						params: new GenericModelHttpParams(modelName)
 					})
-				);
+					.pipe(
+						tap((res: T | any) => {
+							Object.assign(objToSave, res);
+							this.cacheAndNotifySaved(model, objToSave, Action.UPDATE);
+							return res;
+						})
+					);
 			} else {
-				return this.http.post(url, objToSave).pipe(
-					tap((res: T | any) => {
-						Object.assign(objToSave, res);
-						this.cacheAndNotifySaved(model, objToSave, Action.CREATE);
-						return res;
+				return this.http
+					.post(url, objToSave, {
+						params: new GenericModelHttpParams(modelName)
 					})
-				);
+					.pipe(
+						tap((res: T | any) => {
+							Object.assign(objToSave, res);
+							this.cacheAndNotifySaved(model, objToSave, Action.CREATE);
+							return res;
+						})
+					);
 			}
 		}
 	}
 
 	private cacheAndNotifySaved<T>(model: T | any, newModelObj, action: Action) {
+		const modelName = this.DS.getModelName(model);
+
 		switch (action) {
 			case Action.CREATE:
 				// Append the new object into the front end cache
-				this.DS.cache[this.DS.getModelName(model)].push({ ...newModelObj });
+				this.DS.cache[modelName].push({ ...newModelObj });
 				break;
 			case Action.UPDATE:
 				// Update the object in the front end cache
-				this.DS.cache[this.DS.getModelName(model)] = this.DS.cache[
-					this.DS.getModelName(model)
-				].map((entity) => {
+				this.DS.cache[modelName] = this.DS.cache[modelName].map((entity) => {
 					if (entity.id === newModelObj.id) {
 						return newModelObj;
 					} else {
@@ -137,17 +165,15 @@ export class DataSave {
 			case Action.BULK:
 				newModelObj.forEach((newObj) => {
 					if (newObj.METHOD === Action.DELETE) {
-						this.DS.cache[this.DS.getModelName(model)] = this.DS.cache[
-							this.DS.getModelName(model)
-						].filter((d) => d.id !== newObj.id);
-					} else {
-						const updateObj = this.DS.cache[this.DS.getModelName(model)].find(
-							(o) => o.id === newObj.id
+						this.DS.cache[modelName] = this.DS.cache[modelName].filter(
+							(d) => d.id !== newObj.id
 						);
+					} else {
+						const updateObj = this.DS.cache[modelName].find((o) => o.id === newObj.id);
 						if (updateObj) {
 							Object.assign(updateObj, newObj);
 						} else {
-							this.DS.cache[this.DS.getModelName(model)].push({ ...newObj });
+							this.DS.cache[modelName].push({ ...newObj });
 						}
 					}
 				});
@@ -156,9 +182,10 @@ export class DataSave {
 				break;
 		}
 
-		this.DS.subjectMap[this.DS.getModelName(model)].next(
-			this.DS.cache[this.DS.getModelName(model)]
-		);
-		this.DS.loadingMap[this.DS.getModelName(model)].next(false);
+		this.DS.subjectMap[modelName].next(this.DS.cache[modelName]);
+
+		if (this.DS.getActive(model) && this.DS.getActive(model).id === newModelObj.id) {
+			this.DS.setActive(model, newModelObj);
+		}
 	}
 }

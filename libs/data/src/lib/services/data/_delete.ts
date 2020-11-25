@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { DataService } from './data.service';
+import { GenericModelHttpParams } from './interceptors/GenericModelHttpParams';
 
 @Injectable()
 export class DataDelete {
@@ -23,16 +24,21 @@ export class DataDelete {
 	delete<T>(model: T | any, objToDelete: T | any): Observable<T[]> {
 		if (!objToDelete) return;
 
+		const modelName = this.DS.getModelName(model);
+
 		if (this.DS.isOptimistic) {
 			this.cacheAndNotifyDelete(model, objToDelete);
 		}
 
-		const url = `${this.DS.apiEndpoint}/${this.DS.getModelName(model)}${
+		const url = `${this.DS.apiEndpoint}/${modelName}${
 			Array.isArray(objToDelete) ? '' : '/' + objToDelete.id || objToDelete
 		}`;
 
 		return this.http
-			.request<T[]>('delete', url, { body: objToDelete })
+			.request<T[]>('delete', url, {
+				body: objToDelete,
+				params: new GenericModelHttpParams(modelName)
+			})
 			.pipe(
 				tap((res: T[]) => {
 					if (!this.DS.isOptimistic) {
@@ -43,23 +49,26 @@ export class DataDelete {
 	}
 
 	private cacheAndNotifyDelete<T>(model: T | any, objToDelete: T | any) {
-		if (!this.DS.cache[this.DS.getModelName(model)]) return;
+		const modelName = this.DS.getModelName(model);
+
+		if (!this.DS.cache[modelName]) return;
 
 		// Remove the object to delete from the front end cache by filtering out everything that doesn't have the same id
 		if (Array.isArray(objToDelete)) {
 			const deleteIds = objToDelete.map((o) => o.id);
-			this.DS.cache[this.DS.getModelName(model)] = this.DS.cache[
-				this.DS.getModelName(model)
-			].filter((el) => !deleteIds.includes(el.id));
+			this.DS.cache[modelName] = this.DS.cache[modelName].filter(
+				(el) => !deleteIds.includes(el.id)
+			);
 		} else {
-			this.DS.cache[this.DS.getModelName(model)] = this.DS.cache[
-				this.DS.getModelName(model)
-			].filter((el) => el.id !== (objToDelete.id || objToDelete));
+			this.DS.cache[modelName] = this.DS.cache[modelName].filter(
+				(el) => el.id !== (objToDelete.id || objToDelete)
+			);
 		}
 
-		this.DS.subjectMap[this.DS.getModelName(model)].next(
-			this.DS.cache[this.DS.getModelName(model)]
-		);
-		this.DS.loadingMap[this.DS.getModelName(model)].next(false);
+		this.DS.subjectMap[modelName].next(this.DS.cache[modelName]);
+
+		if (this.DS.getActive(model) && this.DS.getActive(model).id === objToDelete.id) {
+			this.DS.setActive(model, null);
+		}
 	}
 }
