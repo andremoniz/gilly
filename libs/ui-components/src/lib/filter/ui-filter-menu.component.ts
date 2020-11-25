@@ -1,84 +1,97 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { KeyValue } from '@angular/common';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 import { UtilityService } from './../../../../utilities/src/lib/services/utility.service';
 import { UIFilterService } from './ui-filter.service';
-import { endOfMonth } from 'date-fns';
 
 @Component({
 	selector: 'ui-filter-menu',
-	templateUrl: `ui-filter-menu.component.html`,
-	styles: [
-		`
-			.filter-list {
-				display: grid;
-				overflow: hidden;
-				grid-template-columns: repeat(4, 1fr);
-				grid-auto-rows: 1fr;
-				grid-row-gap: 0.1rem;
-				grid-column-gap: 0.5rem;
-				width: 95%;
-			}
+	template: `
+		<div class="container-wrapper">
+			<div class="container-header mb-3 pb-1 border-bottom d-flex justify-content-between">
+				<div class="d-flex align-items-center">
+					<h5>Total: {{ uiFilterService.originalData.length }}</h5>
+					<button
+						pButton
+						pRipple
+						label="Reset all"
+						icon="pi pi-refresh"
+						class="p-button-warning ml-3"
+						(click)="removeAllValues()"
+					></button>
+				</div>
 
-			.filter-list-item {
-				display: flex;
-				padding: 0.5rem;
-				margin-bottom: 1rem;
-			}
+				<div>
+					<button
+						pButton
+						pRipple
+						label="Apply filters"
+						icon="pi pi-save"
+						class=""
+						(click)="applyFilters()"
+						*ngIf="!uiFilterService.filterInstantly"
+					></button>
+				</div>
+			</div>
 
-			.filter-list-content {
-				width: 100%;
-			}
+			<div class="container-main" *ngIf="uiFilterService.filterForm">
+				<ng-container *ngIf="uiFilterService.categoryMap; else uniqueProps">
+					<div
+						*ngFor="let cat of uiFilterService.categoryMap | keyvalue: orderByOrderAsc"
+						class="p-shadow-1 justify-content-center"
+					>
+						<h4 class="w-100 bg-secondary text-white p-2">{{ cat.key }}</h4>
 
-			.ant-checkbox-wrapper {
-				margin-left: 0px !important;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
+						<ui-filter-menu-list [uniqueProps]="cat.value.props"></ui-filter-menu-list>
+					</div>
+				</ng-container>
 
-			::ng-deep label > span:nth-child(2) {
-				display: flex;
-				justify-content: space-between;
-				width: 100% !important;
-			}
-
-			::ng-deep label > span {
-				align-items: center;
-			}
-
-			nz-range-picker {
-				margin: 0.5rem;
-			}
-		`
-	]
+				<ng-template #uniqueProps>
+					<ui-filter-menu-list
+						[uniqueProps]="uiFilterService.uniqueProps"
+					></ui-filter-menu-list>
+				</ng-template>
+			</div>
+		</div>
+	`,
+	styles: [``],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIFilterMenuComponent implements OnInit {
-	dateRanges = {
-		Today: [new Date(), new Date()],
-		'This Month': [new Date(), endOfMonth(new Date())]
-	};
-
 	@Input() data: any[];
 
-	constructor(public uiFilterService: UIFilterService, public utilities: UtilityService) {}
+	constructor(
+		public uiFilterService: UIFilterService,
+		public utilities: UtilityService,
+		private dialogConfig: DynamicDialogConfig,
+		private dialogRef: DynamicDialogRef
+	) {
+		if (this.dialogConfig?.data) {
+			this.data = this.dialogConfig.data.data;
+		}
+	}
 
 	ngOnInit(): void {}
 
+	applyFilters() {
+		this.uiFilterService.applyFilters();
+		if (this.dialogRef) {
+			this.dialogRef.close();
+		}
+	}
+
 	removeAllValues() {
-		const temp = [...this.uiFilterService.originalData];
-		this.uiFilterService.originalData = null;
-		this.uiFilterService.setupFilterState(temp);
+		this.utilities.handleUrlParameters({ paramsToDelete: ['filterState'] });
+		setTimeout(() => {
+			this.uiFilterService.setupFilterState(this.uiFilterService.originalData);
+		}, 1);
 	}
 
-	toggleFilterDrillDown(event) {
-		if (!event) this.uiFilterService.setupUniqueValues();
-		this.uiFilterService.filterData(this.uiFilterService.filterForm.value);
-	}
-
-	clearDateInput(event, prop) {
-		const resetValue = {};
-		resetValue[`${prop}`] = false;
-
-		this.uiFilterService.filterForm.get(prop).setValue(resetValue);
+	orderByOrderAsc(
+		a: KeyValue<number, { order: number; props: string[] }>,
+		b: KeyValue<number, { order: number; props: string[] }>
+	): number {
+		return a.value.order === b.value.order ? 0 : a.value.order > b.value.order ? 1 : -1;
 	}
 }
