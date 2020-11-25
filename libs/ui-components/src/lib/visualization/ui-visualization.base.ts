@@ -1,7 +1,15 @@
-import { ChangeDetectorRef, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import {
+	ChangeDetectorRef,
+	EventEmitter,
+	Injectable,
+	Input,
+	OnDestroy,
+	Output
+} from '@angular/core';
 import { isObservable, Subject, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+@Injectable()
 export abstract class UIVisualizationBase implements OnDestroy {
 	configLoaded$ = new Subject<UIVisualizationConfig>();
 	config: UIVisualizationConfig;

@@ -44,7 +44,7 @@ const dbHost = isProd ? process.env.DB_HOST : process.env.DB_HOST_DEV;
 const dbPort = isProd ? process.env.DB_PORT : process.env.DB_PORT_DEV;
 const dbUsername = isProd ? process.env.DB_USER : process.env.DB_USER_DEV;
 const dbPassword = isProd ? process.env.DB_PASSWORD : process.env.DB_PASSWORD_DEV;
-const dbDatabase = isProd ? process.env.DB_DATABASE : process.env.DB_DATABASE_DEV || 'sof-server';
+const dbDatabase = isProd ? process.env.DB_DATABASE : process.env.DB_DATABASE_DEV || 'gilly';
 
 // const createCertificate = util.promisify(pem.createCertificate);
 // const keys = await createCertificate({ days: 1, selfSigned: true });

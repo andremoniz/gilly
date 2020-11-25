@@ -1,4 +1,4 @@
-import { Input, OnDestroy } from '@angular/core';
+import { Injectable, Input, OnDestroy } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 
@@ -31,6 +31,7 @@ export const selectFieldTypes = [
 	'orderlist'
 ];
 
+@Injectable()
 export abstract class UIFieldBase implements OnDestroy {
 	unsubscribe: Subject<any> = new Subject<void>();
 	configLoaded$ = new Subject();
