@@ -1,22 +1,33 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
-import { UIFieldBase, UIFieldConfig } from './../ui-field.base';
+import { UIFieldMultiselectsBase } from '../ui-field-multiselects.base';
 
 @Component({
 	selector: 'ui-field-listbox',
 	template: `
 		<p-multiSelect
-			[formControl]="config.control"
-			[options]="config.field.options"
-			[optionLabel]="config.field.optionLabel || 'label'"
+			appendTo="body"
+			[(ngModel)]="source"
+			[options]="field.options | async"
+			[optionLabel]="field.labelProp || 'label'"
+			[scrollHeight]="'300px'"
+			[maxSelectedLabels]="5"
+			(onChange)="handleMultiSelectChange($event)"
 		></p-multiSelect>
 	`,
 	styles: [``]
 })
-export class UIFieldMultiSelectPrimeNGComponent extends UIFieldBase implements OnInit {
+export class UIFieldMultiSelectPrimeNGComponent extends UIFieldMultiselectsBase implements OnInit {
 	constructor() {
 		super();
 	}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.source = this.generateValuesFromControl();
+	}
+
+	handleMultiSelectChange(event) {
+		this.updateControlValues(this.source, true);
+	}
 }

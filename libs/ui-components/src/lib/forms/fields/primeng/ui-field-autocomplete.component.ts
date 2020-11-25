@@ -1,4 +1,6 @@
+import { Observable } from 'rxjs';
 import { Component, Input, OnInit } from '@angular/core';
+import { deepClone } from '../../../../../../utilities/src/lib/utilities/deepClone';
 
 import { FilterSortService } from './../../../../../../utilities/src/lib/services/filter-sort.service';
 import { UIFieldBase, UIFieldConfig } from './../ui-field.base';
@@ -7,22 +9,21 @@ import { UIFieldBase, UIFieldConfig } from './../ui-field.base';
 	selector: 'ui-field-autocomplete',
 	template: `
 		<p-autoComplete
-			[formControl]="config.control"
-			[suggestions]="results"
+			[formControl]="control"
+			[suggestions]="results | async"
+			[dropdown]="true"
 			(completeMethod)="search($event)"
 		></p-autoComplete>
 	`,
 	styles: [``]
 })
 export class UIFieldAutocompletePrimeNGComponent extends UIFieldBase implements OnInit {
-	results: { label: string; value: any }[];
+	results: any[] | Observable<any[]>;
 
 	_config: UIFieldConfig;
 	@Input()
 	set config(c: UIFieldConfig) {
 		this._config = c;
-
-		this.results = c.field.options;
 	}
 	get config(): UIFieldConfig {
 		return this._config;
@@ -32,9 +33,11 @@ export class UIFieldAutocompletePrimeNGComponent extends UIFieldBase implements 
 		super();
 	}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.results = this.field.options;
+	}
 
 	search(event) {
-		this.results = this.fs.filter(this.config.field.options, 'label', event.query);
+		// this.results = this.fs.filter(this.field.options.valueOf, 'label', event.query);
 	}
 }

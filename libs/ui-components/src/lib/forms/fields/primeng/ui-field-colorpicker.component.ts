@@ -4,7 +4,7 @@ import { UIFieldBase, UIFieldConfig } from './../ui-field.base';
 
 @Component({
 	selector: 'ui-field-colorpicker',
-	template: ` <p-colorPicker [formControl]="config.control"></p-colorPicker> `,
+	template: ` <p-colorPicker appendTo="body" [formControl]="config.control"></p-colorPicker> `,
 	styles: [``]
 })
 export class UIFieldColorPickerPrimeNGComponent extends UIFieldBase implements OnInit {
