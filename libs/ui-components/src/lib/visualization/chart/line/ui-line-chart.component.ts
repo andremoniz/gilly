@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { UIVisualizationBase } from '../../ui-visualization.base';
+import { UIChartBase } from '../ui-chart.base';
 import { UIChartService } from '../ui-chart.service';
 
 @Component({
@@ -11,10 +12,19 @@ import { UIChartService } from '../ui-chart.service';
 				<ng-container *ngIf="displayOptions && multi && multi.length">
 					<ngx-charts-line-chart
 						[scheme]="displayOptions.colorScheme || 'vivid'"
-						[legend]="(displayOptions.hideLegend === undefined) ? true : !displayOptions.hideLegend"
+						[customColors]="customColors"
+						[legend]="
+							displayOptions.hideLegend === undefined
+								? true
+								: !displayOptions.hideLegend
+						"
 						[xAxis]="displayOptions.showXAxis || true"
 						[yAxis]="displayOptions.showYAxis || true"
-						[legend]="(displayOptions.hideLegend === undefined) ? true : !displayOptions.hideLegend"
+						[legend]="
+							displayOptions.hideLegend === undefined
+								? true
+								: !displayOptions.hideLegend
+						"
 						[legendPosition]="displayOptions.legendPosition || 'right'"
 						[showXAxisLabel]="displayOptions.showXAxisLabel || true"
 						[showYAxisLabel]="displayOptions.showYAxisLabel || true"
@@ -37,23 +47,10 @@ import { UIChartService } from '../ui-chart.service';
 	`,
 	styles: [``]
 })
-export class UILineChartComponent extends UIVisualizationBase implements OnInit {
-	multi: any[];
-
+export class UILineChartComponent extends UIChartBase implements OnInit {
 	constructor(public uiChartService: UIChartService, public cdRef: ChangeDetectorRef) {
-		super(cdRef);
-
-		this.configLoaded$.subscribe((config) => {
-			this.multi = this.uiChartService.transformDataSeries(
-				config.data,
-				config.displayOptions
-			);
-		});
+		super(uiChartService, cdRef);
 	}
 
 	ngOnInit(): void {}
-
-	onSelect(event) {
-		this.handleGroupSelected(this.config.displayOptions.groupProp, event.name);
-	}
 }

@@ -1,0 +1,38 @@
+::ng-deep .leaflet-tooltip {
+	padding: 0rem !important;
+	border: 0px;
+	pointer-events: auto !important;
+	cursor: pointer;
+	transition: font-size 100 ease-in;
+}
+
+::ng-deep .leaflet-popup-tip {
+	width: 0px;
+	height: 0px;
+}
+
+::ng-deep .leaflet-tooltip-top:before,
+::ng-deep .leaflet-tooltip-bottom:before,
+::ng-deep .leaflet-tooltip-left:before,
+::ng-deep .leaflet-tooltip-right:before {
+	border: none !important;
+	display: none !important;
+}
+
+::ng-deep .leaflet-countryselect-container {
+	position: absolute;
+	top: 0;
+	left: 4rem;
+}
+
+::ng-deep .leaflet-fitdata-button {
+	width: 5rem;
+	background-color: white !important;
+	color: black !important;
+}
+
+::ng-deep .leaflet-toggletooltips-button {
+	width: 8rem;
+	background-color: white !important;
+	color: black !important;
+}

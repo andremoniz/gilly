@@ -1,18 +1,14 @@
-import { Observable, Subscription } from 'rxjs';
-import { ChangeDetectorRef, EventEmitter, Input, OnDestroy, Output, Directive } from '@angular/core';
-import { isObservable, Subject } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { ChangeDetectorRef, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { isObservable, Subject, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
-@Directive()
 export abstract class UIVisualizationBase implements OnDestroy {
 	configLoaded$ = new Subject<UIVisualizationConfig>();
-	displayOptionsLoaded$ = new Subject<any>();
-
-	viewDimensions: UIDimension;
 	config: UIVisualizationConfig;
 
-	data$: Subscription;
+	viewDimensions: UIDimension;
 
+	data$: Subscription;
 	_data: any[];
 	@Input()
 	set data(d) {
@@ -34,6 +30,7 @@ export abstract class UIVisualizationBase implements OnDestroy {
 		return this._data;
 	}
 
+	displayOptionsLoaded$ = new Subject<any>();
 	_displayOptions: any;
 	@Input()
 	set displayOptions(displayOptions: any) {
@@ -45,9 +42,22 @@ export abstract class UIVisualizationBase implements OnDestroy {
 		return this._displayOptions;
 	}
 
+	hoveredItemInternalSet$ = new Subject<any>();
+	_hoveredItem: any;
+	@Input()
+	set hoveredItem(item: any) {
+		this._hoveredItem = item;
+		this.hoveredItemInternalSet$.next(item);
+	}
+	get hoveredItem() {
+		return this._hoveredItem;
+	}
+
 	@Output() itemClicked = new EventEmitter<any>();
 	@Output() itemMetaClicked = new EventEmitter<{ data: any; meta: any }>();
+	@Output() itemHovered = new EventEmitter<any>();
 	@Output() groupClicked = new EventEmitter<any>();
+	@Output() dataFiltered = new EventEmitter<any>();
 
 	constructor(public cdRef: ChangeDetectorRef) {}
 
@@ -56,6 +66,14 @@ export abstract class UIVisualizationBase implements OnDestroy {
 
 		if (this.data$) {
 			this.data$.unsubscribe();
+		}
+
+		if (this.configLoaded$) {
+			this.configLoaded$.unsubscribe();
+		}
+
+		if (this.hoveredItemInternalSet$) {
+			this.hoveredItemInternalSet$.unsubscribe();
 		}
 	}
 
@@ -68,7 +86,7 @@ export abstract class UIVisualizationBase implements OnDestroy {
 		if (!this.data || !this.displayOptions) return;
 		this.config = { data: this.data, displayOptions: this.displayOptions };
 		this.configLoaded$.next(this.config);
-		this.cdRef.detectChanges();
+		// this.cdRef.detectChanges();
 	}
 
 	handleGroupSelected(filterProp: string, filterValue: string) {

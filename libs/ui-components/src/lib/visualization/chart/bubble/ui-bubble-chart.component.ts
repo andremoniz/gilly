@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { UIVisualizationBase } from '../../ui-visualization.base';
+import { UIChartBase } from '../ui-chart.base';
 import { UIChartService } from './../ui-chart.service';
 
 @Component({
@@ -12,10 +12,19 @@ import { UIChartService } from './../ui-chart.service';
 					<ngx-charts-bubble-chart
 						[results]="multi"
 						[scheme]="displayOptions.colorScheme || 'vivid'"
-						[legend]="(displayOptions.hideLegend === undefined) ? true : !displayOptions.hideLegend"
+						[customColors]="customColors"
+						[legend]="
+							displayOptions.hideLegend === undefined
+								? true
+								: !displayOptions.hideLegend
+						"
 						[xAxis]="displayOptions.showXAxis || true"
 						[yAxis]="displayOptions.showYAxis || true"
-						[legend]="(displayOptions.hideLegend === undefined) ? true : !displayOptions.hideLegend"
+						[legend]="
+							displayOptions.hideLegend === undefined
+								? true
+								: !displayOptions.hideLegend
+						"
 						[legendPosition]="displayOptions.legendPosition || 'right'"
 						[showXAxisLabel]="displayOptions.showXAxisLabel || true"
 						[showYAxisLabel]="displayOptions.showYAxisLabel || true"
@@ -41,9 +50,7 @@ import { UIChartService } from './../ui-chart.service';
 	`,
 	styles: [``]
 })
-export class UIBubbleChartComponent extends UIVisualizationBase implements OnInit {
-	multi: any[];
-
+export class UIBubbleChartComponent extends UIChartBase implements OnInit {
 	xScaleMin = 0;
 	xScaleMax = 100;
 	yScaleMin = 0;
@@ -52,14 +59,9 @@ export class UIBubbleChartComponent extends UIVisualizationBase implements OnIni
 	maxRadius = 100;
 
 	constructor(public uiChartService: UIChartService, public cdRef: ChangeDetectorRef) {
-		super(cdRef);
+		super(uiChartService, cdRef);
 
 		this.configLoaded$.subscribe((config) => {
-			this.multi = this.uiChartService.transformDataBubble(
-				config.data,
-				config.displayOptions
-			);
-
 			this.xScaleMin;
 			this.xScaleMax;
 			this.yScaleMin;
@@ -70,8 +72,4 @@ export class UIBubbleChartComponent extends UIVisualizationBase implements OnIni
 	}
 
 	ngOnInit(): void {}
-
-	onSelect(event) {
-		this.handleGroupSelected(this.config.displayOptions.groupProp, event.name);
-	}
 }

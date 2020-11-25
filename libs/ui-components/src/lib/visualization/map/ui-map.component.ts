@@ -1,8 +1,18 @@
-import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
-import { circle, latLng, Map, tileLayer, tooltip } from 'leaflet';
+import 'leaflet-tooltip-layout';
+
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	OnInit,
+	Output
+} from '@angular/core';
+import { UIMapDisplayOptions } from '@sof/ui-components';
+import { uuidv4 } from 'libs/utilities/src/lib/utilities/uuidv4';
 
 import { UIVisualizationBase, UIVisualizationConfig } from '../ui-visualization.base';
-import { UIMapOptions } from './ui-map.interface';
+import { UIMapService } from './ui-map.service';
 
 @Component({
 	selector: 'ui-map',
@@ -10,103 +20,71 @@ import { UIMapOptions } from './ui-map.interface';
 		<ui-visualization (dimensionChange)="handleDimensionChange($event)">
 			<ng-template #vis>
 				<div
+					[id]="uniqueMapId"
 					*ngIf="viewDimensions"
 					[style.height]="viewDimensions.height + 'px'"
-					leaflet
-					[leafletOptions]="mapOptions"
-					[leafletLayers]="layers"
-					(leafletMapReady)="onMapReady($event)"
-					(leafletClick)="mapClicked.emit($event)"
 				></div>
+
+				<p-dialog
+					[header]="uiMapService.tooltipHeader"
+					[modal]="true"
+					[style]="{ width: '50vw' }"
+					[dismissableMask]="true"
+					[baseZIndex]="10000"
+					[(visible)]="uiMapService.tooltipVisible"
+				>
+					<div [innerHTML]="uiMapService.tooltipContent"></div>
+				</p-dialog>
 			</ng-template>
 		</ui-visualization>
 	`,
-	styles: [
-		`
-			/* @import ('../../../../../node_modules/leaflet/dist/leaflet.css'); */
-		`
-	]
+	styleUrls: [
+		'./styles/ui-map-leaftlet.scss',
+		'./styles/ui-map-markercluster.scss',
+		'./styles/ui-map-beautifymarker.scss',
+		'./styles/ui-map.scss'
+	],
+	providers: [UIMapService]
 })
-export class UIMapComponent extends UIVisualizationBase implements OnInit {
-	mapOptions: any;
-	mapRef: Map;
-	layers = [];
+export class UIMapComponent extends UIVisualizationBase implements OnInit, AfterViewInit {
+	uniqueMapId = `uiMapRef${uuidv4()}`;
 
 	@Output() mapClicked = new EventEmitter<any>();
 
-	constructor(public cdRef: ChangeDetectorRef, private ngZone: NgZone) {
+	@Output() mapZoomMove = new EventEmitter<{
+		zoom: number;
+		center: { lat: number; lng: number };
+	}>();
+
+	constructor(public cdRef: ChangeDetectorRef, public uiMapService: UIMapService) {
 		super(cdRef);
 
-		this.displayOptionsLoaded$.subscribe((displayOptions: any) => {
-			this.mapOptions = this.setupMapOptions(displayOptions.mapOptions);
+		this.uiMapService.mapClicked = this.mapClicked;
+		this.uiMapService.itemClicked = this.itemClicked;
+		this.uiMapService.itemHovered = this.itemHovered;
+		this.uiMapService.dataFiltered = this.dataFiltered;
+		this.uiMapService.mapZoomMove = this.mapZoomMove;
+
+		this.displayOptionsLoaded$.subscribe((displayOptions: UIMapDisplayOptions) => {
+			this.uiMapService.setupDisplayOptions(displayOptions);
+			this.emitConfigLoaded();
 		});
 
 		this.configLoaded$.subscribe((config: UIVisualizationConfig) => {
-			this.createCirclesForEntities(config.data);
+			this.uiMapService.createMarkersForEntities(this.config.data);
+		});
+
+		this.hoveredItemInternalSet$.subscribe((item) => {
+			this.uiMapService.handleExternalMarkerHover(item);
 		});
 	}
 
 	ngOnInit(): void {}
 
-	onMapReady(map: Map) {
-		this.mapRef = map;
-	}
+	ngAfterViewInit() {
+		this.uiMapService.createMap(this.uniqueMapId);
 
-	setupMapOptions(mapOptions: UIMapOptions) {
-		if (!mapOptions) return null;
-
-		const generateLayers = (mapOptionLayers: any[]) => {
-			return mapOptionLayers.map((l) => {
-				switch (l.type) {
-					case 'tile':
-						return tileLayer(l.url, {
-							maxZoom: l.maxZoom || 18,
-							attribution: l.atribute || ''
-						});
-						break;
-					default:
-						break;
-				}
-			});
-		};
-
-		return {
-			layers: generateLayers(mapOptions.layers),
-			zoom: mapOptions.zoom,
-			center: latLng(mapOptions.center[0], mapOptions.center[1])
-		};
-	}
-
-	createCirclesForEntities(entities: any[]) {
-		if (!this.displayOptions || !entities) return;
-
-		this.layers = [];
-		entities.forEach((entity) => {
-			const entityLatitude = +entity[this.displayOptions.locationProp].latitude,
-				entityLongitude = +entity[this.displayOptions.locationProp].longitude;
-			if (!entityLatitude || !entityLongitude) return;
-
-			const circleMarker: any = circle([entityLatitude, entityLongitude], {
-				radius: 5000,
-				color: '#2CE50',
-				weight: 5
-			})
-				.on('click', this.circleClick.bind(this))
-				.bindTooltip(
-					tooltip({
-						permanent: true,
-						direction: 'top',
-						className: 'text'
-					}).setContent(entity[this.displayOptions.labelProp || 'id'])
-				);
-			circleMarker.data = entity;
-
-			this.layers.push(circleMarker);
-		});
-	}
-
-	circleClick(e) {
-		this.itemClicked.emit(e.target.data);
-		this.ngZone.run(() => {});
+		if (this.config && this.config.data)
+			this.uiMapService.createMarkersForEntities(this.config.data);
 	}
 }

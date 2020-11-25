@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
+import { UIChartBase } from '../ui-chart.base';
 import { UIChartService } from '../ui-chart.service';
-import { UIVisualizationBase } from '../../ui-visualization.base';
 
 @Component({
 	selector: 'ui-number-chart',
@@ -11,6 +11,7 @@ import { UIVisualizationBase } from '../../ui-visualization.base';
 				<ng-container *ngIf="displayOptions && single && single.length">
 					<ngx-charts-number-card
 						[scheme]="displayOptions.colorScheme || 'vivid'"
+						[customColors]="customColors"
 						[results]="single"
 						[cardColor]="displayOptions.cardColor || '#232837'"
 						(select)="onSelect($event)"
@@ -22,20 +23,10 @@ import { UIVisualizationBase } from '../../ui-visualization.base';
 	`,
 	styles: [``]
 })
-export class UINumberChartComponent extends UIVisualizationBase implements OnInit {
-	single: any[];
-
+export class UINumberChartComponent extends UIChartBase implements OnInit {
 	constructor(public uiChartService: UIChartService, public cdRef: ChangeDetectorRef) {
-		super(cdRef);
-
-		this.configLoaded$.subscribe((config) => {
-			this.single = this.uiChartService.transformData(config.data, config.displayOptions);
-		});
+		super(uiChartService, cdRef);
 	}
 
 	ngOnInit(): void {}
-
-	onSelect(event) {
-		this.handleGroupSelected(this.config.displayOptions.groupProp, event.name);
-	}
 }

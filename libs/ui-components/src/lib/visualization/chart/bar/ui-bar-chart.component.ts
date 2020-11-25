@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { UIVisualizationBase } from '../../ui-visualization.base';
+import { UIChartBase } from '../ui-chart.base';
 import { UIChartService } from '../ui-chart.service';
 
 @Component({
@@ -12,11 +12,16 @@ import { UIChartService } from '../ui-chart.service';
 					<ng-container *ngIf="!displayOptions.isHorizontal">
 						<ngx-charts-bar-vertical
 							[scheme]="displayOptions.colorScheme || 'vivid'"
+							[customColors]="customColors"
 							[results]="single"
 							[gradient]="displayOptions.gradient || false"
 							[xAxis]="displayOptions.showXAxis || true"
 							[yAxis]="displayOptions.showYAxis || true"
-							[legend]="(displayOptions.hideLegend === undefined) ? true : !displayOptions.hideLegend"
+							[legend]="
+								displayOptions.hideLegend === undefined
+									? true
+									: !displayOptions.hideLegend
+							"
 							[legendPosition]="displayOptions.legendPosition || 'right'"
 							[showXAxisLabel]="displayOptions.showXAxisLabel || true"
 							[showYAxisLabel]="displayOptions.showYAxisLabel || true"
@@ -37,11 +42,16 @@ import { UIChartService } from '../ui-chart.service';
 					<ng-container *ngIf="displayOptions.isHorizontal">
 						<ngx-charts-bar-horizontal
 							[scheme]="displayOptions.colorScheme || 'vivid'"
+							[customColors]="customColors"
 							[results]="single"
 							[gradient]="displayOptions.gradient || false"
 							[xAxis]="displayOptions.showXAxis || true"
 							[yAxis]="displayOptions.showYAxis || true"
-							[legend]="(displayOptions.hideLegend === undefined) ? true : !displayOptions.hideLegend"
+							[legend]="
+								displayOptions.hideLegend === undefined
+									? true
+									: !displayOptions.hideLegend
+							"
 							[legendPosition]="displayOptions.legendPosition || 'right'"
 							[showXAxisLabel]="displayOptions.showXAxisLabel || true"
 							[showYAxisLabel]="displayOptions.showYAxisLabel || true"
@@ -64,20 +74,10 @@ import { UIChartService } from '../ui-chart.service';
 	`,
 	styles: [``]
 })
-export class UIBarChartComponent extends UIVisualizationBase implements OnInit {
-	single: any[];
-
+export class UIBarChartComponent extends UIChartBase implements OnInit {
 	constructor(public uiChartService: UIChartService, public cdRef: ChangeDetectorRef) {
-		super(cdRef);
-
-		this.configLoaded$.subscribe((config) => {
-			this.single = this.uiChartService.transformData(config.data, config.displayOptions);
-		});
+		super(uiChartService, cdRef);
 	}
 
 	ngOnInit(): void {}
-
-	onSelect(event) {
-		this.handleGroupSelected(this.config.displayOptions.groupProp, event.name);
-	}
 }

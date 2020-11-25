@@ -1,6 +1,7 @@
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+
+import { UIChartBase } from '../ui-chart.base';
 import { UIChartService } from './../ui-chart.service';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { UIVisualizationBase } from '../../ui-visualization.base';
 
 @Component({
 	selector: 'ui-pie-chart',
@@ -12,6 +13,7 @@ import { UIVisualizationBase } from '../../ui-visualization.base';
 						<ng-container *ngSwitchCase="'pie-advanced'">
 							<ngx-charts-advanced-pie-chart
 								[scheme]="displayOptions.colorScheme || 'vivid'"
+								[customColors]="customColors"
 								[gradient]="displayOptions.gradient || false"
 								[results]="single"
 								(select)="onSelect($event)"
@@ -21,6 +23,7 @@ import { UIVisualizationBase } from '../../ui-visualization.base';
 						<ng-container *ngSwitchCase="'pie-grid'">
 							<ngx-charts-pie-grid
 								[scheme]="displayOptions.colorScheme || 'vivid'"
+								[customColors]="customColors"
 								[results]="single"
 								(select)="onSelect($event)"
 							>
@@ -29,8 +32,13 @@ import { UIVisualizationBase } from '../../ui-visualization.base';
 						<ng-container *ngSwitchDefault>
 							<ngx-charts-pie-chart
 								[scheme]="displayOptions.colorScheme || 'vivid'"
+								[customColors]="customColors"
 								[gradient]="displayOptions.gradient || false"
-								[legend]="!(displayOptions.hideLegend === undefined) ? true : !displayOptions.hideLegend"
+								[legend]="
+									!(displayOptions.hideLegend === undefined)
+										? true
+										: !displayOptions.hideLegend
+								"
 								[legendPosition]="displayOptions.legendPosition || 'right'"
 								[labels]="displayOptions.showLabels || false"
 								[doughnut]="displayOptions.isDoughnut || false"
@@ -47,20 +55,10 @@ import { UIVisualizationBase } from '../../ui-visualization.base';
 	`,
 	styles: [``]
 })
-export class UIPieChartComponent extends UIVisualizationBase implements OnInit {
-	single: any[];
-
+export class UIPieChartComponent extends UIChartBase implements OnInit {
 	constructor(public cdRef: ChangeDetectorRef, public uiChartService: UIChartService) {
-		super(cdRef);
-
-		this.configLoaded$.subscribe((config) => {
-			this.single = this.uiChartService.transformData(config.data, config.displayOptions);
-		});
+		super(uiChartService, cdRef);
 	}
 
 	ngOnInit(): void {}
-
-	onSelect(event) {
-		this.handleGroupSelected(this.config.displayOptions.groupProp, event.name);
-	}
 }

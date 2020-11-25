@@ -118,6 +118,16 @@ export class UIChartService {
 		});
 		return aggregated;
 	}
+
+	generateCustomColors(displayOptions: any) {
+		const customColors = [];
+		if (displayOptions.dataDrivenColors) {
+			displayOptions.dataDrivenColors.forEach((ddc) =>
+				customColors.push({ name: ddc.fieldValue, value: ddc.color })
+			);
+		}
+		return customColors;
+	}
 }
 
 export enum AGGREGATION {
