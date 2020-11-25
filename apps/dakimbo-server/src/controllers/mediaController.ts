@@ -1,12 +1,10 @@
 import { getRepository } from 'typeorm';
-import { FormMedia } from './../../../../libs/entities/form-taking/form-media';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import path from 'path';
 
 import { entityMap } from '../../../../libs/entities/_entity-map';
 import config from '../config';
-import { FormBaseModel } from '../../../../libs/entities/form-taking/_form-base';
 import { convertByteToHuman } from '../../../../libs/utilities/src';
 
 const os = require('os');
@@ -76,46 +74,41 @@ export class MediaController {
 		entityName: string,
 		entityId?: string
 	) {
-		let fullEntity: FormBaseModel;
-		try {
-			fullEntity = <FormBaseModel>await getRepository(entityName).findOneOrFail(entityId);
-		} catch (e) {
-			// couldn't find, need to create one
-			fullEntity = <FormBaseModel>await getRepository(entityName).save({});
-		}
-
-		let mediaEntities: FormMedia[] = [];
-		Object.keys(media).forEach((path) => {
-			const file = media[path];
-
-			let extension;
-			try {
-				extension = file.name.split('.')[1];
-			} catch (e) {
-				extension = '';
-			}
-
-			mediaEntities.push(
-				new FormMedia({
-					mediaName: file.name,
-					extension: extension,
-					size: file.size,
-					sizeFormatted: convertByteToHuman(file.size),
-					type: file.type,
-					description: '',
-					category: '',
-					url: '',
-					thumbnail: '',
-					relativePath: path.split('public')[1],
-					entityName: entityName,
-					formEntity: fullEntity.formEntity
-				})
-			);
-		});
-
-		if (mediaEntities.length)
-			mediaEntities = await getRepository('FormMedia').save(mediaEntities);
-
-		return mediaEntities;
+		// let fullEntity: FormBaseModel;
+		// try {
+		// 	fullEntity = <FormBaseModel>await getRepository(entityName).findOneOrFail(entityId);
+		// } catch (e) {
+		// 	// couldn't find, need to create one
+		// 	fullEntity = <FormBaseModel>await getRepository(entityName).save({});
+		// }
+		// let mediaEntities: FormMedia[] = [];
+		// Object.keys(media).forEach((path) => {
+		// 	const file = media[path];
+		// 	let extension;
+		// 	try {
+		// 		extension = file.name.split('.')[1];
+		// 	} catch (e) {
+		// 		extension = '';
+		// 	}
+		// 	mediaEntities.push(
+		// 		new FormMedia({
+		// 			mediaName: file.name,
+		// 			extension: extension,
+		// 			size: file.size,
+		// 			sizeFormatted: convertByteToHuman(file.size),
+		// 			type: file.type,
+		// 			description: '',
+		// 			category: '',
+		// 			url: '',
+		// 			thumbnail: '',
+		// 			relativePath: path.split('public')[1],
+		// 			entityName: entityName,
+		// 			formEntity: fullEntity.formEntity
+		// 		})
+		// 	);
+		// });
+		// if (mediaEntities.length)
+		// 	mediaEntities = await getRepository('FormMedia').save(mediaEntities);
+		// return mediaEntities;
 	}
 }

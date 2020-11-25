@@ -51,6 +51,3 @@ export * from './lib/visualization/chart/tree/ui-tree-chart.interface';
 
 export * from './lib/filter/ui-filter.module';
 export * from './lib/filter/ui-filter.component';
-
-export * from './lib/classification-banner/ui-classification-banner.module';
-export * from './lib/classification-banner/ui-classification-banner.component';
